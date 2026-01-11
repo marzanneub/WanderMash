@@ -1,0 +1,24 @@
+# Never commit these! They contain passwords and API keys.
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# --- Operating System Files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Node.js / Express ---
+node_modules/
+dist/
+build/
+.npm
+.eslintcache
+
+# --- IDEs and Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
