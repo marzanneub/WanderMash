@@ -15,5 +15,5 @@ export async function GET(request: Request) {
         credentials: "include",
     });
     const data = await res.json();
-    return NextResponse.json({ items: data.items });
+    return NextResponse.json({ tourismManagers: data.tourismManagers });
 }

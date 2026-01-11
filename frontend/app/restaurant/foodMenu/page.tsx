@@ -142,7 +142,7 @@ const RestaurantFoodMenuPage: React.FC = () => {
     
     const [name, setName] = useState("");
     const [price, setPrice] = useState("");
-    const [description, setDescription] = useState(""); // State for Description
+    const [description, setDescription] = useState("");
     const [category, setCategory] = useState("");
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [editingId, setEditingId] = useState<string>("");
@@ -175,7 +175,6 @@ const RestaurantFoodMenuPage: React.FC = () => {
     /////////////////////////////////////////////////
 
     const handleDeleteMenuItem = async (_id: string) => {
-        console.log(_id);
         const formData = new FormData();
         formData.append("_id", _id);
         
@@ -218,7 +217,6 @@ const RestaurantFoodMenuPage: React.FC = () => {
                     setMenuItems(data.user.menuItems);
                 }
             );
-            resetForm();
 
             return;
         }
@@ -706,7 +704,6 @@ const RestaurantFoodMenuPage: React.FC = () => {
                                 </div>
                             ))
                             ):(
-                            /* EMPTY STATE PLACEHOLDER */
                             <div className="bg-white border-2 border-dashed border-slate-200 rounded-3xl p-12 text-center">
                                 <h3 className="text-xl font-bold text-slate-700">Your menu is empty</h3>
                                 <p className="text-slate-500 mt-2 max-w-xs mx-auto">

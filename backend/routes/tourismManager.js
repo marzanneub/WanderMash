@@ -1,11 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const { TourismManager } = require("../models/user");
 const {
-    handleEditProfile,
-    handleSettings } = require("../controllers/generalUser");
-
-router.post("/editProfile",
-    handleEditProfile);
+    handleSettings } = require("../controllers/tourismManager");
 
 router.post("/settings",
     handleSettings);

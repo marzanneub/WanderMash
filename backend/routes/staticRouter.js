@@ -1,6 +1,6 @@
 const express = require("express");
 const {setUser, getUser} = require("../services/auth");
-const { Attraction, Admin, GeneralUser, Restaurant } = require("../models/user");
+const { Attraction, Admin, GeneralUser, Restaurant, TourismManager } = require("../models/user");
 
 const router = express.Router();
 
@@ -33,6 +33,7 @@ router.get("/get-user-info", async(req, res) => {
     let user = await Admin.findOne({_id: token._id});
     if(!user) user = await GeneralUser.findOne({_id: token._id});
     if(!user) user = await Restaurant.findOne({_id: token._id});
+    if(!user) user = await TourismManager.findOne({_id: token._id});
     if(user) return res.status(200).json({user});
     else return res.status(404).json(null);
 });

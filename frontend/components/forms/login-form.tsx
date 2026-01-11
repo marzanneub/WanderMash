@@ -90,7 +90,6 @@ const LoginForm: React.FC = () => {
         <div className="bg-white shadow-lg rounded-lg max-w-md w-full p-8">
             <h2 className="text-3xl font-extrabold text-indigo-900 mb-8 text-center">Welcome Back</h2>
             
-            {/* <form action="/login" method="POST" className="space-y-6"></form> */}
             <form onSubmit={handleSubmit} className="space-y-6">
             <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email address <span className="text-red-500">*</span></label>

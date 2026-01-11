@@ -11,6 +11,7 @@ const authRoute = require("./routes/auth");
 const adminRoute = require("./routes/admin");
 const generalUserRoute = require("./routes/generalUser");
 const restaurantRoute = require("./routes/restaurant");
+const tourismManagerRoute = require("./routes/tourismManager");
 
 const app = express();
 
@@ -36,5 +37,6 @@ app.use("/auth", authRoute);
 app.use("/admin", restrictTo(["admin"]), adminRoute);
 app.use("/generalUser", restrictTo(["generalUser"]), generalUserRoute);
 app.use("/restaurant", restrictTo(["restaurant"]), restaurantRoute);
+app.use("/tourismManager", restrictTo(["tourismManager"]), tourismManagerRoute);
 
 app.listen(PORT, () => console.log(`Server Started at the PORT ${PORT}`));

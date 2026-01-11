@@ -23,5 +23,8 @@ export async function GET(request: Request) {
     else if(data && data.user.role === "restaurant") {
         return NextResponse.json({ role: "restaurant", dp: data.user.logo });
     }
+    else if(data && data.user.role === "tourismManager") {
+        return NextResponse.json({ role: "tourismManager", dp: data.user.profilePicture });
+    }
     return NextResponse.json({ role: "None", dp: "" });
 }

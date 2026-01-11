@@ -18,15 +18,16 @@ import {
     BsPerson, 
     BsSearch,
 } from "react-icons/bs";
-import { FaUserEdit, FaUsers } from "react-icons/fa";
+import { FaUserEdit } from "react-icons/fa";
 import { LiaUserEditSolid } from "react-icons/lia";
-import { RiAdminLine, RiDashboardFill, RiLogoutBoxRLine  } from "react-icons/ri";
+import { MdAttractions } from "react-icons/md";
+import { RiDashboardFill, RiLogoutBoxRLine  } from "react-icons/ri";
 
 interface Props {
   pagetype: string;
 }
 
-const SidebarAdmin: React.FC<Props> = (props) => {
+const SidebarTourismManager: React.FC<Props> = (props) => {
     const router = useRouter();
     const [open, setOpen] = useState(false);
     const [submenuOpen, setSubmenuOpen] = useState(false);
@@ -34,21 +35,21 @@ const SidebarAdmin: React.FC<Props> = (props) => {
         // { title: "Dashboard", submenu: false, submenuItems: [] },
         // { title: "Pages", submenu: false, submenuItems: [], icon: <AiOutlineFileText /> },
         // { title: "Media", submenu: false, submenuItems: [], spacing:true, icon: <BsFillImageFill /> },
+        // {
+        //     title: "Projects",
+        //     icon: <BsReverseLayoutTextSidebarReverse />,
+        //     submenu: true,
+        //     submenuItems: [
+        //         { title: "Submenu 1" },
+        //         { title: "Submenu 2" },
+        //         { title: "Submenu 3" },
+        //     ],
+        // },
         // { title: "Analysis", submenu: false, submenuItems: [], icon: <AiOutlineBarChart /> },
         // { title: "Inbox", submenu: false, submenuItems: [], icon: <AiOutlineMail /> },
-        // { title: "Profile", href: "profile", spacing: true, icon: <BsPerson /> },
+        { title: "Profile", href: "profile", spacing: true, icon: <BsPerson /> },
         // { title: "Edit Profile", href: "editProfile", icon: <LiaUserEditSolid /> },
-        { title: "Dashboard", href: "dashboard", icon: <RiAdminLine /> },
-        {
-            title: "Users",
-            icon: <FaUsers />,
-            submenu: true,
-            submenuItems: [
-                { title: "Tourism Managers",  href: "tourismManagers" },
-                { title: "Submenu 2" },
-                { title: "Submenu 3" },
-            ],
-        },
+        { title: "Attractions", href: "attractions", icon: <MdAttractions /> },
         { title: "Settings", href: "settings", spacing: true, icon: <AiOutlineSetting /> },
         { title: "Logout", action: "logout", icon: <RiLogoutBoxRLine /> },
     ];
@@ -139,28 +140,7 @@ const SidebarAdmin: React.FC<Props> = (props) => {
                                         !open && "hidden"
                                     }`}>{menu.title}
                                 </span>
-                                {menu.submenu && (
-                                    <BsChevronDown className={`${submenuOpen &&
-                                    "rotate-180"} duration-300`} onClick={() => 
-                                    setSubmenuOpen(!submenuOpen)} />
-                                )}
                             </li>
-                            {menu.submenu && submenuOpen && open && (
-                                <ul>
-                                    {menu.submenuItems.map((submenuItem, index) =>(
-                                        <div  key={index}>
-                                            <Link href={submenuItem.href ?? "#"}>
-                                            <li className="text-gray-300
-                                            text-sm flex items-center gap-x-4 
-                                            cursor-pointer p-2 px-5 hover:bg-white/10 
-                                            rounded-md">
-                                                {submenuItem.title}
-                                            </li>
-                                            </Link>
-                                        </div>
-                                    ))}
-                                </ul>
-                            )}
                         </Link>)}
                     </div>
                 ))}
@@ -170,4 +150,4 @@ const SidebarAdmin: React.FC<Props> = (props) => {
     )
 }
 
-export default SidebarAdmin;
+export default SidebarTourismManager;

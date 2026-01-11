@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const bcrypt = require ("bcrypt");
 const {setUser, getUser} = require("../services/auth");
-const { Admin, GeneralUser, Restaurant } = require("../models/user");
+const { Admin, GeneralUser, Restaurant, TourismManager } = require("../models/user");
 const { Verification } = require("../models/verification");
 
 /////////////////////////Need to handle many types of user in this fucntion///////////////////////////////
@@ -19,11 +19,13 @@ async function handleUserRegistration(req, res) {
     let user = await Admin.find({ email: email });
     if(!user.length) user = await GeneralUser.find({ email: email });
     if(!user.length) user = await Restaurant.find({ email: email });
+    if(!user.length) user = await TourismManager.find({ email: email });
     if(user.length) return res.status(409).json({errormessage: "Email already exists"});
 
     user = await Admin.find({ phone: phone });
     if(!user.length) user = await GeneralUser.find({ phone: phone });
     if(!user.length) user = await Restaurant.find({ phone: phone });
+    if(!user.length) user = await TourismManager.find({ phone: phone });
     if(user.length) return res.status(409).json({errormessage: "Phone number already exists"});
 
     const hash = bcrypt.hashSync(password, 10);
@@ -110,6 +112,7 @@ async function handleUserVerification(req, res) {
     await Admin.findOneAndUpdate({ email: email }, { verified: true });
     await GeneralUser.findOneAndUpdate({ email: email }, { verified: true });
     await Restaurant.findOneAndUpdate({ email: email }, { verified: true });
+    await TourismManager.findOneAndUpdate({ email: email }, { verified: true });
 
     return res.status(200).json({successmessage: "Verification successful"});
 }
@@ -129,6 +132,7 @@ async function handleUserResendVerificationCode(req, res) {
     let user = await Admin.findOne({email});
     if(!user) user = await GeneralUser.findOne({email});
     if(!user) user = await Restaurant.findOne({email});
+    if(!user) user = await TourismManager.findOne({email});
 
     if(user){
         const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -181,6 +185,7 @@ async function handleForgotPassword(req, res) {
     let user = await Admin.findOne({email});
     if(!user) user = await GeneralUser.findOne({email});
     if(!user) user = await Restaurant.findOne({email});
+    if(!user) user = await TourismManager.findOne({email});
 
     if(user){
         const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -240,6 +245,7 @@ async function handleResetPassword(req, res){
     await Admin.findOneAndUpdate({email}, {password: hash});
     await GeneralUser.findOneAndUpdate({email}, {password: hash});
     await Restaurant.findOneAndUpdate({email}, {password: hash});
+    await TourismManager.findOneAndUpdate({email}, {password: hash});
 
     return res.status(200).json({successmessage: "Password reset successful"});
 }
@@ -250,6 +256,7 @@ async function handleUserLogin(req, res) {
     let user = await Admin.findOne({email});
     if(!user)  user = await GeneralUser.findOne({email});
     if(!user)  user = await Restaurant.findOne({email});
+    if(!user)  user = await TourismManager.findOne({email});
     if(!user)  return res.status(401).json({errormessage: "Invalid email or Password"});
 
     if(bcrypt.compareSync(password, user.password)==false) return res.status(401).json({errormessage: "Invalid email or Password"});
