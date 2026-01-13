@@ -3,7 +3,7 @@ const multer = require("multer");
 const util = require("util");
 const bcrypt = require ("bcrypt");
 
-const { TourismManager } = require("../models/user");
+const { TourismManager, Attraction } = require("../models/user");
 const { Verification } = require("../models/verification");
 
 const storage = multer.diskStorage({
@@ -35,7 +35,24 @@ async function handleSettings(req, res) {
     return res.status(201).json({successmessage: "Successfully settings updated"});
 }
 
+async function handleAddAttraction(req, res) {
+    await uploadAsync(req, res);
+    
+    const result = await Attraction.create({
+        name: req.body.name,
+        category: req.body.category,
+        district: req.body.district,
+        upazila: req.body.upazila,
+        address: req.body.address,
+        createdBy: req.userData._id,
+    });
+
+    if(result) return res.status(200).json({ successmessage: "Attraction added successfully" });
+    else return res.status(409).json({ errormessage: "Error" });
+}
+
 
 module.exports = {
     handleSettings,
+    handleAddAttraction,
 };

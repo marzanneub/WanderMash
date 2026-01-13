@@ -280,7 +280,6 @@ const RestaurantGalleryPage: React.FC = () => {
             return;
         }
 
-        // router.push("dashboard?successmessage=Successfully updated");
     }
 
     return (

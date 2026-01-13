@@ -399,7 +399,7 @@ const RestaurantEditProfilePage: React.FC = () => {
             return;
         }
         
-        router.push("dashboard?successmessage=Successfully updated");
+        router.push("profile?successmessage=Successfully updated");
     }
 
     return (
@@ -929,7 +929,7 @@ const RestaurantEditProfilePage: React.FC = () => {
 
 
                         <div className="flex justify-between items-center">
-                            <Link href={`dashboard?warnmessage=${"Nothing Changed"}`}>
+                            <Link href={`profile?warnmessage=${"Nothing Changed"}`}>
                                 <button className="px-4 py-3 text-indigo-600 hover:bg-gray-100 font-semibold rounded-md shadow-md transition cursor-pointer">
                                     Cancel
                                 </button>

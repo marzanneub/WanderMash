@@ -116,11 +116,11 @@ const RestaurantSettingsPage: React.FC = () => {
                 return;
             }
             
-            router.push("dashboard?successmessage=Successfully settings updated");
+            router.push("profile?successmessage=Successfully settings updated");
             return;
         }
         
-        router.push("dashboard?warnmessage=Nothing changed");
+        router.push("profile?warnmessage=Nothing changed");
     }
 
     return (

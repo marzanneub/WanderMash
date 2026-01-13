@@ -231,10 +231,10 @@ const Navbar:React.FC<Props> = (props) => {
                 >
                   <MenuItem>
                     <a
-                      href="/restaurant/dashboard"
+                      href="/restaurant/profile"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
-                      Dashboard
+                      Profile
                     </a>
                   </MenuItem>
                   <MenuItem>

@@ -62,7 +62,7 @@ interface User {
     location?: Location;
 }
 
-const RestaurantDashboardPage: React.FC = () => {
+const RestaurantProfilePage: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const searchParams = useSearchParams();
@@ -118,10 +118,10 @@ const RestaurantDashboardPage: React.FC = () => {
 
     return (
         <div className="bg-indigo-50 min-h-screen w-full flex">
-            <SidebarRestaurant  pagetype="Dashboard"/>
+            <SidebarRestaurant  pagetype="Profile"/>
 
             <main className="container mx-auto px-10 py-16 max-w-7xl">
-                <h1 className="text-4xl font-bold text-indigo-900 mb-10">Dashboard</h1>
+                <h1 className="text-4xl font-bold text-indigo-900 mb-10">Profile</h1>
 
                 {loading && (
                 <div className="bg-white rounded-2xl shadow-xl p-12 flex flex-col md:flex-row gap-14">
@@ -220,4 +220,4 @@ const RestaurantDashboardPage: React.FC = () => {
     )
 }
 
-export default RestaurantDashboardPage;
+export default RestaurantProfilePage;

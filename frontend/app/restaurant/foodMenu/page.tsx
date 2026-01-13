@@ -384,7 +384,6 @@ const RestaurantFoodMenuPage: React.FC = () => {
             return;
         }
 
-        // router.push("dashboard?successmessage=Successfully updated");
     }
 
     return (

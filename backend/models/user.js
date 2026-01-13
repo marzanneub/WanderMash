@@ -99,15 +99,16 @@ const attractionSchema = new mongoose.Schema({
         address: {
             type: String,
             default: "",
+            required: true,
         },
         location: {
             latitude: { type: Number },
             longitude: { type: Number }
         },
         socialLinks: {
-            facebook: String,
-            instagram: String,
-            twitter: String,
+            facebook: {type: String,  default: ""},
+            instagram: {type: String,  default: ""},
+            twitter: {type: String,  default: ""},
         },
         images: [{
             type: String,
@@ -119,13 +120,13 @@ const attractionSchema = new mongoose.Schema({
         views: [String],
         facilities: [String],
         openingHours: {
-            saturday: { open: String, close: String },
-            sunday: { open: String, close: String },
-            monday: { open: String, close: String },
-            tuesday: { open: String, close: String },
-            wednesday: { open: String, close: String },
-            thursday: { open: String, close: String },
-            friday: { open: String, close: String },
+            saturday: { open: {type: String,  default: ""}, close: {type: String,  default: ""} },
+            sunday: { open: {type: String,  default: ""}, close: {type: String,  default: ""} },
+            monday: { open: {type: String,  default: ""}, close: {type: String,  default: ""} },
+            tuesday: { open: {type: String,  default: ""}, close: {type: String,  default: ""} },
+            wednesday: { open: {type: String,  default: ""}, close: {type: String,  default: ""} },
+            thursday: { open: {type: String,  default: ""}, close: {type: String,  default: ""} },
+            friday: { open: {type: String,  default: ""}, close: {type: String,  default: ""} },
         },
         clicks: {
             type: Number,
@@ -151,6 +152,10 @@ const attractionSchema = new mongoose.Schema({
         averageRating: {
             type: Number,
             default: 0,
+        },
+        approved: {
+            type: Boolean,
+            default: true,
         },
     }, {timestamps: true}
 );
