@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Edit Profile | WanderMash",
 };
 
-export default function GeneralUserEditProfileLayout({children}: {children: React.ReactNode;}) {
+export default function TourismManagerEditProfileLayout({children}: {children: React.ReactNode;}) {
     return (
         <Provider showNavbar showFooter>
         <main>{children}</main>

@@ -305,6 +305,14 @@ const Navbar:React.FC<Props> = (props) => {
                   </MenuItem>
                   <MenuItem>
                     <a
+                      href="/tourismManager/attractions"
+                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
+                    >
+                      Attractions
+                    </a>
+                  </MenuItem>
+                  <MenuItem>
+                    <a
                       href="/tourismManager/settings"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
