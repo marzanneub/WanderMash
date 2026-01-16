@@ -4,7 +4,8 @@ const { TourismManager, Attraction } = require("../models/user");
 const {
     handleEditProfile,
     handleSettings,
-    handleAddAttraction } = require("../controllers/tourismManager");
+    handleAddAttraction,
+    handleEditAttraction } = require("../controllers/tourismManager");
 
 router.get("/my-added-attractions", async(req, res) => {
     const attractions = await Attraction.find({createdBy: req.userData._id});
@@ -20,5 +21,8 @@ router.post("/settings",
 
 router.post("/addAttraction",
     handleAddAttraction);
+
+router.post("/editAttraction",
+    handleEditAttraction);
 
 module.exports = router;

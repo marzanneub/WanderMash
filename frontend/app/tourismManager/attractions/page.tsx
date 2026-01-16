@@ -5,10 +5,13 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import SidebarTourismManager from "@/components/navigation/sidebarTourismManager";
 import { districtUpazilas } from "@/data/locations/districtUpazilas";
+import { attractionFacilities } from "@/data/attractions";
 
 interface Attraction {
     _id: string;
     name: string;
+    email: string;
+    phone: string;
     dp: string;
     category: string;
     description: string;
@@ -24,6 +27,7 @@ const TourismManagerAttractionsPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
 
     const districts = Object.keys(districtUpazilas);
+    const categories = Object.keys(attractionFacilities);
 
     const searchParams = useSearchParams();
     const warnmessage  = searchParams.get("warnmessage");
@@ -62,6 +66,8 @@ const TourismManagerAttractionsPage: React.FC = () => {
     }, []);
 
     const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
     const [category, setCategory] = useState("");
     const [district, setDistrict] = useState("");
     const [upazila, setUpazila] = useState("");
@@ -70,6 +76,8 @@ const TourismManagerAttractionsPage: React.FC = () => {
     
     const [errors, setErrors] = useState<{
         name?: string;
+        email?: string;
+        phone?: string;
         category?: string;
         district?: string;
         upazila?: string;
@@ -78,6 +86,8 @@ const TourismManagerAttractionsPage: React.FC = () => {
     
     const resetForm = async() => {
         setName("");
+        setEmail("");
+        setPhone("");
         setCategory("");
         setDistrict("");
         setUpazila("");
@@ -91,6 +101,16 @@ const TourismManagerAttractionsPage: React.FC = () => {
 
         if(!name) {
             newErrors.name = "Name is required";
+        }
+
+        if(!phone) {
+            newErrors.phone = "Phone number is required";
+        }
+
+        if(!email) {
+            newErrors.email = "Email is required";
+        } else if(!/^\S+@\S+\.\S+$/.test(email)) {
+            newErrors.email = "Please enter a valid email address";
         }
 
         if(!category) {
@@ -117,6 +137,8 @@ const TourismManagerAttractionsPage: React.FC = () => {
         const formData = new FormData();
 
         formData.append("name", name);
+        formData.append("phone", phone);
+        formData.append("email", email);
         formData.append("category", category);
         formData.append("district", district);
         formData.append("upazila", upazila);
@@ -212,6 +234,16 @@ const TourismManagerAttractionsPage: React.FC = () => {
                         <div className="h-12 w-full bg-gray-200 rounded-md" />
                         </div>
 
+                        <div>
+                        <div className="h-4 w-32 bg-gray-200 rounded mb-2" />
+                        <div className="h-12 w-full bg-gray-200 rounded-md" />
+                        </div>
+
+                        <div>
+                        <div className="h-4 w-32 bg-gray-200 rounded mb-2" />
+                        <div className="h-12 w-full bg-gray-200 rounded-md" />
+                        </div>
+
                         <div className="h-12 w-full bg-gray-300 rounded-md mt-4" />
                     </div>
                     </div>
@@ -287,23 +319,12 @@ const TourismManagerAttractionsPage: React.FC = () => {
                                     onChange={(e) => setCategory(e.target.value)}
                                     className="w-full h-12 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 >
-                                    <option value="" disabled>-- select --</option>
-                                    <option  value="Adventure & Outdoor">Adventure & Outdoor</option>
-                                    <option  value="Cultural">Cultural</option>
-                                    <option  value="Educational & Research">Educational & Research</option>
-                                    <option  value="Events & Festival">Events & Festival</option>
-                                    <option  value="Food & Culinary">Food & Culinary</option>
-                                    <option  value="Historical">Historical</option>
-                                    <option  value="Leisure & Recreation">Leisure & Recreation</option>
-                                    <option  value="Natural">Natural</option>
-                                    <option  value="Religious & Spiritual">Religious & Spiritual</option>
-                                    <option  value="Rural">Rural</option>
-                                    <option  value="Special / Unique">Special / Unique</option>
-                                    <option  value="Shopping & Market">Shopping & Market</option>
-                                    <option  value="Transport & Infrastructure">Transport & Infrastructure</option>
-                                    <option  value="Urban & Modern">Urban & Modern</option>
-                                    <option  value="Wellness & Health">Wellness & Health</option>
-                                    <option  value="Wildlife & Nature">Wildlife & Nature</option>
+                                    <option value="" disabled selected>-- select category --</option>
+                                        {categories.map((c) => (
+                                            <option key={c} value={c}>
+                                                {c}
+                                            </option>
+                                        ))}
                                 </select>
                                 {errors.category && (
                                     <p className="mt-1 text-sm text-red-600">{errors.category}</p>
@@ -360,6 +381,41 @@ const TourismManagerAttractionsPage: React.FC = () => {
                                     )}
                                 </div>
                             </div>
+                            
+                            <div>
+                                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email address  <span className="text-red-500">*</span></label>
+                                <input
+                                id="email"
+                                name="email"
+                                value={email}
+                                type="email"
+                                // required
+                                placeholder="you@example.com"
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                />
+                                {errors.email && (
+                                    <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                                )}
+                            </div>
+                            
+                            <div>
+                                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number <span className="text-red-500">*</span></label>
+                                <input
+                                    type="number"
+                                    id="phone"
+                                    name="phone"
+                                    value={phone}
+                                    placeholder="01XXX XXX XXX"
+                                    // required
+                                    onChange={(e) => setPhone(e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                />
+                                {errors.phone && (
+                                    <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+                                )}
+                            </div>
+
                             <div>
                                 <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">Address <span className="text-red-500">*</span></label>
                                 <input

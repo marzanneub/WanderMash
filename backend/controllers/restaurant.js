@@ -1,7 +1,7 @@
 const multer = require("multer");
 const util = require("util");
 const bcrypt = require ("bcrypt");
-const { Admin, GeneralUser, Restaurant, TourismManager } = require("../models/user");
+const { Admin, Attraction, GeneralUser, Restaurant, TourismManager } = require("../models/user");
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -25,8 +25,10 @@ async function handleEditProfile(req, res) {
     const logo = req.files?.logo?.[0]?.filename || null;
 
     const updates = {...req.body};
+    // console.log(updates);
 
     let result =  await GeneralUser.findOne({ phone: updates.phone });
+    if(!result) result =  await Attraction.findOne({phone: updates.phone });
     if(!result) result =  await Restaurant.findOne({ _id: { $ne: req.userData._id },  phone: updates.phone });
     if(!result) result =  await TourismManager.findOne({phone: updates.phone });
     if(result){ return res.status(409).json({errormessage: "Phone number already exists"}); }

@@ -28,6 +28,7 @@ async function handleEditProfile(req, res) {
     const profilePicture = req.files?.profilePicture?.[0]?.filename || null;
 
     let result =  await TourismManager.findOne({ _id: { $ne: req.userData._id },  phone: phone });
+    if(!result) result =  await Attraction.findOne({ phone: phone });
     if(!result) result =  await Restaurant.findOne({ phone: phone });
     if(!result) result =  await GeneralUser.findOne({ phone: phone });
     if(result) return res.status(409).json({errormessage: "Phone number already exists"});
@@ -54,15 +55,41 @@ async function handleSettings(req, res) {
     return res.status(201).json({successmessage: "Successfully settings updated"});
 }
 
+/////////////////////////Need to handle many types of user in this fucntion///////////////////////////////
 async function handleAddAttraction(req, res) {
     await uploadAsync(req, res);
+
+    let {name, email, phone, category, district, upazila, address} = req.body;
+
+    if(phone.startsWith("880")) {
+        phone = `+${phone}`;
+    } else if(phone.startsWith("0")) {
+        phone = `+880${phone.slice(1)}`;
+    } else if(!phone.startsWith("+880")) {
+        phone = `+880${phone}`;
+    }
+
+    let found =  await Admin.findOne({ email: email });
+    if(!found) found =  await GeneralUser.findOne({ email: email });
+    if(!found) found =  await Attraction.findOne({ email: email });
+    if(!found) found =  await Restaurant.findOne({ email: email });
+    if(!found) found =  await TourismManager.findOne({email: email });
+    if(found){ return res.status(409).json({errormessage: "Email already exists"}); }
+
+    found =  await GeneralUser.findOne({ phone: phone });
+    if(!found) found =  await Attraction.findOne({ phone: phone });
+    if(!found) found =  await Restaurant.findOne({ phone: phone });
+    if(!found) found =  await TourismManager.findOne({phone: phone });
+    if(found){ return res.status(409).json({errormessage: "Phone number already exists"}); }
     
     const result = await Attraction.create({
-        name: req.body.name,
-        category: req.body.category,
-        district: req.body.district,
-        upazila: req.body.upazila,
-        address: req.body.address,
+        name: name,
+        phone: phone,
+        email: email,
+        category: category,
+        district: district,
+        upazila: upazila,
+        address: address,
         createdBy: req.userData._id,
     });
 
@@ -70,9 +97,37 @@ async function handleAddAttraction(req, res) {
     else return res.status(409).json({ errormessage: "Error" });
 }
 
+/////////////////////////Need to handle many types of user in this fucntion///////////////////////////////
+async function handleEditAttraction(req, res) {
+    await uploadAsync(req, res);
+
+    const updates = {...req.body};
+
+    found =  await GeneralUser.findOne({ phone: updates.phone });
+    if(!found) found =  await Attraction.findOne({ _id: { $ne: updates.id }, phone: updates.phone });
+    if(!found) found =  await Restaurant.findOne({ phone: updates.phone });
+    if(!found) found =  await TourismManager.findOne({phone: updates.phone });
+    if(found){ return res.status(409).json({errormessage: "Phone number already exists"}); }
+
+    result =  await Attraction.findOne({ _id: updates.id, createdBy: req.userData._id });
+    if(!result){ return res.status(409).json({errormessage: "You cannot edit this attraction because you didn't added this."}); }
+
+    updates.socialLinks = JSON.parse(updates.socialLinks);
+    updates.facilities = JSON.parse(updates.facilities);
+    updates.views = JSON.parse(updates.views);
+    updates.openingHours = JSON.parse(updates.openingHours);
+    updates.location = JSON.parse(updates.location);
+
+    // console.log(updates);
+
+    await Attraction.findByIdAndUpdate({_id: updates.id}, { $set: updates });
+    return res.status(200).json({successmessage: "Successfully Updated"});
+}
+
 
 module.exports = {
     handleEditProfile,
     handleSettings,
     handleAddAttraction,
+    handleEditAttraction,
 };

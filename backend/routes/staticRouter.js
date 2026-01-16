@@ -23,6 +23,13 @@ router.get("/get-restaurant-info", async(req, res) => {
     else return res.status(404).json({errormessage: "Error"});
 });
 
+router.get("/get-attraction-info", async(req, res) => {
+    
+    const attraction = await Attraction.findById(req.query.id);
+    if(attraction) return res.status(200).json({attraction: attraction});
+    else return res.status(404).json({errormessage: "Error"});
+});
+
 /////////////////////////Need to handle many types of user in this fucntion///////////////////////////////
 router.get("/get-user-info", async(req, res) => {
     const token = getUser(req.cookies.user);

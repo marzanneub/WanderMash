@@ -39,8 +39,8 @@ interface OpeningHours {
 }
 
 interface Location {
-    latitude: number;
-    longitude: number;
+    latitude: number|null;
+    longitude: number|null;
 }
 
 
@@ -75,7 +75,7 @@ interface Restaurant {
     facilities?: string[];
     cuisines?: string[];
     openingHours: OpeningHours;
-    location?: Location;
+    location: Location;
     menuItems: MenuItems[];
 }
 
@@ -193,7 +193,12 @@ const RestaurantPreviewPage: React.FC = () => {
                             <div>
                                 <FoodCardSwiper title="Food Menu" items={restaurant.menuItems || []}/>
                             </div>
-                            {restaurant.location && (<MapView {...restaurant.location} />)}
+                            {(restaurant.location.latitude && restaurant.location.longitude) && (
+                                <MapView 
+                                    latitude={restaurant.location.latitude} 
+                                    longitude={restaurant.location.longitude} 
+                                />
+                            )}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                 <TimeTable {...restaurant.openingHours} />
                             </div>

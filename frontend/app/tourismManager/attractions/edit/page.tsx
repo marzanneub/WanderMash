@@ -5,14 +5,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import Cropper, { Area, Point } from "react-easy-crop";
 import getCroppedImg from "@/utils/cropImage";
-import SidebarRestaurant from "@/components/navigation/sidebarRestaurant";
+import SidebarTourismManager from "@/components/navigation/sidebarTourismManager";
 import { 
     FaSquareFacebook,
     FaSquareInstagram,
     FaSquareTwitter,
 } from "react-icons/fa6";
 import { districtUpazilas } from "@/data/locations/districtUpazilas";
-import { restaurantFacilities, restaurantCuisines } from "@/data/user/restaurant";
+import { attractionFacilities, attractionViews } from "@/data/attractions";
 
 interface SocialLinks {
     facebook: string;
@@ -48,46 +48,46 @@ const mapStyles = `
   }
 `;
 
-interface User {
+interface Attraction {
     name: string;
-    logo: string;
-    email: string;
-    registrationId: string;
-    phone: string;
-    approved: boolean;
-    address: string;
+    email?: string;
+    phone?: string;
+    category?: string;
+    description: string;
     district: string;
     upazila: string;
-    postalCode: number;
-    description: string;
-    socialLinks?: SocialLinks;
-    facilities?: string[];
-    cuisines?: string[];
-    openingHours: OpeningHours;
+    address: string;
     location: Location;
+    socialLinks?: SocialLinks;
+    views?: string[];
+    facilities?: string[];
+    openingHours: OpeningHours;
+    approved: boolean;
 }
 
-const RestaurantEditProfilePage: React.FC = () => {
+const TourismManagerEditAttractionsPage: React.FC = () => {
     const router = useRouter();
-    const [user, setUser] = useState<User | null>(null);
+
+    const searchParams = useSearchParams();
+    const id: string|null  = searchParams.get("_id");
+
+    const [attraction, setAttraction] = useState<Attraction | null>(null);
     const [name, setName] = useState("")
-    const [logo, setLogo] = useState("")
     const [email, setEmail] = useState("")
-    const [registrationId, setRegistrationId] = useState("")
     const [phone, setPhone] = useState("")
-    const [approved, setApproved] = useState(false)
-    const [address, setAddress] = useState("")
+    const [category, setCategory] = useState("")
+    const [description, setDescription] = useState("")
     const [district, setDistrict] = useState("")
     const [upazila, setUpazila] = useState("")
-    const [postalCode, setPostalCode] = useState("")
-    const [description, setDescription] = useState("")
+    const [address, setAddress] = useState("")
+    const [location, setLocation] = useState<Location>({latitude: null, longitude: null});
     const [socialLinks, setSocialLinks] = useState<SocialLinks>({
         facebook: "",
         instagram: "",
         twitter: "",
     })
+    const [views, setViews] = useState<string[]>([])
     const [facilities, setFacilities] = useState<string[]>([])
-    const [cuisines, setCuisines] = useState<string[]>([])
     const [openingHours, setOpeningHours] = useState<OpeningHours>({
         saturday: { open: "", close: "" },
         sunday: { open: "", close: "" },
@@ -97,35 +97,35 @@ const RestaurantEditProfilePage: React.FC = () => {
         thursday: { open: "", close: "" },
         friday: { open: "", close: "" },
     });
-    const [location, setLocation] = useState<Location>({latitude: null, longitude: null});
+    const [approved, setApproved] = useState(false)
     const [changeLocation, setChangeLocation] = useState(0);
     const [ClientMap, setClientMap] = useState<React.ReactElement | null>(null);
 
     const [loading, setLoading] = useState(true);
     
     const districts = Object.keys(districtUpazilas);
+    const categories = Object.keys(attractionFacilities);
 
     const [errors, setErrors] = useState<{
         name?: string;
-        logo?: string;
         email?: string;
-        registrationId?: string;
         phone?: string;
-        approved?: string;
-        address?: string;
+        category?: string;
+        description?: string;
         district?: string;
         upazila?: string;
-        postalCode?: string;
-        description?: string;
+        address?: string;
+        location?: string;
         socialLinks?: string;
+        views?: string;
         facilities?: string;
         cuisines?: string;
-        location?: string;
         loading?: string;
+        approved?: string;
         errormessage?: string;
     }>({});
 
-    const searchParams = useSearchParams();
+
     const warnmessage = searchParams.get("warnmessage");
     const successmessage = searchParams.get("successmessage");
     useEffect(() => {
@@ -152,31 +152,28 @@ const RestaurantEditProfilePage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        fetch('/api/get-user-info-for-profile')
+        fetch(`/api/get-attraction-info?id=${id}`)
             .then(res => res.json())
             .then(data => {
-                setUser(data.user);
-
-                setName(data.user.name);
-                setLogo(data.user.logo);
-                setEmail(data.user.email);
-                setRegistrationId(data.user.registrationId);
-                setPhone(data.user.phone);
-                setApproved(data.user.approved);
-                setAddress(data.user.address);
-                setDistrict(data.user.district);
-                setUpazila(data.user.upazila);
-                setPostalCode(data.user.postalCode);
-                setDescription(data.user.description);
+                setAttraction(data.attraction);
+                setName(data.attraction.name);
+                setEmail(data.attraction.email);
+                setPhone(data.attraction.phone);
+                setCategory(data.attraction.category);
+                setDescription(data.attraction.description);
+                setDistrict(data.attraction.district);
+                setUpazila(data.attraction.upazila);
+                setAddress(data.attraction.address);
+                setLocation(data.attraction.location);
                 setSocialLinks({
-                    facebook: data.user.socialLinks?.facebook || "",
-                    instagram: data.user.socialLinks?.instagram || "",
-                    twitter: data.user.socialLinks?.twitter || ""
+                    facebook: data.attraction.socialLinks?.facebook || "",
+                    instagram: data.attraction.socialLinks?.instagram || "",
+                    twitter: data.attraction.socialLinks?.twitter || ""
                 });
-                setFacilities(data.user.facilities);
-                setCuisines(data.user.cuisines);
-                setOpeningHours(data.user.openingHours);
-                setLocation(data.user.location);
+                setFacilities(data.attraction.facilities);
+                setViews(data.attraction.views);
+                setOpeningHours(data.attraction.openingHours);
+                setApproved(data.attraction.approved);
                 setChangeLocation(changeLocation+1);
 
                 setLoading(false);
@@ -232,53 +229,6 @@ const RestaurantEditProfilePage: React.FC = () => {
     }, [changeLocation]);
 //////////////////////////////////////////////////
 
-////////////////////for image////////////////////
-    const [fileName, setFileName] = useState("No file selected");
-    const [currentUploadedFile, setCurrentUploadedFile] = useState("No file selected");
-
-    const [image, setImage] = useState<string | null>(null);
-    const [isOpen, setIsOpen] = useState(false);
-    const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
-    const [zoom, setZoom] = useState<number>(1);
-    const [croppedArea, setCroppedArea] = useState<Area | null>(null);
-    const [croppedImage, setCroppedImage] = useState<string | null>(null);
-    const aspectRatio = 1;
-
-    const onCropComplete = (_: Area, croppedPixels: Area) => {
-        setCroppedArea(croppedPixels);
-    };
-
-    const handleCrop = async () => {
-        if (!image || !croppedArea) return;
-        const cropped = await getCroppedImg(image, croppedArea);
-        setCroppedImage(cropped);
-        setIsOpen(false);
-        setFileName(currentUploadedFile);
-    };
-
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        setCurrentUploadedFile(file.name);
-        setImage(URL.createObjectURL(file));
-        setZoom(1);
-        setIsOpen(true);
-    };
-
-    const dataURLtoBlob = (dataurl: string) => {
-        const arr = dataurl.split(',');
-        const mime = arr[0].match(/:(.*?);/)?.[1];
-        const bstr = atob(arr[1]);
-        let n = bstr.length;
-        const u8arr = new Uint8Array(n);
-        while (n--) {
-            u8arr[n] = bstr.charCodeAt(n);
-        }
-        return new Blob([u8arr], { type: mime });
-    }
-
-/////////////////////////////////////////////////
 
 /////////////////for facilities/////////////////
     const handleFacilitiesCheckboxChange = (option: string) => {
@@ -293,16 +243,17 @@ const RestaurantEditProfilePage: React.FC = () => {
 
 /////////////////////////////////////////////////
 
-///////////////////for cuisines//////////////////
-    const handleCuisinesCheckboxChange = (option: string) => {
-        if (cuisines.includes(option)) {
+///////////////////for views/////////////////////
+    const handleViewsCheckboxChange = (option: string) => {
+        if (views.includes(option)) {
             // REMOVE: Filter out the item to create a new array
-            setCuisines(cuisines.filter(item => item !== option));
+            setViews(views.filter(item => item !== option));
         } else {
             // ADD: Spread existing items and add the new one
-            setCuisines([...cuisines, option]);
+            setViews([...views, option]);
         }
     };
+
 
 /////////////////////////////////////////////////
 
@@ -327,10 +278,6 @@ const RestaurantEditProfilePage: React.FC = () => {
         if(!name) {
             newErrors.name = "Name is required";
         }
-        
-        if(!registrationId) {
-            newErrors.registrationId = "Registration ID is required";
-        }
 
         if(!phone) {
             newErrors.phone = "Phone number is required";
@@ -340,6 +287,12 @@ const RestaurantEditProfilePage: React.FC = () => {
             setPhone(`+880${phone.slice(1)}`);
         } else if(!phone.startsWith("+880")) {
             setPhone(`+880${phone}`);
+        }
+
+        console.log(phone)
+
+        if(!category) {
+            newErrors.category = "category is required";
         }
 
         if(!district) {
@@ -355,30 +308,27 @@ const RestaurantEditProfilePage: React.FC = () => {
 
         setErrors(newErrors);
         if (Object.keys(newErrors).length !== 0) return;
+        if (!id) return;
 
         const formData = new FormData();
-        if (croppedImage !== null) {
-            const imageBlob = dataURLtoBlob(croppedImage);
-            formData.append("logo", imageBlob, `${phone}.png`);
-        }
+        
+        formData.append("id", id);
         formData.append("name", name);
-        formData.append("registrationId", registrationId);
         formData.append("phone", phone);
+        formData.append("category", category);
+        formData.append("description", description);
         formData.append("district", district);
         formData.append("upazila", upazila);
         formData.append("address", address);
-        formData.append("postalCode", postalCode);
-        formData.append("description", description);
-        
-        formData.append("socialLinks", JSON.stringify(socialLinks));
-        formData.append("facilities", JSON.stringify(facilities));
-        formData.append("cuisines", JSON.stringify(cuisines));
-        formData.append("openingHours", JSON.stringify(openingHours));
         formData.append("location", JSON.stringify(location));
+        formData.append("socialLinks", JSON.stringify(socialLinks));
+        formData.append("views", JSON.stringify(views));
+        formData.append("facilities", JSON.stringify(facilities));
+        formData.append("openingHours", JSON.stringify(openingHours));
         
 
 
-        const res = await fetch("http://localhost:4000/restaurant/editProfile", {
+        const res = await fetch("http://localhost:4000/tourismManager/editAttraction", {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -399,27 +349,18 @@ const RestaurantEditProfilePage: React.FC = () => {
             return;
         }
         
-        router.push("profile?successmessage=Successfully updated");
+        router.push("/tourismManager/attractions?successmessage=Successfully updated");
     }
 
     return (
         <div className="bg-indigo-50 min-h-screen w-full flex">
-            <SidebarRestaurant pagetype="Edit Profile" />
+            <SidebarTourismManager pagetype="Attractions" />
 
             <main className="container mx-auto px-10 py-16 max-w-7xl">
-                <h1 className="text-4xl font-bold text-indigo-900 mb-10">Edit Profile</h1>
+                <h1 className="text-4xl font-bold text-indigo-900 mb-10">Edit Attraction</h1>
 
                 {loading && (
                     <div className="bg-white rounded-xl shadow-lg p-8 space-y-8 animate-pulse">
-
-                        {/* Logo section */}
-                        <div className="flex items-center space-x-6">
-                            <div className="w-24 h-24 bg-gray-200 rounded-lg"></div>
-                            <div className="space-y-2">
-                            <div className="h-4 w-28 bg-gray-200 rounded"></div>
-                            <div className="h-3 w-40 bg-gray-100 rounded"></div>
-                            </div>
-                        </div>
 
                         {/* Basic info */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -439,7 +380,7 @@ const RestaurantEditProfilePage: React.FC = () => {
 
                         {/* Address */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {[...Array(3)].map((_, i) => (
+                            {[...Array(2)].map((_, i) => (
                             <div key={i} className="space-y-2">
                                 <div className="h-4 w-32 bg-gray-200 rounded"></div>
                                 <div className="h-11 w-full bg-gray-100 rounded-md"></div>
@@ -478,7 +419,7 @@ const RestaurantEditProfilePage: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Cuisines */}
+                        {/* Views */}
                         <div className="border border-gray-200 rounded-md p-6 space-y-4">
                             <div className="h-4 w-24 bg-gray-200 rounded"></div>
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -506,105 +447,20 @@ const RestaurantEditProfilePage: React.FC = () => {
                             <div className="h-11 w-36 bg-gray-300 rounded-md"></div>
                         </div>
                     </div>
-
                 )}
 
-                {user !== null && (
+                {attraction !==null && (
                     <div className="bg-white rounded-xl shadow-lg p-8 space-y-8">
                         <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="flex items-center space-x-6">
-                            <img
-                                id="logoPreview"
-                                src={croppedImage || `http://localhost:4000/images/${logo}`}
-                                alt="Restaurant Logo"
-                                className="w-24 h-24 object-cover rounded-lg shadow-md"
-                            />
-                            <div>
-                                <label htmlFor="logoInput" className="block text-gray-700 font-semibold mb-1 cursor-pointer hover:text-indigo-600">
-                                    Change Logo
-                                </label>
-                                <input
-                                    type="file"
-                                    id="logoInput"
-                                    name="logo"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={handleFileChange}
-                                />
-                                <p id="fileName" className="mt-1 text-gray-600 italic text-sm">{fileName}</p>
-                            </div>
-                        </div>
-                        {isOpen && image && (
-                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-                                <div className="bg-white w-full max-w-2xl rounded-lg shadow-lg overflow-hidden">
-                                    <div className="flex justify-between items-center px-4 py-3 border-b">
-                                        <h2 className="font-semibold">Crop Image</h2>
-                                        <button
-                                            onClick={() => setIsOpen(false)}
-                                            className="text-gray-500 hover:text-black cursor-pointer"
-                                        >
-                                            ✕
-                                        </button>
-                                    </div>
-
-                                    <div className="relative h-96 bg-black">
-                                        <Cropper
-                                            image={image}
-                                            crop={crop}
-                                            zoom={zoom}
-                                            aspect={aspectRatio}
-                                            minZoom={1}
-                                            maxZoom={4}
-                                            onCropChange={setCrop}
-                                            onZoomChange={setZoom}
-                                            onCropComplete={onCropComplete}
-                                        />
-                                    </div>
-
-                                    <div className="p-4 space-y-4">
-                                        <div className="flex items-center gap-3">
-                                            <span className="text-sm">Zoom</span>
-                                            <input
-                                                type="range"
-                                                min={1}
-                                                max={4}
-                                                step={0.1}
-                                                value={zoom}
-                                                onChange={(e) => setZoom(Number(e.target.value))}
-                                                className="w-full"
-                                            />
-                                        </div>
-                                        <div className="flex justify-end gap-3">
-
-                                            <a
-                                                onClick={() => setIsOpen(false)}
-                                                className="px-4 py-3 text-indigo-600 hover:bg-gray-100 font-semibold rounded-md shadow-md transition cursor-pointer"
-                                            >
-                                                Cancel
-                                            </a>
-                                            <a
-                                                onClick={handleCrop}
-                                                className="px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold border rounded-md shadow-md transition cursor-pointer"
-                                            >
-                                                Crop & Save
-                                            </a>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Restaurant Basic Info */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Restaurant name <span className="text-red-500">*</span></label>
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Attraction name <span className="text-red-500">*</span></label>
                                 <input
                                     id="name"
                                     name="name"
                                     type="text"
                                     // required
-                                    placeholder="Restaurant Name"
+                                    placeholder="Attraction Name"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -614,19 +470,25 @@ const RestaurantEditProfilePage: React.FC = () => {
                                 )}
                             </div>
                             <div>
-                                <label htmlFor="registrationId" className="block text-sm font-medium text-gray-700 mb-1">Registration ID <span className="text-red-500">*</span></label>
-                                <input
-                                    id="registrationId"
-                                    name="registrationId"
-                                    type="text"
-                                    // required
-                                    placeholder="e.g., 123456789"
-                                    value={registrationId}
-                                    onChange={(e) => setRegistrationId(e.target.value)}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                />
-                                {errors.registrationId && (
-                                    <p className="mt-1 text-sm text-red-600">{errors.registrationId}</p>
+                                <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">Category <span className="text-red-500">*</span></label>
+                                <select
+                                    value={category} 
+                                    onChange={(e) => {
+                                        setCategory(e.target.value);
+                                        setFacilities([]);
+                                        setViews([]);
+                                    }}
+                                    className="w-full h-12 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                >
+                                    <option value="" disabled selected>-- select category --</option>
+                                        {categories.map((c) => (
+                                            <option key={c} value={c}>
+                                                {c}
+                                            </option>
+                                        ))}
+                                </select>
+                                {errors.category && (
+                                    <p className="mt-1 text-sm text-red-600">{errors.category}</p>
                                 )}
                             </div>
                             <div>
@@ -664,9 +526,7 @@ const RestaurantEditProfilePage: React.FC = () => {
                                     <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
                                 )}
                             </div>
-
                         </div>
-
                         <div>
                             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description </label>
                             <input
@@ -674,7 +534,7 @@ const RestaurantEditProfilePage: React.FC = () => {
                                 id="description"
                                 name="description"
                                 // required
-                                placeholder="Describe your restaurant, its vibe, and specialties…"
+                                placeholder="Describe the attraction, its vibe, and specialties…"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -683,7 +543,6 @@ const RestaurantEditProfilePage: React.FC = () => {
                                 <p className="mt-1 text-sm text-red-600">{errors.description}</p>
                             )}
                         </div>
-
                         {/* Address */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
@@ -733,25 +592,7 @@ const RestaurantEditProfilePage: React.FC = () => {
                                     <p className="mt-1 text-sm text-red-600">{errors.upazila}</p>
                                 )}
                             </div>
-
-                            <div>
-                                <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700 mb-1">Postal Code </label>
-                                <input
-                                    id="postalCode"
-                                    name="postalCode"
-                                    type="text"
-                                    // required
-                                    placeholder="e.g., 1209"
-                                    value={postalCode}
-                                    onChange={(e) => setPostalCode(e.target.value)}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                />
-                                {errors.postalCode && (
-                                    <p className="mt-1 text-sm text-red-600">{errors.postalCode}</p>
-                                )}
-                            </div>
                         </div>
-
                         <div>
                             <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">Full Address <span className="text-red-500">*</span></label>
                             <input
@@ -810,7 +651,7 @@ const RestaurantEditProfilePage: React.FC = () => {
                                     name="facebook"
                                     type="text"
                                     // required
-                                    placeholder="    yourpage"
+                                    placeholder="    pagename"
                                     value={socialLinks?.facebook}
                                     onChange={(e) => setSocialLinks(prev => ({ ...prev, facebook: e.target.value }))}
                                     className="w-full py-3"
@@ -828,7 +669,7 @@ const RestaurantEditProfilePage: React.FC = () => {
                                     name="instagram"
                                     type="text"
                                     // required
-                                    placeholder="    yourpage"
+                                    placeholder="    pagename"
                                     value={socialLinks?.instagram}
                                     onChange={(e) => setSocialLinks(prev => ({ ...prev, instagram: e.target.value }))}
                                     className="w-full py-3"
@@ -846,7 +687,7 @@ const RestaurantEditProfilePage: React.FC = () => {
                                     name="twitter"
                                     type="text"
                                     // required
-                                    placeholder="    yourpage"
+                                    placeholder="    pagename"
                                     value={socialLinks?.twitter}
                                     onChange={(e) => setSocialLinks(prev => ({ ...prev, twitter: e.target.value }))}
                                      className="w-full py-3"
@@ -859,7 +700,7 @@ const RestaurantEditProfilePage: React.FC = () => {
                         <fieldset className="border border-gray-300 rounded-md p-6">
                             <legend className="text-indigo-900 font-semibold">Facilities & Services</legend>
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-y-4 gap-x-2 text-indigo-900 text-sm">
-                                {restaurantFacilities.map((option) => (
+                                {category && attractionFacilities[category]?.map((option) => (
                                     <label
                                         key={option}
                                         className="inline-flex items-center space-x-2 cursor-pointer hover:text-indigo-600 transition-colors"
@@ -875,12 +716,12 @@ const RestaurantEditProfilePage: React.FC = () => {
                                 ))}
                             </div>
                         </fieldset>
-                        
-                        {/* Cuisines */}
+
+                        {/* Views */}
                         <fieldset className="border border-gray-300 rounded-md p-6">
-                            <legend className="text-indigo-900 font-semibold">Cuisines</legend>
+                            <legend className="text-indigo-900 font-semibold">Views</legend>
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-y-4 gap-x-2 text-indigo-900 text-sm">
-                                {restaurantCuisines.map((option) => (
+                                {category && attractionViews[category]?.map((option) => (
                                     <label
                                         key={option}
                                         className="inline-flex items-center space-x-2 cursor-pointer hover:text-indigo-600 transition-colors"
@@ -888,8 +729,8 @@ const RestaurantEditProfilePage: React.FC = () => {
                                         <input
                                             type="checkbox"
                                             className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                            checked={cuisines.includes(option)}
-                                            onChange={() => handleCuisinesCheckboxChange(option)}
+                                            checked={views.includes(option)}
+                                            onChange={() => handleViewsCheckboxChange(option)}
                                         />
                                         <span>{option}</span>
                                     </label>
@@ -925,11 +766,9 @@ const RestaurantEditProfilePage: React.FC = () => {
                                 ))}
                             </div>
                         </fieldset>
-                        
-
 
                         <div className="flex justify-between items-center">
-                            <Link href={`profile?warnmessage=${"Nothing Changed"}`}>
+                            <Link href={`/tourismManager/attractions?warnmessage=${"Nothing Changed"}`}>
                                 <button className="px-4 py-3 text-indigo-600 hover:bg-gray-100 font-semibold rounded-md shadow-md transition cursor-pointer">
                                     Cancel
                                 </button>
@@ -951,4 +790,4 @@ const RestaurantEditProfilePage: React.FC = () => {
     )
 }
 
-export default RestaurantEditProfilePage;
+export default TourismManagerEditAttractionsPage;

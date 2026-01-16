@@ -80,6 +80,16 @@ const attractionSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        phone: {
+            type: String,
+            required: true,
+            unique: true,
+        },
         category: {
             type: String,
             required: true,
@@ -102,8 +112,8 @@ const attractionSchema = new mongoose.Schema({
             required: true,
         },
         location: {
-            latitude: { type: Number },
-            longitude: { type: Number }
+            latitude: { type: Number, default: null },
+            longitude: { type: Number, default: null },
         },
         socialLinks: {
             facebook: {type: String,  default: ""},
@@ -190,8 +200,8 @@ const restaurantSchema = new mongoose.Schema({
             required: true,
         },
         location: {
-            latitude: { type: Number },
-            longitude: { type: Number },
+            latitude: { type: Number, default: null },
+            longitude: { type: Number, default: null },
         },
         description: {
             type: String,

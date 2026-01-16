@@ -47,10 +47,10 @@ const SidebarTourismManager: React.FC<Props> = (props) => {
         // },
         // { title: "Analysis", submenu: false, submenuItems: [], icon: <AiOutlineBarChart /> },
         // { title: "Inbox", submenu: false, submenuItems: [], icon: <AiOutlineMail /> },
-        { title: "Profile", href: "profile", spacing: true, icon: <BsPerson /> },
-        { title: "Edit Profile", href: "editProfile", icon: <LiaUserEditSolid /> },
-        { title: "Attractions", href: "attractions", icon: <MdAttractions /> },
-        { title: "Settings", href: "settings", spacing: true, icon: <AiOutlineSetting /> },
+        { title: "Profile", href: "/tourismManager/profile", spacing: true, icon: <BsPerson /> },
+        { title: "Edit Profile", href: "/tourismManager/editProfile", icon: <LiaUserEditSolid /> },
+        { title: "Attractions", href: "/tourismManager/attractions", icon: <MdAttractions /> },
+        { title: "Settings", href: "/tourismManager/settings", spacing: true, icon: <AiOutlineSetting /> },
         { title: "Logout", action: "logout", icon: <RiLogoutBoxRLine /> },
     ];
 

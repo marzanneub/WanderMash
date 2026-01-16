@@ -34,8 +34,8 @@ interface OpeningHours {
 }
 
 interface Location {
-    latitude: number;
-    longitude: number;
+    latitude: number|null;
+    longitude: number|null;
 }
 
 
@@ -59,7 +59,7 @@ interface User {
     facilities?: string[];
     cuisines?: string[];
     openingHours: OpeningHours;
-    location?: Location;
+    location: Location;
 }
 
 const RestaurantProfilePage: React.FC = () => {
@@ -199,8 +199,11 @@ const RestaurantProfilePage: React.FC = () => {
                                 <CuisinesGrid title="Cuisines" items={user.cuisines || []} />
                             </div>
 
-                            {user.location && (<div className="md:col-span-2">
-                                <MapView {...user.location} />
+                            {(user.location.latitude && user.location.longitude) && (<div className="md:col-span-2">
+                                <MapView 
+                                    latitude={user.location.latitude} 
+                                    longitude={user.location.longitude} 
+                                />
                             </div>)}
 
                             <div className="md:col-span-2">

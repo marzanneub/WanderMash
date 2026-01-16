@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const bcrypt = require ("bcrypt");
 const {setUser, getUser} = require("../services/auth");
-const { Admin, GeneralUser, Restaurant, TourismManager } = require("../models/user");
+const { Admin, Attraction, GeneralUser, Restaurant, TourismManager } = require("../models/user");
 const { Verification } = require("../models/verification");
 
 /////////////////////////Need to handle many types of user in this fucntion///////////////////////////////
@@ -17,12 +17,14 @@ async function handleUserRegistration(req, res) {
     }
 
     let user = await Admin.find({ email: email });
+    if(!user.length) user = await Attraction.find({ email: email });
     if(!user.length) user = await GeneralUser.find({ email: email });
     if(!user.length) user = await Restaurant.find({ email: email });
     if(!user.length) user = await TourismManager.find({ email: email });
     if(user.length) return res.status(409).json({errormessage: "Email already exists"});
 
     user = await Admin.find({ phone: phone });
+    if(!user.length) user = await Attraction.find({ phone: phone });
     if(!user.length) user = await GeneralUser.find({ phone: phone });
     if(!user.length) user = await Restaurant.find({ phone: phone });
     if(!user.length) user = await TourismManager.find({ phone: phone });
