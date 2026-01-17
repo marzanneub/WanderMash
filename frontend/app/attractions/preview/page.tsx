@@ -13,7 +13,7 @@ import DescriptionGrid from "@/components/data-display/description-grid";
 import DescriptionGridSkeleton from "@/components/data-display/description-grid-skeleton";
 import SocialLinksGrid from "@/components/data-display/social-links-grid";
 import SocialLinksGridSkeleton from "@/components/data-display/social-links-grid-skeleton";
-import ServicesGrid from "@/components/data-display/restaurant-services-grid";
+import ServicesGrid from "@/components/data-display/attraction-services-grid";
 import ServicesGridSkeleton from "@/components/data-display/services-grid-skeleton";
 import CuisinesGrid from "@/components/data-display/cuisines-grid";
 import CuisinesGridSkeleton from "@/components/data-display/cuisines-grid-skeleton";
@@ -21,6 +21,12 @@ import FoodCardSwiperSkeleton from "@/components/ui/food-card-swiper-skeleton";
 import FoodCardSwiper from "@/components/ui/food-card-swiper";
 import MapViewSkeleton from "@/components/maps/map-view-skeleton";
 import MapView from "@/components/maps/map-view";
+
+interface SocialLinks {
+    facebook: string;
+    instagram: string;
+    twitter: string;
+}
 
 
 interface TimeSlot {
@@ -43,44 +49,26 @@ interface Location {
     longitude: number|null;
 }
 
-
-interface MenuItems {
-    _id: string;
+interface Attraction {
     name: string;
-    price: string;
-    description: string;
-    category: string;
-    image: string;
-    isAvailable: boolean;
-}
-
-interface Restaurant {
-    name: string;
-    logo: string;
     images: string[];
-    email: string;
-    registrationId: string;
-    phone: string;
-    approved: boolean;
-    address: string;
+    email?: string;
+    phone?: string;
+    category?: string;
+    description: string;
     district: string;
     upazila: string;
-    postalCode: number;
-    description: string;
-    socialLinks?: {
-        facebook?: string;
-        instagram?: string;
-        twitter?: string;
-    };
-    facilities?: string[];
-    cuisines?: string[];
-    openingHours: OpeningHours;
+    address: string;
     location: Location;
-    menuItems: MenuItems[];
+    socialLinks?: SocialLinks;
+    views?: string[];
+    facilities?: string[];
+    openingHours: OpeningHours;
+    approved: boolean;
 }
 
-const RestaurantPreviewPage: React.FC = () => {
-    const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
+const AttractionPreviewPage: React.FC = () => {
+    const [attraction, setAttraction] = useState<Attraction | null>(null);
     const [loading, setLoading] = useState(true);
 
     const searchParams = useSearchParams();
@@ -109,26 +97,26 @@ const RestaurantPreviewPage: React.FC = () => {
             progress: undefined,
             theme: "colored",
         });
-        fetch(`/api/get-restaurant-info?id=${id}`) 
+        fetch(`/api/get-attraction-info?id=${id}`) 
             .then(res => res.json())
             .then(data => {
-                setRestaurant(data.restaurant);
+                setAttraction(data.attraction);
                 setLoading(false);
             }
         );
     }, []);
 
+
 /////////////////////////////////////////////
     const contactInformation = [
-        { label: "Email", value: restaurant?.email },
-        { label: "Phone Number", value: restaurant?.phone },
+        { label: "Email", value: attraction?.email },
+        { label: "Phone Number", value: attraction?.phone },
     ];
 
     const location = [
-        { label: "Address", value: restaurant?.address },
-        { label: "District", value: restaurant?.district },
-        { label: "Upazila", value: restaurant?.upazila },
-        { label: "Postal Code", value: restaurant?.postalCode },
+        { label: "Address", value: attraction?.address },
+        { label: "District", value: attraction?.district },
+        { label: "Upazila", value: attraction?.upazila },
     ];
 /////////////////////////////////////////////
 
@@ -157,9 +145,6 @@ const RestaurantPreviewPage: React.FC = () => {
                                 <InfoGridSkeleton />
                             </div>
                             <div>
-                                <FoodCardSwiperSkeleton />
-                            </div>
-                            <div>
                                 <MapViewSkeleton />
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -169,38 +154,35 @@ const RestaurantPreviewPage: React.FC = () => {
                     </div>
                 </div>
             )}
-            {restaurant!==null && (
+            {attraction!==null && (
                 <div>
-                    <h1 className="text-4xl font-bold text-indigo-900 mb-10">{restaurant.name}</h1>
+                    <h1 className="text-4xl font-bold text-indigo-900 mb-10">{attraction.name}</h1>
                     <div className="bg-white rounded-2xl shadow-xl p-12 flex flex-col md:flex-row gap-14">
                         <div className="md:w-2/2 space-y-12">
                             <div className="grid grid-cols-1 md:grid-cols-1 gap-10">
-                                {restaurant.images.length>0 && (<Carousel items={restaurant.images} />)}
+                                {attraction.images.length>0 && (<Carousel items={attraction.images} />)}
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-1 gap-1">
-                                <DescriptionGrid description={restaurant.description} />
+                                <DescriptionGrid description={attraction.description} />
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                <CuisinesGrid title="Cuisines" items={restaurant.cuisines || []} />
-                                <ServicesGrid title="Facilities & Services" items={restaurant.facilities || []} />
+                                <CuisinesGrid title="Views" items={attraction.views || []} />
+                                <ServicesGrid title="Facilities & Services" items={attraction.facilities || []} />
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                                <SocialLinksGrid {...restaurant.socialLinks}/>
+                                <SocialLinksGrid {...attraction.socialLinks}/>
                                 <InfoGrid title="Contact Information" items={contactInformation} />
                                 <InfoGrid title="Location" items={location} />
                             </div>
-                            <div>
-                                <FoodCardSwiper title="Food Menu" items={restaurant.menuItems || []}/>
-                            </div>
-                            {(restaurant.location.latitude && restaurant.location.longitude) && (
+                            {(attraction.location.latitude && attraction.location.longitude) && (
                                 <MapView 
-                                    latitude={restaurant.location.latitude} 
-                                    longitude={restaurant.location.longitude} 
+                                    latitude={attraction.location.latitude} 
+                                    longitude={attraction.location.longitude} 
                                 />
                             )}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                <TimeTable {...restaurant.openingHours} />
+                                <TimeTable {...attraction.openingHours} />
                             </div>
                         </div>
                     </div>
@@ -209,6 +191,7 @@ const RestaurantPreviewPage: React.FC = () => {
             </main>
         </div>
     )
+
 }
 
-export default RestaurantPreviewPage;
+export default AttractionPreviewPage;

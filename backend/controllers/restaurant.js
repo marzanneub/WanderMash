@@ -186,9 +186,11 @@ async function handleDeleteMenuItem(req, res) {
 
 module.exports = {
     handleEditProfile,
+    
     handleUploadImage,
     handleSetAsDp,
     handleDeleteImage,
+
     handleAddMenuItem,
     handleEditMenuItem,
     handleDeleteMenuItem,

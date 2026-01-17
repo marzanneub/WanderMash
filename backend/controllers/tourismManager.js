@@ -17,6 +17,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).fields([
     { name: "profilePicture", maxCount: 1 },
+    { name: "image", maxCount: 1 },
 ]);
 const uploadAsync = util.promisify(upload);
 
@@ -109,7 +110,7 @@ async function handleEditAttraction(req, res) {
     if(!found) found =  await TourismManager.findOne({phone: updates.phone });
     if(found){ return res.status(409).json({errormessage: "Phone number already exists"}); }
 
-    result =  await Attraction.findOne({ _id: updates.id, createdBy: req.userData._id });
+    let result =  await Attraction.findOne({ _id: updates.id, createdBy: req.userData._id });
     if(!result){ return res.status(409).json({errormessage: "You cannot edit this attraction because you didn't added this."}); }
 
     updates.socialLinks = JSON.parse(updates.socialLinks);
@@ -124,10 +125,69 @@ async function handleEditAttraction(req, res) {
     return res.status(200).json({successmessage: "Successfully Updated"});
 }
 
+async function handleDeleteAttraction(req, res) {
+    await uploadAsync(req, res);
+
+    let result =  await Attraction.findOne({ _id: req.body.id, createdBy: req.userData._id });
+    if(!result){ return res.status(409).json({errormessage: "You cannot delete this attraction because you didn't added this."}); }
+
+    result = await Attraction.findByIdAndDelete(req.body.id);
+
+    if(result) return res.status(200).json({successmessage: "Successfully Deleted"});
+    return res.status(404).json({errormessage: "Error"});
+
+}
+
+async function handleUploadImage(req, res) {
+    await uploadAsync(req, res);
+
+    const image = req.files?.image?.[0]?.filename || null;
+
+    let result =  await Attraction.findOne({ _id: req.body.id, createdBy: req.userData._id });
+    if(!result){ return res.status(409).json({errormessage: "You cannot edit this attraction because you didn't added this."}); }
+
+    if(image!=null) await Attraction.findByIdAndUpdate(req.body.id,{ $push: { images: image } });
+
+    return res.status(200).json({successmessage: "Successfully Uploaded", imageTitle: image});
+}
+
+async function handleSetAsDp(req, res) {
+    await uploadAsync(req, res);
+    
+    let result =  await Attraction.findOne({ _id: req.body.id, createdBy: req.userData._id });
+    if(!result){ return res.status(409).json({errormessage: "You cannot edit this attraction because you didn't added this."}); }
+
+
+    if(req.body.image) {
+        await Attraction.findByIdAndUpdate(req.body.id,{ dp: req.body.image });
+        return res.status(200).json({successmessage: "Display picture updated successfully."});
+    }
+    return res.status(404).json({errormessage: "Error"});
+}
+
+async function handleDeleteImage(req, res) {
+    await uploadAsync(req, res);
+
+    let result =  await Attraction.findOne({ _id: req.body.id, createdBy: req.userData._id });
+    if(!result){ return res.status(409).json({errormessage: "You cannot edit this attraction because you didn't added this."}); }
+
+    if(req.body.image) {
+        await Attraction.findByIdAndUpdate(req.body.id,{$pull:{ images: req.body.image }});
+        return res.status(200).json({successmessage: "Image deleted successfully."});
+    }
+    return res.status(404).json({errormessage: "Error"});
+}
+
 
 module.exports = {
     handleEditProfile,
     handleSettings,
+
     handleAddAttraction,
     handleEditAttraction,
+    handleDeleteAttraction,
+
+    handleUploadImage,
+    handleSetAsDp,
+    handleDeleteImage,
 };

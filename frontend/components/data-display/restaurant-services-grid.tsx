@@ -133,7 +133,6 @@ const restaurantFacilityIconList: FacilityIcon[] = [
 const ServicesGrid: React.FC<ServicesGridProps> = ({ title, items }) => {
     const [isOpen, setIsOpen] = useState(false);
 
-
     const limit = 6;
     const more = items.length > limit;
     const previewItems = items.slice(0, limit);

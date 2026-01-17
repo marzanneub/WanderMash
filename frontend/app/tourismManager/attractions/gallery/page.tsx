@@ -5,30 +5,32 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import Cropper, { Area, Point } from "react-easy-crop";
 import getCroppedImg from "@/utils/cropImage";
-import SidebarRestaurant from "@/components/navigation/sidebarRestaurant";
+import SidebarTourismManager from "@/components/navigation/sidebarTourismManager";
 
-interface User {
-    logo: string;
+interface Attraction {
     dp: string;
     phone: string;
     images: string[];
 }
 
-const RestaurantGalleryPage: React.FC = () => {
+const AttractionGalleryPage: React.FC = () => {
     const router = useRouter();
-    const [user, setUser] = useState<User | null>(null);
+
+    const searchParams = useSearchParams();
+    const id: string|null  = searchParams.get("_id");
+
+    const [attraction, setAttraction] = useState<Attraction | null>(null);
     const [images, setImages] = useState([]);
     const [phone, setPhone] = useState("");
     const [loading, setLoading] = useState(true);
 
     const [errors, setErrors] = useState<{
-        logo?: string;
+        dp?: string;
         phone?: string;
         loading?: string;
         errormessage?: string;
     }>({});
 
-    const searchParams = useSearchParams();
     const warnmessage = searchParams.get("warnmessage");
     const successmessage = searchParams.get("successmessage");
     useEffect(() => {
@@ -55,27 +57,29 @@ const RestaurantGalleryPage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        fetch('/api/get-user-info-for-profile')
+        fetch(`/api/get-attraction-info?id=${id}`)
             .then(res => res.json())
             .then(data => {
-                setUser(data.user);
-                setPhone(data.user.phone);
-                setImages(data.user.images);
+                setAttraction(data.attraction);
+                setPhone(data.attraction.phone);
+                setImages(data.attraction.images);
 
                 setLoading(false);
             }
             );
     }, []);
 
-
+    
     const deleteImage = async (item: string) => {
+        if(!id) return;
 
         const formData = new FormData();
 
         formData.append("image", item);
+        formData.append("id", id);
 
 
-        const res = await fetch("http://localhost:4000/restaurant/deleteImage", {
+        const res = await fetch("http://localhost:4000/tourismManager/deleteImage", {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -107,10 +111,10 @@ const RestaurantGalleryPage: React.FC = () => {
                 theme: "colored",
             });
 
-            fetch('/api/get-user-info-for-profile')
+            fetch(`/api/get-attraction-info?id=${id}`)
                 .then(res => res.json())
                 .then(data => {
-                    setImages(data.user.images);
+                    setImages(data.attraction.images);
                 }
                 );
 
@@ -119,13 +123,15 @@ const RestaurantGalleryPage: React.FC = () => {
     };
 
     const setAsDp = async (item: string) => {
+        if(!id) return;
 
         const formData = new FormData();
 
         formData.append("image", item);
+        formData.append("id", id);
 
 
-        const res = await fetch("http://localhost:4000/restaurant/setAsDp", {
+        const res = await fetch("http://localhost:4000/tourismManager/setAsDp", {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -157,10 +163,10 @@ const RestaurantGalleryPage: React.FC = () => {
                 theme: "colored",
             });
 
-            fetch('/api/get-user-info-for-profile')
+            fetch(`/api/get-attraction-info?id=${id}`)
                 .then(res => res.json())
                 .then(data => {
-                    setUser(data.user);
+                    setAttraction(data.attraction);
                 }
                 );
 
@@ -207,14 +213,14 @@ const RestaurantGalleryPage: React.FC = () => {
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-    
+
         const img = new Image();
         img.src = URL.createObjectURL(file);
-    
+
         img.onload = () => {
         const minW = 650;
         const minH = 400;
-    
+
         if (img.width < minW || img.height < minH) {
             toast.error(`Original image must be at least ${minW}x${minH} pixels.`, {
                 position: "top-center",
@@ -229,13 +235,13 @@ const RestaurantGalleryPage: React.FC = () => {
             URL.revokeObjectURL(img.src);
             return;
         }
-    
-            setCurrentUploadedFile(file.name);
-            setImage(img.src);
-            setZoom(1);
-            setIsOpen(true);
-        };
-    
+
+        setCurrentUploadedFile(file.name);
+        setImage(img.src);
+        setZoom(1);
+        setIsOpen(true);
+    };
+
         // setCurrentUploadedFile(file.name);
         // setImage(URL.createObjectURL(file));
         // setZoom(1);
@@ -258,6 +264,7 @@ const RestaurantGalleryPage: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if(!id) return;
 
         const formData = new FormData();
         if (croppedImage !== null) {
@@ -265,7 +272,9 @@ const RestaurantGalleryPage: React.FC = () => {
             formData.append("image", imageBlob, `${phone}.png`);
         }
 
-        const res = await fetch("http://localhost:4000/restaurant/uploadImage", {
+        formData.append("id", id);
+
+        const res = await fetch("http://localhost:4000/tourismManager/uploadImage", {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -297,10 +306,10 @@ const RestaurantGalleryPage: React.FC = () => {
                 theme: "colored",
             });
 
-            fetch('/api/get-user-info-for-profile')
+            fetch(`/api/get-attraction-info?id=${id}`)
                 .then(res => res.json())
                 .then(data => {
-                    setImages(data.user.images);
+                    setImages(data.attraction.images);
                 }
                 );
             handleResetImage();
@@ -311,12 +320,11 @@ const RestaurantGalleryPage: React.FC = () => {
     }
 
     return (
-        <div className="bg-indigo-50 min-h-screen w-full flex">
-            <SidebarRestaurant pagetype="Gallery" />
+        <div  className="bg-indigo-50 min-h-screen w-full flex">
+            <SidebarTourismManager pagetype="Attractions" />
 
             <main className="container mx-auto px-10 py-16 max-w-7xl">
-                <h1 className="text-4xl font-bold text-indigo-900 mb-10">Gallery</h1>
-
+                <h1 className="text-4xl font-bold text-indigo-900 mb-10">Attraction Gallery</h1>
                 {loading && (
                     <div className="animate-pulse">
                     {/* ================= Upload Form Skeleton ================= */}
@@ -370,10 +378,9 @@ const RestaurantGalleryPage: React.FC = () => {
                     </div>
                 )}
 
-                {user !== null && (
+                {attraction !== null && (
                     <div>
                         <form className="bg-white rounded-xl shadow-lg p-8 space-y-8" onSubmit={handleSubmit}>
-                            {/* /////////////////////////////////////////////////////// */}
                             <div className="grid md:grid-cols-2 gap-8 items-start">
                                 <div>
                                     <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
@@ -428,9 +435,9 @@ const RestaurantGalleryPage: React.FC = () => {
                                     </h2>
                                     <div className="p-5 bg-slate-50 rounded-xl border border-slate-100">
                                         <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-                                            Upload photos of your dishes, interior, or ambiance. You
-                                            can set any uploaded photo as your primary display picture
-                                            later.
+                                            Upload photos of this attraction’s key features, architecture, 
+                                            or surroundings. You can select your favorite shot as the 
+                                            primary display photo later.
                                         </p>
                                         <div className="flex gap-3">
                                             <button
@@ -455,11 +462,8 @@ const RestaurantGalleryPage: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-
-
-                            {/* /////////////////////////////////////////////////////// */}
-
                         </form>
+
                         {isOpen && image && (
                             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
                                 <div className={`bg-white w-full max-w-2xl rounded-lg shadow-lg overflow-hidden`}>
@@ -556,7 +560,7 @@ const RestaurantGalleryPage: React.FC = () => {
                             <h2 className="text-xl font-semibold text-gray-800 mb-6">Uploaded Photos</h2>
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                                 <div className="relative group">
-                                    <img src={`http://localhost:4000/images/${user.dp}`} alt="Gallery Image" className="w-full h-48 object-cover rounded-xl shadow-md" />
+                                    <img src={`http://localhost:4000/images/${attraction.dp}`} alt="Gallery Image" className="w-full h-48 object-cover rounded-xl shadow-md" />
 
                                     <div className="absolute top-2 left-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full shadow">Display</div>
 
@@ -564,7 +568,7 @@ const RestaurantGalleryPage: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {images.map((item) => (item !== user.dp && (
+                                {images.map((item) => (item !== attraction.dp && (
                                     <div key={item} className="relative group w-full h-auto">
                                         <img src={`http://localhost:4000/images/${item}`} alt="Gallery Image" className="w-full h-full object-cover rounded-xl shadow-md" />
 
@@ -588,14 +592,12 @@ const RestaurantGalleryPage: React.FC = () => {
 
                             </div>
                         </div>
-
                     </div>
                 )}
 
             </main>
-
         </div>
     )
 }
 
-export default RestaurantGalleryPage;
+export default AttractionGalleryPage;

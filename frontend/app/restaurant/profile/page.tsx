@@ -11,7 +11,7 @@ import DescriptionGrid from "@/components/data-display/description-grid";
 import DescriptionGridSkeleton from "@/components/data-display/description-grid-skeleton";
 import SocialLinksGrid from "@/components/data-display/social-links-grid";
 import SocialLinksGridSkeleton from "@/components/data-display/social-links-grid-skeleton";
-import ServicesGrid from "@/components/data-display/services-grid";
+import ServicesGrid from "@/components/data-display/restaurant-services-grid";
 import ServicesGridSkeleton from "@/components/data-display/services-grid-skeleton";
 import CuisinesGrid from "@/components/data-display/cuisines-grid";
 import CuisinesGridSkeleton from "@/components/data-display/cuisines-grid-skeleton";

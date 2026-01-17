@@ -94,6 +94,53 @@ const TourismManagerAttractionsPage: React.FC = () => {
         setAddress("");
     }
 
+    const handleDeleteAttraction = async (_id: string) => {
+        const formData = new FormData();
+        formData.append("id", _id);
+        
+        const res = await fetch("http://localhost:4000/tourismManager/deleteAttraction", {
+            method: "POST",
+            body: formData,
+            credentials: "include",
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+            toast.error(data.errormessage, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+            return;
+        }
+        else {
+            toast.success(data.successmessage, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+
+            fetch('/api/tourismManager-get-my-added-attractions') 
+                .then(res => res.json())
+                .then(data => {
+                    setAttractions(data.attractions);
+                }
+            );
+
+            return;
+        }
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -469,10 +516,12 @@ const TourismManagerAttractionsPage: React.FC = () => {
                                     Edit
                                 </button>
                                 </Link>
+                                <Link href={`attractions/gallery?_id=${item._id}`}>
                                 <button className="text-slate-400 hover:text-lime-500 flex items-center gap-1.5 text-xs font-bold transition-colors cursor-pointer">
                                     Gallery
                                 </button>
-                                <button className="text-slate-400 hover:text-rose-500 flex items-center gap-1.5 text-xs font-bold transition-colors cursor-pointer">
+                                </Link>
+                                <button onClick={() => handleDeleteAttraction(item._id)} className="text-slate-400 hover:text-rose-500 flex items-center gap-1.5 text-xs font-bold transition-colors cursor-pointer">
                                     Delete
                                 </button>
                             </div>

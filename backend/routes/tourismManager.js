@@ -4,8 +4,14 @@ const { TourismManager, Attraction } = require("../models/user");
 const {
     handleEditProfile,
     handleSettings,
+
     handleAddAttraction,
-    handleEditAttraction } = require("../controllers/tourismManager");
+    handleEditAttraction,
+    handleDeleteAttraction,
+
+    handleUploadImage,
+    handleSetAsDp,
+    handleDeleteImage } = require("../controllers/tourismManager");
 
 router.get("/my-added-attractions", async(req, res) => {
     const attractions = await Attraction.find({createdBy: req.userData._id});
@@ -13,16 +19,15 @@ router.get("/my-added-attractions", async(req, res) => {
     return res.status(200).json({attractions});
 });
 
-router.post("/editProfile",
-    handleEditProfile);
+router.post("/editProfile", handleEditProfile);
+router.post("/settings", handleSettings);
 
-router.post("/settings",
-    handleSettings);
+router.post("/addAttraction", handleAddAttraction);
+router.post("/editAttraction", handleEditAttraction);
+router.post("/deleteAttraction", handleDeleteAttraction);
 
-router.post("/addAttraction",
-    handleAddAttraction);
-
-router.post("/editAttraction",
-    handleEditAttraction);
+router.post("/uploadImage", handleUploadImage);
+router.post("/setAsDp", handleSetAsDp);
+router.post("/deleteImage", handleDeleteImage);
 
 module.exports = router;

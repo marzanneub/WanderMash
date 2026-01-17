@@ -3,19 +3,23 @@ const router = express.Router();
 
 const {
     handleEditProfile,
+    handleSettings,
+
     handleUploadImage,
     handleSetAsDp,
     handleDeleteImage,
+
     handleAddMenuItem,
     handleEditMenuItem,
-    handleDeleteMenuItem,
-    handleSettings } = require("../controllers/restaurant");
+    handleDeleteMenuItem } = require("../controllers/restaurant");
 
 router.post("/editProfile", handleEditProfile);
 router.post("/settings", handleSettings);
+
 router.post("/uploadImage", handleUploadImage);
 router.post("/setAsDp", handleSetAsDp);
 router.post("/deleteImage", handleDeleteImage);
+
 router.post("/addMenuItem", handleAddMenuItem);
 router.post("/editMenuItem", handleEditMenuItem);
 router.post("/deleteMenuItem", handleDeleteMenuItem);
