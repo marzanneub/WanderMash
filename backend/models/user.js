@@ -171,6 +171,141 @@ const attractionSchema = new mongoose.Schema({
 );
 const Attraction = mongoose.model("attraction", attractionSchema);
 
+const hotelSchema = new mongoose.Schema({
+        name: {
+            type: String,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        phone: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        logo: {
+            type: String,
+            default: "hotelDefault.jpg",
+        },
+        registrationId: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        address: {
+            type: String,
+            required: true,
+        },
+        location: {
+            latitude: { type: Number, default: null },
+            longitude: { type: Number, default: null },
+        },
+        description: {
+            type: String,
+            default: "",
+        },
+        role: {
+            type: String,
+            required: true,
+        },
+        district: {
+            type: String,
+            required: true,
+        },
+        upazila: {
+            type: String,
+            required: true,
+        },
+        postalCode: {
+            type: String,
+            default: "",
+        },
+        socialLinks: {
+            facebook: { type: String, default: "" },
+            instagram: { type: String, default: "" },
+            twitter: { type: String, default: "" },
+        },
+        roomTypes: [
+            {
+                title: { type: String, required: true }, // e.g., "Deluxe King Room"
+                pricePerNight: { type: Number, required: true },
+                capacity: {
+                    adults: { type: Number, default: 2 },
+                    children: { type: Number, default: 0 }
+                },
+                amenities: [String], // e.g., ["Mini Bar", "Sea View", "AC"]
+                description: String,
+                images: [String],
+                
+                rooms: [
+                    {
+                        roomNumber: [{ type: Number }],
+                        isAvailable: { type: Boolean, default: true },
+                        unavailableDates: { type: [Date] }
+                    }
+                ]
+            }
+        ],
+        facilities: [String],
+        views: [String],
+        policies: {
+            checkIn: { type: String, default: "14:00" },
+            checkOut: { type: String, default: "12:00" },
+            cancellation: { type: String, default: "Flexible" },
+        },
+        images: [{
+            type: String,
+        }],
+        dp: {
+            type: String,
+            default: "hotelDefault.jpg",
+        },
+        clicks: {
+            type: Number,
+            default: 0,
+        },
+        videoUrl: {
+            type: String,
+        },
+        reviews: [
+            {
+                userId: { type: mongoose.Schema.Types.ObjectId, ref: "generalUser" },
+                name: String,
+                rating: { type: Number, min: 1, max: 5 },
+                comment: String,
+                createdAt: { type: Date, default: Date.now },
+            },
+        ],
+        averageRating: {
+            type: Number,
+            default: 0,
+        },
+        starRating: {
+            type: Number,
+            min: 1,
+            max: 5,
+            default: 3,
+        },
+        password: {
+            type: String,
+            required: true,
+        },
+        verified: {
+            type: Boolean,
+            default: false,
+        },
+        approved: {
+            type: Boolean,
+            default: true,
+        },
+    }, { timestamps: true }
+);
+
+const Hotel = mongoose.model("hotel", hotelSchema);
+
 const restaurantSchema = new mongoose.Schema({
         name: {
             type: String,
@@ -238,8 +373,8 @@ const restaurantSchema = new mongoose.Schema({
                 isAvailable: { type: Boolean, default: true },
             },
         ],
-        cuisines: [String],
         facilities: [String],
+        cuisines: [String],
         openingHours: {
             saturday: { open: {type: String,  default: ""}, close: {type: String,  default: ""} },
             sunday: { open: {type: String,  default: ""}, close: {type: String,  default: ""} },
@@ -342,6 +477,7 @@ module.exports = {
     Admin,
     GeneralUser,
     Attraction,
+    Hotel,
     Restaurant,
     TourismManager,
 };

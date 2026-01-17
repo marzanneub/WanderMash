@@ -10,6 +10,7 @@ const staticRoute = require("./routes/staticRouter");
 const authRoute = require("./routes/auth");
 const adminRoute = require("./routes/admin");
 const generalUserRoute = require("./routes/generalUser");
+const hotelRoute = require("./routes/hotel");
 const restaurantRoute = require("./routes/restaurant");
 const tourismManagerRoute = require("./routes/tourismManager");
 
@@ -36,6 +37,7 @@ app.use("/", staticRoute);
 app.use("/auth", authRoute);
 app.use("/admin", restrictTo(["admin"]), adminRoute);
 app.use("/generalUser", restrictTo(["generalUser"]), generalUserRoute);
+app.use("/hotel", restrictTo(["hotel"]), hotelRoute);
 app.use("/restaurant", restrictTo(["restaurant"]), restaurantRoute);
 app.use("/tourismManager", restrictTo(["tourismManager"]), tourismManagerRoute);
 

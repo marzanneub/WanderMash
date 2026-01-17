@@ -3,7 +3,7 @@ const multer = require("multer");
 const util = require("util");
 const bcrypt = require ("bcrypt");
 
-const { Attraction, GeneralUser, Restaurant, Admin, TourismManager } = require("../models/user");
+const { Attraction, GeneralUser, Hotel, Restaurant, Admin, TourismManager } = require("../models/user");
 const { Verification } = require("../models/verification");
 
 const storage = multer.diskStorage({
@@ -51,6 +51,7 @@ async function handleAddTourismManager(req, res) {
     let result = await Admin.find({ email: email });
     if (result.length == 0) result = await Attraction.find({ email: email });
     if (result.length == 0) result = await GeneralUser.find({ email: email });
+    if (result.length == 0) result = await Hotel.find({ email: email });
     if (result.length == 0) result = await Restaurant.find({ email: email });
     if (result.length == 0) result = await TourismManager.find({ email: email });
     if (result.length) return res.status(409).json({errormessage: "Email already exists"});
@@ -58,6 +59,7 @@ async function handleAddTourismManager(req, res) {
     if (result.length == 0) result = await Admin.find({ phone: phone });
     if (result.length == 0) result = await Attraction.find({ phone: phone });
     if (result.length == 0) result = await GeneralUser.find({ phone: phone });
+    if (result.length == 0) result = await Hotel.find({ phone: phone });
     if (result.length == 0) result = await Restaurant.find({ phone: phone });
     if (result.length == 0) result = await TourismManager.find({ phone: phone });
     if (result.length) return res.status(409).json({errormessage: "Phone number already exists"});

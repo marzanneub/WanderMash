@@ -1,11 +1,20 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import HomepageCards from "../cards/homepage-cards";
-import { ITopAttractions } from "@/types/attraction";
 import HomepageCardsSkeleton from "../cards/homepage-cards-skeleton";
 
+interface Attraction {
+    _id: string;
+    name: string;
+    description?: string;
+    dp?: string;
+    upazila: string;
+    district: string;
+}
+
+
 const MustSeeAttractions: React.FC = () => {
-    const [items, setItems] = useState<ITopAttractions[]>([]);
+    const [items, setItems] = useState<Attraction[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

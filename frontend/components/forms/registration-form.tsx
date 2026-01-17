@@ -16,6 +16,7 @@ const RegistrationForm: React.FC = () => {
     const [district, setDistrict] = useState("")
     const [upazila, setUpazila] = useState("")
     const [address, setAddress] = useState("")
+    const [submission, setSubmission] = useState(false);
 
     const districts = Object.keys(districtUpazilas);
 
@@ -36,6 +37,8 @@ const RegistrationForm: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        setSubmission(true);
 
         const newErrors: typeof errors = {};
 
@@ -71,7 +74,10 @@ const RegistrationForm: React.FC = () => {
             setErrors(newErrors);
             // console.log(phone);
 
-            if (Object.keys(newErrors).length !== 0) return;
+            if (Object.keys(newErrors).length !== 0){
+                setSubmission(false);
+                return;
+            }
 
             const res = await fetch("http://localhost:4000/auth/registration", {
                 method: "POST",
@@ -96,6 +102,8 @@ const RegistrationForm: React.FC = () => {
                     progress: undefined,
                     theme: "colored",
                 });
+
+                setSubmission(false);
 
                 return;
             }
@@ -149,7 +157,10 @@ const RegistrationForm: React.FC = () => {
             setErrors(newErrors);
             // console.log(phone);
 
-            if (Object.keys(newErrors).length !== 0) return;
+            if (Object.keys(newErrors).length !== 0){
+                setSubmission(false);
+                return;
+            }
 
             const res = await fetch("http://localhost:4000/auth/registration", {
                 method: "POST",
@@ -174,6 +185,91 @@ const RegistrationForm: React.FC = () => {
                     progress: undefined,
                     theme: "colored",
                 });
+
+                setSubmission(false);
+
+                return;
+            }
+            router.push(`/verification?message=${data.successmessage}`);
+        }
+        else if(role === "hotel") {
+            if(!name) {
+                newErrors.name = "Name is required";
+            }
+
+            if(!email) {
+                newErrors.email = "Email is required";
+            } else if(!/^\S+@\S+\.\S+$/.test(email)) {
+                newErrors.email = "Please enter a valid email address";
+            }
+
+            if(!phone) {
+                newErrors.phone = "Phone number is required";
+            } else if(phone.startsWith("880")) {
+                setPhone(`+${phone}`);
+            } else if(phone.startsWith("0")) {
+                setPhone(`+880${phone.slice(1)}`);
+            } else if(!phone.startsWith("+880")) {
+                setPhone(`+880${phone}`);
+            }
+
+            if(!registrationId) {
+                newErrors.registrationId = "Registration ID is required";
+            }
+
+            if(!district) {
+                newErrors.district = "District is required";
+            }
+
+            if(!upazila) {
+                newErrors.upazila = "Upazila is required";
+            }
+
+            if(!address) {
+                newErrors.address = "Address is required";
+            }
+
+            if(!password) {
+                newErrors.password = "Password is required";
+            }
+            if(password && password.length < 8) {
+                newErrors.password = "Password must be at least 8 characters";
+            }
+            if(password !== confirmPassword) newErrors.confirmPassword = "Password doesn't matched";
+
+            setErrors(newErrors);
+            // console.log(phone);
+
+            if (Object.keys(newErrors).length !== 0){
+                setSubmission(false);
+                return;
+            }
+
+            const res = await fetch("http://localhost:4000/auth/registration", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ role, name, email, phone, registrationId, district, upazila, address, password }),
+                credentials: "include",
+            });
+
+            const data = await res.json();
+            if(!res.ok){
+                setErrors({ errormessage: data.errormessage });
+
+                toast.error(data.errormessage, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
+
+                setSubmission(false);
 
                 return;
             }
@@ -280,9 +376,21 @@ const RegistrationForm: React.FC = () => {
                     
                     <button
                         type="submit"
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-md shadow-md transition cursor-pointer"
+                        className="w-full bg-indigo-600 flex items-center justify-center text-white font-semibold py-3 rounded-md disabled:opacity-70"
+                        disabled={submission}
                     >
-                        Register
+                        {submission ? (
+                        <>
+                            {/* This is a pure Tailwind Spinner */}
+                            <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Processing...
+                        </>
+                        ) : (
+                            "Register"
+                        )}
                     </button>
                 </div>
                 
@@ -295,7 +403,7 @@ const RegistrationForm: React.FC = () => {
                         type="text"
                         id="name"
                         name="name"
-                        placeholder="Your Name"
+                        placeholder="Restaurant Name"
                         onChange={(e) => setName(e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                         />
@@ -443,12 +551,198 @@ const RegistrationForm: React.FC = () => {
                     
                     <button
                         type="submit"
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-md shadow-md transition cursor-pointer"
+                        className="w-full bg-indigo-600 flex items-center justify-center text-white font-semibold py-3 rounded-md disabled:opacity-70"
+                        disabled={submission}
                     >
-                        Register
+                        {submission ? (
+                        <>
+                            {/* This is a pure Tailwind Spinner */}
+                            <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Processing...
+                        </>
+                        ) : (
+                            "Register"
+                        )}
                     </button>
                 </div>
                 
+            )}
+            {role==="hotel" && (
+                <div className="space-y-6">
+                    <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Hotel Name <span className="text-red-500">*</span></label>
+                        <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Hotel Name"
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                        {errors.name && (
+                            <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                        )}
+                    </div>
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email address <span className="text-red-500">*</span></label>
+                        <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        // required
+                        placeholder="you@example.com"
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                        {errors.email && (
+                            <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                        )}
+                    </div>
+                    <div>
+                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number <span className="text-red-500">*</span></label>
+                        <input
+                            type="number"
+                            id="phone"
+                            name="phone"
+                            placeholder="01XXX XXX XXX"
+                            // required
+                            onChange={(e) => setPhone(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                        {errors.phone && (
+                            <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+                        )}
+                    </div>
+                    <div>
+                        <label htmlFor="registrationId" className="block text-sm font-medium text-gray-700 mb-1">Registration ID <span className="text-red-500">*</span></label>
+                        <input
+                            type="text"
+                            id="registrationId"
+                            name="registrationId"
+                            placeholder="XXXXXXXXX"
+                            // required
+                            onChange={(e) => setRegistrationId(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                        {errors.registrationId && (
+                            <p className="mt-1 text-sm text-red-600">{errors.registrationId}</p>
+                        )}
+                    </div>
+                    <div>
+                        <label htmlFor="district" className="block text-sm font-medium text-gray-700 mb-1">Select District <span className="text-red-500">*</span></label>
+                        <select
+                        id="district"
+                        name="district"
+                        onChange={(e) => {
+                            setDistrict(e.target.value);
+                            setUpazila("");
+                        }}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        >
+                            <option value="" disabled selected>-- select district --</option>
+                            {districts.map((d) => (
+                                <option key={d} value={d}>
+                                    {d}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.district && (
+                            <p className="mt-1 text-sm text-red-600">{errors.district}</p>
+                        )}
+                    </div>
+                    <div>
+                        <label htmlFor="upazila" className="block text-sm font-medium text-gray-700 mb-1">Select Upazila <span className="text-red-500">*</span></label>
+                        <select
+                        id="upazila"
+                        name="upazila"
+                        onChange={(e) => setUpazila(e.target.value)}
+                        disabled={!district}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        >
+                            <option value="">
+                                {district ? "-- select upazila --" : "-- select district first --"}
+                            </option>
+
+                            {district &&
+                                districtUpazilas[district]?.map((u) => (
+                                <option key={u} value={u}>
+                                    {u}
+                                </option>
+                            ))}
+
+                        </select>
+                        {errors.upazila && (
+                            <p className="mt-1 text-sm text-red-600">{errors.upazila}</p>
+                        )}
+                    </div>
+                    <div>
+                        <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">Address <span className="text-red-500">*</span></label>
+                        <input
+                            type="text"
+                            id="address"
+                            name="address"
+                            placeholder="Street, City, Country"
+                            // required
+                            onChange={(e) => setAddress(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                        {errors.address && (
+                            <p className="mt-1 text-sm text-red-600">{errors.address}</p>
+                        )}
+                    </div>
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password <span className="text-red-500">*</span></label>
+                        <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        // required
+                        placeholder="••••••••"
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                        {errors.password && (
+                            <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                        )}
+                    </div>
+                    <div>
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">Confirm Password <span className="text-red-500">*</span></label>
+                        <input
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type="password"
+                        // required
+                        placeholder="••••••••"
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                        {errors.confirmPassword && (
+                            <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
+                        )}
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="w-full bg-indigo-600 flex items-center justify-center text-white font-semibold py-3 rounded-md disabled:opacity-70"
+                        disabled={submission}
+                    >
+                        {submission ? (
+                        <>
+                            {/* This is a pure Tailwind Spinner */}
+                            <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Processing...
+                        </>
+                        ) : (
+                            "Register"
+                        )}
+                    </button>
+                </div>
             )}
             
             </form>

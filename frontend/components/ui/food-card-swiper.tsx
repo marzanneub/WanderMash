@@ -79,3 +79,5 @@ const FoodCardSwiper: React.FC<Items> = ({title, items}) => {
 }
 
 export default FoodCardSwiper;
+
+// https://swiperjs.com/demos

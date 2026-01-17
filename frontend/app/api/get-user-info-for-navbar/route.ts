@@ -20,6 +20,9 @@ export async function GET(request: Request) {
     else if(data && data.user.role === "generalUser") {
         return NextResponse.json({ role: "generalUser", dp: data.user.profilePicture });
     }
+    else if(data && data.user.role === "hotel") {
+        return NextResponse.json({ role: "hotel", dp: data.user.logo });
+    }
     else if(data && data.user.role === "restaurant") {
         return NextResponse.json({ role: "restaurant", dp: data.user.logo });
     }

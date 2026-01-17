@@ -77,12 +77,24 @@ const TourismManagerProfilePage: React.FC = () => {
                 <h1 className="text-4xl font-bold text-indigo-900 mb-10">Profile</h1>
 
                 {loading && (
-                    <div>
+                    <div className="bg-white rounded-2xl shadow-xl p-12 flex flex-col md:flex-row gap-14">
+                        <div className="md:w-1/4 flex flex-col items-center border-gray-200 pr-6">
+                            <div className="rounded-full w-36 h-36 bg-gray-200 mb-6"></div>
+                            <div className="h-6 w-32 bg-gray-300 rounded mb-2"></div>
+                            <div className="h-4 w-40 bg-gray-200 rounded mb-6"></div>
+                        </div>
 
+                        <div className="md:w-2/3 space-y-12 ">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                <InfoGridSkeleton />
+                                <InfoGridSkeleton />
+                            </div>
+                        </div>
                     </div>
                 )}
 
 
+                {/* {!loading && user && ( */}
                 {user!==null && (
                 <div className="bg-white rounded-2xl shadow-xl p-12 flex flex-col md:flex-row gap-14">
                     <div className="md:w-1/4 flex flex-col items-center border-gray-300 pr-10 md:sticky md:top-[128px] md:h-[calc(100vh-128px)] md:z-40">

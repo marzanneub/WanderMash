@@ -3,7 +3,7 @@ const multer = require("multer");
 const util = require("util");
 const bcrypt = require ("bcrypt");
 
-const { Admin, Attraction, GeneralUser, Restaurant, TourismManager } = require("../models/user");
+const { Admin, Attraction, GeneralUser, Hotel, Restaurant, TourismManager } = require("../models/user");
 const { Verification } = require("../models/verification");
 
 const storage = multer.diskStorage({
@@ -30,6 +30,7 @@ async function handleEditProfile(req, res) {
 
     let result =  await TourismManager.findOne({ _id: { $ne: req.userData._id },  phone: phone });
     if(!result) result =  await Attraction.findOne({ phone: phone });
+    if(!result) result =  await Hotel.findOne({ phone: phone });
     if(!result) result =  await Restaurant.findOne({ phone: phone });
     if(!result) result =  await GeneralUser.findOne({ phone: phone });
     if(result) return res.status(409).json({errormessage: "Phone number already exists"});
@@ -62,6 +63,10 @@ async function handleAddAttraction(req, res) {
 
     let {name, email, phone, category, district, upazila, address} = req.body;
 
+    const user = await TourismManager.findOne({ _id: req.userData._id});
+
+    if(!user.approved){ return res.status(409).json({errormessage: "You cannot add attractions because your account is disapproved."}); }
+
     if(phone.startsWith("880")) {
         phone = `+${phone}`;
     } else if(phone.startsWith("0")) {
@@ -73,12 +78,14 @@ async function handleAddAttraction(req, res) {
     let found =  await Admin.findOne({ email: email });
     if(!found) found =  await GeneralUser.findOne({ email: email });
     if(!found) found =  await Attraction.findOne({ email: email });
+    if(!found) found =  await Hotel.findOne({ email: email });
     if(!found) found =  await Restaurant.findOne({ email: email });
     if(!found) found =  await TourismManager.findOne({email: email });
     if(found){ return res.status(409).json({errormessage: "Email already exists"}); }
 
     found =  await GeneralUser.findOne({ phone: phone });
     if(!found) found =  await Attraction.findOne({ phone: phone });
+    if(!found) found =  await Hotel.findOne({ phone: phone });
     if(!found) found =  await Restaurant.findOne({ phone: phone });
     if(!found) found =  await TourismManager.findOne({phone: phone });
     if(found){ return res.status(409).json({errormessage: "Phone number already exists"}); }
@@ -102,10 +109,15 @@ async function handleAddAttraction(req, res) {
 async function handleEditAttraction(req, res) {
     await uploadAsync(req, res);
 
+    const user = await TourismManager.findOne({ _id: req.userData._id});
+
+    if(!user.approved){ return res.status(409).json({errormessage: "You cannot edit attractions because your account is disapproved."}); }
+
     const updates = {...req.body};
 
     found =  await GeneralUser.findOne({ phone: updates.phone });
     if(!found) found =  await Attraction.findOne({ _id: { $ne: updates.id }, phone: updates.phone });
+    if(!found) found =  await Hotel.findOne({ phone: updates.phone });
     if(!found) found =  await Restaurant.findOne({ phone: updates.phone });
     if(!found) found =  await TourismManager.findOne({phone: updates.phone });
     if(found){ return res.status(409).json({errormessage: "Phone number already exists"}); }
@@ -128,6 +140,10 @@ async function handleEditAttraction(req, res) {
 async function handleDeleteAttraction(req, res) {
     await uploadAsync(req, res);
 
+    const user = await TourismManager.findOne({ _id: req.userData._id});
+
+    if(!user.approved){ return res.status(409).json({errormessage: "You cannot delete attractions because your account is disapproved."}); }
+
     let result =  await Attraction.findOne({ _id: req.body.id, createdBy: req.userData._id });
     if(!result){ return res.status(409).json({errormessage: "You cannot delete this attraction because you didn't added this."}); }
 
@@ -141,6 +157,10 @@ async function handleDeleteAttraction(req, res) {
 async function handleUploadImage(req, res) {
     await uploadAsync(req, res);
 
+    const user = await TourismManager.findOne({ _id: req.userData._id});
+
+    if(!user.approved){ return res.status(409).json({errormessage: "You cannot upload images because your account is disapproved."}); }
+
     const image = req.files?.image?.[0]?.filename || null;
 
     let result =  await Attraction.findOne({ _id: req.body.id, createdBy: req.userData._id });
@@ -153,6 +173,10 @@ async function handleUploadImage(req, res) {
 
 async function handleSetAsDp(req, res) {
     await uploadAsync(req, res);
+
+    const user = await TourismManager.findOne({ _id: req.userData._id});
+
+    if(!user.approved){ return res.status(409).json({errormessage: "You cannot do updates because your account is disapproved."}); }
     
     let result =  await Attraction.findOne({ _id: req.body.id, createdBy: req.userData._id });
     if(!result){ return res.status(409).json({errormessage: "You cannot edit this attraction because you didn't added this."}); }
@@ -167,6 +191,10 @@ async function handleSetAsDp(req, res) {
 
 async function handleDeleteImage(req, res) {
     await uploadAsync(req, res);
+
+    const user = await TourismManager.findOne({ _id: req.userData._id});
+
+    if(!user.approved){ return res.status(409).json({errormessage: "You cannot delete images because your account is disapproved."}); }
 
     let result =  await Attraction.findOne({ _id: req.body.id, createdBy: req.userData._id });
     if(!result){ return res.status(409).json({errormessage: "You cannot edit this attraction because you didn't added this."}); }

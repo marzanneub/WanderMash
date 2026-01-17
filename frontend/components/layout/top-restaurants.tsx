@@ -1,11 +1,20 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import HomepageCards from "../cards/homepage-cards";
-import { ITopRestaurants } from "@/types/restaurants";
 import HomepageCardsSkeleton from "../cards/homepage-cards-skeleton";
 
+interface Restaurant {
+    _id: string;
+    name: string;
+    description?: string;
+    dp?: string;
+    upazila: string;
+    district: string;
+}
+
+
 const TopRestaurants: React.FC = () => {
-    const [items, setItems] = useState<ITopRestaurants[]>([]);
+    const [items, setItems] = useState<Restaurant[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

@@ -1,6 +1,6 @@
 const express = require("express");
 const {setUser, getUser} = require("../services/auth");
-const { Attraction, Admin, GeneralUser, Restaurant, TourismManager } = require("../models/user");
+const { Attraction, Admin, GeneralUser, Hotel, Restaurant, TourismManager } = require("../models/user");
 
 const router = express.Router();
 
@@ -12,6 +12,12 @@ router.get("/must-see-attractions", async(req, res) => {
 
 router.get("/top-restaurants", async(req, res) => {
     const items = await Restaurant.find({}).limit(4);
+
+    return res.status(200).json({items});
+});
+
+router.get("/popular-hotels", async(req, res) => {
+    const items = await Hotel.find({}).limit(4);
 
     return res.status(200).json({items});
 });
@@ -39,6 +45,7 @@ router.get("/get-user-info", async(req, res) => {
 
     let user = await Admin.findOne({_id: token._id});
     if(!user) user = await GeneralUser.findOne({_id: token._id});
+    if(!user) user = await Hotel.findOne({_id: token._id});
     if(!user) user = await Restaurant.findOne({_id: token._id});
     if(!user) user = await TourismManager.findOne({_id: token._id});
     if(user) return res.status(200).json({user});

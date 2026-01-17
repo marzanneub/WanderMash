@@ -39,6 +39,10 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
 
+    if (path.startsWith("/hotel") && role !== "hotel") {
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
+    }
+
     if (path.startsWith("/restaurant") && role !== "restaurant") {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
@@ -54,5 +58,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/registration", "/password-recovery", "/verification", "/admin/:path*", "/generalUser/:path*", "/restaurant/:path*", "/tourismManager/:path*"],
+  matcher: ["/login", "/registration", "/password-recovery", "/verification", "/admin/:path*", "/generalUser/:path*", "/hotel/:path*", "/restaurant/:path*", "/tourismManager/:path*"],
 };

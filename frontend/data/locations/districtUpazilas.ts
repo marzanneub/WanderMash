@@ -119,7 +119,7 @@ export const districtUpazilas: Record<string, string[]> = {
 
   "Sunamganj": ["Sunamganj Sadar", "Bishwamvarpur", "Chhatak", "Derai", "Dharamapasha", "Dowarabazar", "Jagannathpur", "Jamalganj", "Sullah", "Tahirpur"],
 
-  "Sylhet": ["Sylhet City", "Balaganj", "Beanibazar", "Bishwanath", "Companiganj", "Fenchuganj", "Gowainghat", "Jaintiapur", "Kanaighat", "South Surma", "Zakiganj"],
+  "Sylhet": ["Sylhet City", "Sylhet Sadar", "Balaganj", "Beanibazar", "Bishwanath", "Companiganj", "Fenchuganj", "Gowainghat", "Jaintiapur", "Kanaighat", "South Surma", "Zakiganj"],
 
   "Tangail": ["Tangail Sadar", "Basail", "Bhuapur", "Delduar", "Dhanbari", "Ghatail", "Gopalpur", "Kalihati", "Madhupur", "Mirzapur", "Nagarpur", "Sakhipur"],
 

@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const bcrypt = require ("bcrypt");
 const {setUser, getUser} = require("../services/auth");
-const { Admin, Attraction, GeneralUser, Restaurant, TourismManager } = require("../models/user");
+const { Admin, Attraction, GeneralUser, Hotel, Restaurant, TourismManager } = require("../models/user");
 const { Verification } = require("../models/verification");
 
 /////////////////////////Need to handle many types of user in this fucntion///////////////////////////////
@@ -19,6 +19,7 @@ async function handleUserRegistration(req, res) {
     let user = await Admin.find({ email: email });
     if(!user.length) user = await Attraction.find({ email: email });
     if(!user.length) user = await GeneralUser.find({ email: email });
+    if(!user.length) user = await Hotel.find({ email: email });
     if(!user.length) user = await Restaurant.find({ email: email });
     if(!user.length) user = await TourismManager.find({ email: email });
     if(user.length) return res.status(409).json({errormessage: "Email already exists"});
@@ -26,6 +27,7 @@ async function handleUserRegistration(req, res) {
     user = await Admin.find({ phone: phone });
     if(!user.length) user = await Attraction.find({ phone: phone });
     if(!user.length) user = await GeneralUser.find({ phone: phone });
+    if(!user.length) user = await Hotel.find({ phone: phone });
     if(!user.length) user = await Restaurant.find({ phone: phone });
     if(!user.length) user = await TourismManager.find({ phone: phone });
     if(user.length) return res.status(409).json({errormessage: "Phone number already exists"});
@@ -48,6 +50,23 @@ async function handleUserRegistration(req, res) {
         if(user.length) return res.status(409).json({errormessage: "Registration ID already exists"});
 
         await Restaurant.create({
+            role,
+            name,
+            email,
+            phone,
+            registrationId,
+            district,
+            upazila,
+            address,
+            password: hash,
+        });
+    }
+    else if(role === "hotel")
+    {
+        user = await Hotel.find({ registrationId: registrationId });
+        if(user.length) return res.status(409).json({errormessage: "Registration ID already exists"});
+
+        await Hotel.create({
             role,
             name,
             email,
@@ -113,6 +132,7 @@ async function handleUserVerification(req, res) {
 
     await Admin.findOneAndUpdate({ email: email }, { verified: true });
     await GeneralUser.findOneAndUpdate({ email: email }, { verified: true });
+    await Hotel.findOneAndUpdate({ email: email }, { verified: true });
     await Restaurant.findOneAndUpdate({ email: email }, { verified: true });
     await TourismManager.findOneAndUpdate({ email: email }, { verified: true });
 
@@ -133,6 +153,7 @@ async function handleUserResendVerificationCode(req, res) {
     
     let user = await Admin.findOne({email});
     if(!user) user = await GeneralUser.findOne({email});
+    if(!user) user = await Hotel.findOne({email});
     if(!user) user = await Restaurant.findOne({email});
     if(!user) user = await TourismManager.findOne({email});
 
@@ -186,6 +207,7 @@ async function handleForgotPassword(req, res) {
     
     let user = await Admin.findOne({email});
     if(!user) user = await GeneralUser.findOne({email});
+    if(!user) user = await Hotel.findOne({email});
     if(!user) user = await Restaurant.findOne({email});
     if(!user) user = await TourismManager.findOne({email});
 
@@ -246,6 +268,7 @@ async function handleResetPassword(req, res){
     const hash = bcrypt.hashSync(password, 10);
     await Admin.findOneAndUpdate({email}, {password: hash});
     await GeneralUser.findOneAndUpdate({email}, {password: hash});
+    await Hotel.findOneAndUpdate({email}, {password: hash});
     await Restaurant.findOneAndUpdate({email}, {password: hash});
     await TourismManager.findOneAndUpdate({email}, {password: hash});
 
@@ -257,6 +280,7 @@ async function handleUserLogin(req, res) {
     const {email, password} = req.body;
     let user = await Admin.findOne({email});
     if(!user)  user = await GeneralUser.findOne({email});
+    if(!user)  user = await Hotel.findOne({email});
     if(!user)  user = await Restaurant.findOne({email});
     if(!user)  user = await TourismManager.findOne({email});
     if(!user)  return res.status(401).json({errormessage: "Invalid email or Password"});
