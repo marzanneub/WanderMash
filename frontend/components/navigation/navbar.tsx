@@ -19,8 +19,8 @@ interface NavItem {
 const Navbar:React.FC<Props> = (props) => {
   const navigation: NavItem[] = [
     { name: "Home", href: "/", current: (props.pagetype==="Home"? true : false) },
-    { name: "Attractions", href: "#", current: (props.pagetype==="Attractions"? true : false) },
-    { name: "Hotels", href: "#", current: (props.pagetype==="Hotels"? true : false) },
+    { name: "Attractions", href: "/attractions", current: (props.pagetype==="Attractions"? true : false) },
+    { name: "Hotels", href: "/hotels", current: (props.pagetype==="Hotels"? true : false) },
     { name: "Restaurants", href: "/restaurants", current: (props.pagetype==="Restaurants"? true : false) },
   ];
 

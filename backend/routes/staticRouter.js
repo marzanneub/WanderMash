@@ -22,6 +22,13 @@ router.get("/popular-hotels", async(req, res) => {
     return res.status(200).json({items});
 });
 
+router.get("/get-hotel-info", async(req, res) => {
+
+    const hotel = await Hotel.findById(req.query.id);
+    if(hotel) return res.status(200).json({hotel: hotel});
+    else return res.status(404).json({errormessage: "Error"});
+});
+
 router.get("/get-restaurant-info", async(req, res) => {
 
     const restaurant = await Restaurant.findById(req.query.id);

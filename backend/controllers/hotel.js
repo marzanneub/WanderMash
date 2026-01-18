@@ -64,8 +64,42 @@ async function handleSettings(req, res) {
     return res.status(201).json({successmessage: "Successfully settings updated"});
 }
 
+async function handleUploadImage(req, res) {
+    await uploadAsync(req, res);
+
+    const image = req.files?.image?.[0]?.filename || null;
+
+    if(image!=null) await Hotel.findByIdAndUpdate(req.userData._id,{ $push: { images: image } });
+
+    return res.status(200).json({successmessage: "Successfully Uploaded", imageTitle: image});
+}
+
+async function handleSetAsDp(req, res) {
+    await uploadAsync(req, res);
+
+    if(req.body.image) {
+        await Hotel.findByIdAndUpdate(req.userData._id,{ dp: req.body.image });
+        return res.status(200).json({successmessage: "Display picture updated successfully."});
+    }
+    return res.status(404).json({errormessage: "Error"});
+}
+
+async function handleDeleteImage(req, res) {
+    await uploadAsync(req, res);
+
+
+    if(req.body.image) {
+        await Hotel.findByIdAndUpdate(req.userData._id,{$pull:{ images: req.body.image }});
+        return res.status(200).json({successmessage: "Image deleted successfully."});
+    }
+    return res.status(404).json({errormessage: "Error"});
+}
+
 module.exports = {
     handleEditProfile,
-
     handleSettings,
+
+    handleUploadImage,
+    handleSetAsDp,
+    handleDeleteImage,
 };

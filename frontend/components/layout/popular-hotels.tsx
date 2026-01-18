@@ -45,7 +45,7 @@ const PopularHotels: React.FC = () => {
                         <HomepageCardsSkeleton key={i}/>
                     )) : (
                         items.map((item) => (
-                            <a href={`/restaurants/preview?id=${item._id}`} key={item._id}>
+                            <a href={`/hotels/preview?id=${item._id}`} key={item._id}>
                                 <HomepageCards
                                     _id={item._id}
                                     name={item.name}

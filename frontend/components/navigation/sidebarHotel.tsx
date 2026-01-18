@@ -54,7 +54,7 @@ const SidebarHotel: React.FC<Props> = (props) => {
         { title: "Profile", href: "/hotel/profile", spacing: true, icon: <BsPerson /> },
         // { title: "Dashboard", href: "/hotel/dashboard", spacing: true, icon: <RiDashboardFill /> },
         { title: "Edit Profile", href: "/hotel/editProfile", icon: <FaRegEdit /> },
-        // { title: "Gallery", href: "/hotel/gallery", icon: <TfiGallery /> },
+        { title: "Gallery", href: "/hotel/gallery", icon: <TfiGallery /> },
         // { title: "Food Menu", href: "/hotel/foodMenu", icon: <BiFoodMenu /> },
         { title: "Settings", href: "/hotel/settings", spacing: true, icon: <AiOutlineSetting /> },
         { title: "Logout", action: "logout", icon: <RiLogoutBoxRLine /> },
