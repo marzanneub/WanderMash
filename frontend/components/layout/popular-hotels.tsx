@@ -6,8 +6,8 @@ import HomepageCardsSkeleton from "../cards/homepage-cards-skeleton";
 interface Hotel {
     _id: string;
     name: string;
-    description?: string;
-    dp?: string;
+    description: string;
+    dp: string;
     upazila: string;
     district: string;
 }
