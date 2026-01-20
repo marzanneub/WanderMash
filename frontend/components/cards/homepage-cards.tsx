@@ -1,11 +1,12 @@
 import React from "react";
 
 interface TopAttractions {
+    _id: string;
     name: string;
-    dp: string;
-    district: string;
-    upazila: string;
     description: string;
+    dp: string;
+    upazila: string;
+    district: string;
 }
 
 const HomepageCards: React.FC<TopAttractions> = (props) => {
