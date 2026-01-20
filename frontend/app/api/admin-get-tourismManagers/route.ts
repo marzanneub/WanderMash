@@ -6,7 +6,7 @@ export async function GET(request: Request) {
     const cookieStore = await cookies();
     const allCookies = cookieStore.toString();
 
-    const res = await fetch(`http://localhost:4000/admin/get-tourismManagers`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/admin/get-tourismManagers`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

@@ -10,6 +10,24 @@ interface InfoGridProps {
     items: InfoItem[];
 }
 
+const to12HourFormat = (timeStr: string | undefined): string => {
+    if (!timeStr || timeStr.trim() === "") {
+        return "--:-- --";
+    }
+    
+    const [hourStr, minute] = timeStr.split(":");
+    let hour = parseInt(hourStr, 10);
+
+    const ampm = hour >= 12 ? "PM" : "AM";
+
+    hour = hour % 12;
+    hour = hour ? hour : 12;
+
+    const displayHour = hour < 10 ? `0${hour}` : hour;
+        
+    return `${displayHour}:${minute} ${ampm}`;
+};
+
 const InfoGrid: React.FC<InfoGridProps> = ({ title, items }) => {
     return (
         <div>
@@ -24,15 +42,17 @@ const InfoGrid: React.FC<InfoGridProps> = ({ title, items }) => {
                 >
                 <span className="font-semibold">{item.label}: </span>
                 {/* {item.value || <span className="text-slate-400 italic">Not provided</span>} */}
-                {(typeof item.value === "string") && (
+                {((item.label === "CheckIn" || item.label === "CheckOut") && typeof item.value === "string") && (
+                    to12HourFormat(item.value) || <span className="text-slate-400 italic">Not provided</span>
+                )}
+
+                {(!(item.label === "CheckIn" || item.label === "CheckOut") && typeof item.value === "string") && (
                     item.value || <span className="text-slate-400 italic">Not provided</span>
                 )}
                 {(typeof item.value === "number") && (
                     item.value || <span className="text-slate-400 italic">Not provided</span>
                 )}
-                {(typeof item.value === "boolean") && ((item.value===true && (<span className="text-green-600 font-bold">Yes</span>)) || (item.value===false && (<span className="text-red-600 font-bold">No</span>)))
-
-                }
+                {(typeof item.value === "boolean") && ((item.value===true && (<span className="text-green-600 font-bold">Yes</span>)) || (item.value===false && (<span className="text-red-600 font-bold">No</span>)))}
                 </div>
             ))}
         </div>

@@ -90,7 +90,7 @@ const RestaurantSettingsPage: React.FC = () => {
             setErrors(newErrors);
             if (Object.keys(newErrors).length !== 0) return;
 
-            const res = await fetch("http://localhost:4000/restaurant/settings", {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/restaurant/settings`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

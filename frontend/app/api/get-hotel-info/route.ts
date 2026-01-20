@@ -7,10 +7,10 @@ export async function GET(request: Request) {
     
     const id = searchParams.get("id");
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/get-restaurant-info?id=${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/get-hotel-info?id=${id}`, {
         method: "GET",
         credentials: "include",
     });
     const data = await res.json();
-    return NextResponse.json({ restaurant: data.restaurant });
+    return NextResponse.json({ hotel: data.hotel });
 }

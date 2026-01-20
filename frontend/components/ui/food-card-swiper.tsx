@@ -49,7 +49,7 @@ const FoodCardSwiper: React.FC<Items> = ({title, items}) => {
                 <div className='w-full h-full max-w-md  mx-auto bg-white rounded-3xl shadow-lg overflow-hidden'>
                     <div className='max-w-md mx-auto'>
                     <div className='w-full h-full object-cover'>
-                        <img src={`http://localhost:4000/images/${item.image}`}alt={item.name} />
+                        <img src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${item.image}`}alt={item.name} />
                     </div>
                     <div className='p-4 sm:p-6'>
                         <p className='font-bold text-gray-700 text-[22px] leading-7 mb-1'>{item.name}</p>

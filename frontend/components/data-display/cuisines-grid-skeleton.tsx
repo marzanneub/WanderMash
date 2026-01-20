@@ -16,7 +16,7 @@ const CuisinesGridSkeleton: React.FC<CuisinesGridSkeletonProps> = ({
         <div className="mb-10 animate-pulse">
             {/* Title Skeleton */}
             {title && (
-                <div className="h-8 w-52 bg-indigo-200/60 rounded mb-6 border-b-2 border-transparent"></div>
+                <div className="h-8 w-52 bg-gray-300 rounded mb-6 border-b-2 border-transparent"></div>
             )}
 
             {/* Grid Skeleton */}
@@ -26,7 +26,7 @@ const CuisinesGridSkeleton: React.FC<CuisinesGridSkeletonProps> = ({
                         key={index}
                         className="flex items-center gap-3 p-3 rounded-lg border border-indigo-100 bg-indigo-100/40"
                     >
-                        <div className="h-4 w-32 bg-indigo-300/60 rounded"></div>
+                        <div className="h-4 w-32 bg-gray-300 rounded"></div>
                     </li>
                 ))}
             </ul>
@@ -34,8 +34,8 @@ const CuisinesGridSkeleton: React.FC<CuisinesGridSkeletonProps> = ({
             {/* See More Button Skeleton */}
             {showButton && (
                 <div className="mt-6 flex items-center gap-2">
-                    <div className="h-4 w-20 bg-indigo-300/60 rounded"></div>
-                    <div className="h-4 w-4 bg-indigo-300/60 rounded-full"></div>
+                    <div className="h-4 w-20 bg-gray-300 rounded"></div>
+                    <div className="h-4 w-4 bg-gray-300 rounded-full"></div>
                 </div>
             )}
         </div>

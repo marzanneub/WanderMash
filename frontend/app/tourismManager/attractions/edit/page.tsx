@@ -328,7 +328,7 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
         
 
 
-        const res = await fetch("http://localhost:4000/tourismManager/editAttraction", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/tourismManager/editAttraction`, {
             method: "POST",
             body: formData,
             credentials: "include",

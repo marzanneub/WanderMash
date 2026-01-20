@@ -33,7 +33,7 @@ const ForgotPasswordForm: React.FC = () => {
             return;
         }
 
-        const res = await fetch("http://localhost:4000/auth/forgot-password", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/auth/forgot-password`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

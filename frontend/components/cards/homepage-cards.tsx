@@ -1,13 +1,20 @@
-import { ITopAttractions } from "@/types/attraction";
 import React from "react";
 
-const HomepageCards: React.FC<ITopAttractions> = (props) => {
+interface TopAttractions {
+    name: string;
+    dp: string;
+    district: string;
+    upazila: string;
+    description: string;
+}
+
+const HomepageCards: React.FC<TopAttractions> = (props) => {
 
     return (
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl">
             
                 <img
-                    src={`http://localhost:4000/images/${props.dp}`}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${props.dp}`}
                     className="w-full object-cover rounded-t-xl h-56"
                 />
                 <div className="p-6 flex flex-col justify-between h-[150px]">

@@ -131,7 +131,7 @@ const TourismManagerEditProfilePage: React.FC = () => {
         formData.append("address", address);
 
 
-        const res = await fetch("http://localhost:4000/tourismManager/editProfile", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/tourismManager/editProfile`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -212,7 +212,7 @@ const TourismManagerEditProfilePage: React.FC = () => {
                         <div className="flex items-center space-x-6">
                             <img
                                 id="profilePreview"
-                                src={croppedImage || `http://localhost:4000/images/${profilePicture}`}
+                                src={croppedImage || `${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${profilePicture}`}
                                 className="rounded-full w-24 h-24 object-cover shadow-md"
                             />
                             <div>

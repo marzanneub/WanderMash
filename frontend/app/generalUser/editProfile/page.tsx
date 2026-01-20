@@ -118,7 +118,7 @@ const GeneralUserEditProfilePage: React.FC = () => {
         formData.append("bio", bio);
 
 
-        const res = await fetch("http://localhost:4000/generalUser/editProfile", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/generalUser/editProfile`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -188,7 +188,7 @@ const GeneralUserEditProfilePage: React.FC = () => {
                         <div className="flex items-center space-x-6">
                             <img
                                 id="profilePreview"
-                                src={croppedImage || `http://localhost:4000/images/${profilePicture}`}
+                                src={croppedImage || `${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${profilePicture}`}
                                 className="rounded-full w-24 h-24 object-cover shadow-md"
                             />
                             <div>

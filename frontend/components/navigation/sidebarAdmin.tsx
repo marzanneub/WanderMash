@@ -79,10 +79,10 @@ const SidebarAdmin: React.FC<Props> = (props) => {
                         open && "rotate-360"
                     }`}/> */}
                     <img
-                        src={`http://localhost:4000/images/logo.JPG`}
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/logo.JPG`}
                         className={`w-10 h-10 rounded
                             cursor-pointer mr-2 transition-transform duration-500
-                            ${open ? "rotate-[360deg]" : ""}
+                            ${open ? "rotate-360" : ""}
                         `}
                     />
 

@@ -171,7 +171,7 @@ const RestaurantProfilePage: React.FC = () => {
                 <div className="bg-white rounded-2xl shadow-xl p-12 flex flex-col md:flex-row gap-14">
                     <div className="md:w-1/4 flex flex-col items-center border-gray-300 pr-10 md:sticky md:top-[128px] md:h-[calc(100vh-128px)] md:z-40">
                         <img
-                            src={`http://localhost:4000/images/${user.logo}`}
+                            src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${user.logo}`}
                             className="w-48 h-48 object-cover rounded-lg mb-8 shadow-lg"
                         />
                         <h2 className="text-2xl font-semibold text-indigo-900 mb-2">{user.name} </h2>

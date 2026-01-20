@@ -351,7 +351,7 @@ const HotelEditProfilePage: React.FC = () => {
         formData.append("policies", JSON.stringify(policies));
         formData.append("location", JSON.stringify(location));
 
-        const res = await fetch("http://localhost:4000/hotel/editProfile", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/hotel/editProfile`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -499,7 +499,7 @@ const HotelEditProfilePage: React.FC = () => {
                         <div className="flex items-center space-x-6">
                             <img
                                 id="logoPreview"
-                                src={croppedImage || `http://localhost:4000/images/${logo}`}
+                                src={croppedImage || `${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}BLIC_BACKEND_SERVER_URL}/images/${logo}`}
                                 alt="Restaurant Logo"
                                 className="w-24 h-24 object-cover rounded-lg shadow-md"
                             />

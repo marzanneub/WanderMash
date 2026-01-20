@@ -7,7 +7,7 @@ const TimeTableSkeleton: React.FC = () => {
     return (
         <div className="animate-pulse">
             {/* Title Skeleton */}
-            <div className="h-8 w-56 bg-indigo-200/60 rounded mb-6"></div>
+            <div className="h-8 w-56 bg-gray-300 rounded mb-6"></div>
 
             {/* Table Skeleton */}
             <div className="w-full border border-gray-300 rounded-lg shadow-sm overflow-hidden">
@@ -15,14 +15,14 @@ const TimeTableSkeleton: React.FC = () => {
                     <tbody>
                         {/* Header */}
                         <tr className="bg-indigo-50/50">
-                            <td className="px-6 py-4 border-b border-indigo-100">
-                                <div className="h-3 w-16 bg-indigo-300/60 rounded"></div>
+                            <td className="px-6 py-4 border-b border-gray-100">
+                                <div className="h-3 w-16 bg-gray-300 rounded"></div>
                             </td>
-                            <td className="px-6 py-4 border-b border-indigo-100 text-center">
-                                <div className="h-3 w-24 bg-indigo-300/60 rounded mx-auto"></div>
+                            <td className="px-6 py-4 border-b border-gray-100 text-center">
+                                <div className="h-3 w-24 bg-gray-300 rounded mx-auto"></div>
                             </td>
-                            <td className="px-6 py-4 border-b border-indigo-100 text-center">
-                                <div className="h-3 w-24 bg-indigo-300/60 rounded mx-auto"></div>
+                            <td className="px-6 py-4 border-b border-gray-100 text-center">
+                                <div className="h-3 w-24 bg-gray-300 rounded mx-auto"></div>
                             </td>
                         </tr>
 
@@ -33,10 +33,10 @@ const TimeTableSkeleton: React.FC = () => {
                                     <div className="h-4 w-24 bg-gray-300 rounded"></div>
                                 </td>
                                 <td className="px-6 py-4 text-center">
-                                    <div className="inline-block h-6 w-20 bg-indigo-200/60 rounded-md"></div>
+                                    <div className="inline-block h-6 w-20 bg-gray-300 rounded-md"></div>
                                 </td>
                                 <td className="px-6 py-4 text-center">
-                                    <div className="inline-block h-6 w-20 bg-indigo-200/60 rounded-md"></div>
+                                    <div className="inline-block h-6 w-20 bg-gray-300 rounded-md"></div>
                                 </td>
                             </tr>
                         ))}

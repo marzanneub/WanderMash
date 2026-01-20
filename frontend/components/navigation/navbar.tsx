@@ -19,8 +19,8 @@ interface NavItem {
 const Navbar:React.FC<Props> = (props) => {
   const navigation: NavItem[] = [
     { name: "Home", href: "/", current: (props.pagetype==="Home"? true : false) },
-    { name: "Attractions", href: "#", current: (props.pagetype==="Attractions"? true : false) },
-    { name: "Hotels", href: "#", current: (props.pagetype==="Hotels"? true : false) },
+    { name: "Attractions", href: "/attractions", current: (props.pagetype==="Attractions"? true : false) },
+    { name: "Hotels", href: "/hotels", current: (props.pagetype==="Hotels"? true : false) },
     { name: "Restaurants", href: "/restaurants", current: (props.pagetype==="Restaurants"? true : false) },
   ];
 
@@ -101,8 +101,8 @@ const Navbar:React.FC<Props> = (props) => {
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
                   <img
-                    alt="http://localhost:4000/images/generalUserDefault.jpg"
-                    src={`http://localhost:4000/images/${props.dp}`}
+                    alt={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/generalUserDefault.jpg`}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${props.dp}`}
                     className="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10"
                   />
                 </MenuButton>
@@ -159,8 +159,8 @@ const Navbar:React.FC<Props> = (props) => {
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
                   <img
-                    alt="http://localhost:4000/images/generalUserDefault.jpg"
-                    src={`http://localhost:4000/images/${props.dp}`}
+                    alt={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/generalUserDefault.jpg`}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${props.dp}`}
                     className="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10"
                   />
                 </MenuButton>
@@ -217,8 +217,8 @@ const Navbar:React.FC<Props> = (props) => {
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
                   <img
-                    alt="http://localhost:4000/images/restaurantDefault.jpg"
-                    src={`http://localhost:4000/images/${props.dp}`}
+                    alt={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/restaurantDefault.jpg`}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${props.dp}`}
                     className="size-8 rounded bg-gray-800 outline -outline-offset-1 outline-white/10"
                   />
                 </MenuButton>
@@ -275,8 +275,8 @@ const Navbar:React.FC<Props> = (props) => {
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
                   <img
-                    alt="http://localhost:4000/images/restaurantDefault.jpg"
-                    src={`http://localhost:4000/images/${props.dp}`}
+                    alt={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/restaurantDefault.jpg`}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${props.dp}`}
                     className="size-8 rounded bg-gray-800 outline -outline-offset-1 outline-white/10"
                   />
                 </MenuButton>
@@ -341,8 +341,8 @@ const Navbar:React.FC<Props> = (props) => {
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
                   <img
-                    alt="http://localhost:4000/images/generalUserDefault.jpg"
-                    src={`http://localhost:4000/images/${props.dp}`}
+                    alt={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/generalUserDefault.jpg`}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${props.dp}`}
                     className="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10"
                   />
                 </MenuButton>

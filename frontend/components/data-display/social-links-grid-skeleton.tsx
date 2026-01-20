@@ -11,14 +11,14 @@ const SocialLinksGridSkeleton: React.FC<SocialLinksGridSkeletonProps> = ({
     return (
         <div className="animate-pulse">
             {/* Title Skeleton */}
-            <div className="h-8 w-48 bg-indigo-200/60 rounded mb-6"></div>
+            <div className="h-8 w-48 bg-gray-300 rounded mb-6"></div>
 
             {/* Social Links Skeleton */}
             <ul className="space-y-3">
                 {Array.from({ length: rows }).map((_, index) => (
                     <li key={index} className="flex items-center gap-2">
                         {/* Icon */}
-                        <div className="w-5 h-5 bg-indigo-300/70 rounded"></div>
+                        <div className="w-5 h-5 bg-gray-300 rounded"></div>
 
                         {/* Text */}
                         <div className="h-4 w-24 bg-gray-200 rounded"></div>

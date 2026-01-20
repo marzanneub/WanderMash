@@ -54,7 +54,7 @@ const SidebarHotel: React.FC<Props> = (props) => {
         { title: "Profile", href: "/hotel/profile", spacing: true, icon: <BsPerson /> },
         // { title: "Dashboard", href: "/hotel/dashboard", spacing: true, icon: <RiDashboardFill /> },
         { title: "Edit Profile", href: "/hotel/editProfile", icon: <FaRegEdit /> },
-        // { title: "Gallery", href: "/hotel/gallery", icon: <TfiGallery /> },
+        { title: "Gallery", href: "/hotel/gallery", icon: <TfiGallery /> },
         // { title: "Food Menu", href: "/hotel/foodMenu", icon: <BiFoodMenu /> },
         { title: "Settings", href: "/hotel/settings", spacing: true, icon: <AiOutlineSetting /> },
         { title: "Logout", action: "logout", icon: <RiLogoutBoxRLine /> },
@@ -86,7 +86,7 @@ const SidebarHotel: React.FC<Props> = (props) => {
                         open && "rotate-360"
                     }`}/> */}
                     <img
-                        src={`http://localhost:4000/images/logo.JPG`}
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/logo.JPG`}
                         className={`w-10 h-10 rounded
                             cursor-pointer mr-2 transition-transform duration-500
                             ${open ? "rotate-[360deg]" : ""}

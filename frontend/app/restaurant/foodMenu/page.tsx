@@ -178,7 +178,7 @@ const RestaurantFoodMenuPage: React.FC = () => {
         const formData = new FormData();
         formData.append("_id", _id);
         
-        const res = await fetch("http://localhost:4000/restaurant/deleteMenuItem", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/restaurant/deleteMenuItem`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -259,7 +259,7 @@ const RestaurantFoodMenuPage: React.FC = () => {
         formData.append("description", description);
         formData.append("category", category);
 
-        const res = await fetch("http://localhost:4000/restaurant/editMenuItem", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/restaurant/editMenuItem`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -340,7 +340,7 @@ const RestaurantFoodMenuPage: React.FC = () => {
         formData.append("description", description);
         formData.append("category", category);
 
-        const res = await fetch("http://localhost:4000/restaurant/addMenuItem", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/restaurant/addMenuItem`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -504,7 +504,7 @@ const RestaurantFoodMenuPage: React.FC = () => {
                                     />
                                 ) : (editingId ? (
                                     <img 
-                                        src={`http://localhost:4000/images/${imagePreview}`} 
+                                        src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${imagePreview}`} 
                                         className="w-full h-full object-cover"
                                         alt="Preview"
                                     />
@@ -676,7 +676,7 @@ const RestaurantFoodMenuPage: React.FC = () => {
                             </h2>
                             {(menuItems && menuItems.length>0) ? (menuItems.map((item) => (
                                 <div key={item._id} className={`bg-white p-5 rounded-2xl border flex gap-5 shadow-sm transition-all ${editingId === item._id ? 'border-amber-400 bg-amber-50/30 ring-1 ring-amber-400' : 'border-slate-200'}`}>
-                                    <img src={`http://localhost:4000/images/${item.image}`} className="w-24 h-24 rounded-2xl object-cover border border-slate-100 shrink-0" alt={item.name} />
+                                    <img src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${item.image}`} className="w-24 h-24 rounded-2xl object-cover border border-slate-100 shrink-0" alt={item.name} />
                                 
                                     <div className="flex-1 min-w-0">
                                     <div className="flex justify-between items-start">

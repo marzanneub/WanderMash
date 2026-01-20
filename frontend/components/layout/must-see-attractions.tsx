@@ -21,7 +21,7 @@ const MustSeeAttractions: React.FC = () => {
         const loadData = async () => {
             try {
                 const res = await fetch(
-                    `http://localhost:4000/must-see-attractions`
+                    `${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/must-see-attractions`
                 );
 
                 const data = await res.json();

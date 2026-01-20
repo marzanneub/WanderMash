@@ -92,7 +92,7 @@ const TourismManagersPage: React.FC = () => {
         const formData = new FormData();
         formData.append("_id", _id);
         
-        const res = await fetch("http://localhost:4000/admin/approveTourismManager", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/admin/approveTourismManager`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -139,7 +139,7 @@ const TourismManagersPage: React.FC = () => {
         const formData = new FormData();
         formData.append("_id", _id);
         
-        const res = await fetch("http://localhost:4000/admin/disapproveTourismManager", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/admin/disapproveTourismManager`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -218,7 +218,7 @@ const TourismManagersPage: React.FC = () => {
         formData.append("phone", phone);
         formData.append("district", district);
 
-        const res = await fetch("http://localhost:4000/admin/addTourismManager", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/admin/addTourismManager`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -449,7 +449,7 @@ const TourismManagersPage: React.FC = () => {
                             </h2>
                             {(tourismManagers && tourismManagers.length>0) ? (tourismManagers.map((manager, index) => (
                                 <div key={index} className="bg-white p-5 rounded-2xl border flex gap-5 shadow-sm transition-all border-slate-200">
-                                    <img src={`http://localhost:4000/images/${manager.profilePicture}`} className="w-24 h-24 rounded-full object-cover border border-slate-100 shrink-0" />
+                                    <img src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${manager.profilePicture}`} className="w-24 h-24 rounded-full object-cover border border-slate-100 shrink-0" />
 
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between items-start">

@@ -88,7 +88,7 @@ const GeneralUserProfilePage: React.FC = () => {
                 <div className="bg-white rounded-xl shadow-lg p-8 flex flex-col md:flex-row gap-10">
                     <div className="md:w-1/4 flex flex-col items-center border-gray-200 pr-6">
                         <img
-                            src={`http://localhost:4000/images/${user.profilePicture}`}
+                            src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${user.profilePicture}`}
                             className="rounded-full w-36 h-36 object-cover mb-6 shadow-md"
                         />
                         <h2 className="text-2xl font-semibold text-indigo-900 mb-1">{user.name}</h2>

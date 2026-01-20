@@ -7,7 +7,7 @@ export async function GET(request: Request) {
     
     const id = searchParams.get("id");
 
-    const res = await fetch(`http://localhost:4000/get-attraction-info?id=${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/get-attraction-info?id=${id}`, {
         method: "GET",
         credentials: "include",
     });

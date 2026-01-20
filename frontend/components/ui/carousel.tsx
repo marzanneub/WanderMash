@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react"; // 1. Added useEffect
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
@@ -37,7 +37,7 @@ const Carousel: React.FC<CarouselProps> = ({items}) => {
             <AnimatePresence mode="wait">
                 <motion.img
                     key={currentIndex}
-                    src={`http://localhost:4000/images/${images[currentIndex]}`}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${images[currentIndex]}`}
                     initial={{ opacity: 0, x: 100 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -100 }}

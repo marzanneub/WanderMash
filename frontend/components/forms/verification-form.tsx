@@ -56,7 +56,7 @@ const VerificationForm: React.FC = () => {
     }, [canResend]);
 
     const handleResend = async () => {
-        const res = await fetch("http://localhost:4000/auth/resend-verification-code", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/auth/resend-verification-code`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -106,7 +106,7 @@ const VerificationForm: React.FC = () => {
             return;
         }
 
-        const res = await fetch("http://localhost:4000/auth/verification", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/auth/verification`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -9,7 +9,7 @@ const InfoGridSkeleton: React.FC<InfoGridSkeletonProps> = ({ rows = 5 }) => {
     return (
         <div className="animate-pulse">
             {/* Title Skeleton */}
-            <div className="h-8 w-56 bg-indigo-200/60 rounded mb-6"></div>
+            <div className="h-8 w-56 bg-gray-300 rounded mb-6"></div>
 
             {/* Rows Skeleton */}
             <div className="space-y-3">

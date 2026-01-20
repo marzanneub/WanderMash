@@ -18,7 +18,7 @@ const app = express();
 
 const PORT = 4000;
 
-connectMongoDb("mongodb://127.0.0.1:27017/WanderMash")
+connectMongoDb(process.env.MONGODB_URI)
     .then(() => console.log("Mongodb Connected"));
 
 app.use(express.json());

@@ -5,7 +5,7 @@ export async function GET(request: Request) {
     const cookieStore = await cookies();
     const allCookies = cookieStore.toString();
 
-    const res = await fetch("http://localhost:4000/get-user-info", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/get-user-info`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

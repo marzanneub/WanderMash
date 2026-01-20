@@ -5,7 +5,7 @@ const DescriptionGridSkeleton: React.FC = () => {
     return (
         <div className="animate-pulse">
             {/* Title Skeleton */}
-            <div className="h-8 w-44 bg-indigo-200/60 rounded mb-6"></div>
+            <div className="h-8 w-44 bg-gray-300 rounded mb-6"></div>
 
             {/* Paragraph Skeleton */}
             <div className="space-y-3">

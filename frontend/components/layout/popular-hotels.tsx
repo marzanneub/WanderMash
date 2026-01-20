@@ -20,7 +20,7 @@ const PopularHotels: React.FC = () => {
         const loadData = async () => {
             try {
                 const res = await fetch(
-                    `http://localhost:4000/popular-hotels`
+                    `${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/popular-hotels`
                 );
         
                 const data = await res.json();
@@ -45,7 +45,7 @@ const PopularHotels: React.FC = () => {
                         <HomepageCardsSkeleton key={i}/>
                     )) : (
                         items.map((item) => (
-                            <a href={`/restaurants/preview?id=${item._id}`} key={item._id}>
+                            <a href={`/hotels/preview?id=${item._id}`} key={item._id}>
                                 <HomepageCards
                                     _id={item._id}
                                     name={item.name}

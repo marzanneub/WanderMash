@@ -56,7 +56,7 @@ const LoginForm: React.FC = () => {
             return;
         }
 
-        const res = await fetch("http://localhost:4000/auth/login", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

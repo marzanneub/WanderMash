@@ -98,7 +98,7 @@ const TourismManagerAttractionsPage: React.FC = () => {
         const formData = new FormData();
         formData.append("id", _id);
         
-        const res = await fetch("http://localhost:4000/tourismManager/deleteAttraction", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/tourismManager/deleteAttraction`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -191,7 +191,7 @@ const TourismManagerAttractionsPage: React.FC = () => {
         formData.append("upazila", upazila);
         formData.append("address", address);
 
-        const res = await fetch("http://localhost:4000/tourismManager/addAttraction", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/tourismManager/addAttraction`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -495,7 +495,7 @@ const TourismManagerAttractionsPage: React.FC = () => {
                         
                         {(attractions && attractions.length>0) ? (attractions.map((item) => (
                         <div key={item._id} className="bg-white p-5 rounded-2xl border flex gap-5 shadow-sm transition-all border-slate-200">
-                            <img src={`http://localhost:4000/images/${item.dp}`} className="w-24 h-24 rounded-2xl object-cover border border-slate-100 shrink-0" alt={item.name} />
+                            <img src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${item.dp}`} className="w-24 h-24 rounded-2xl object-cover border border-slate-100 shrink-0" alt={item.name} />
                         
                             <div className="flex-1 min-w-0">
                             <div className="flex justify-between items-start">
