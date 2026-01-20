@@ -18,7 +18,7 @@ const app = express();
 
 const PORT = 4000;
 
-connectMongoDb(process.env.MONGODB_URI)
+connectMongoDb(process.env.MONGODB_URL)
     .then(() => console.log("Mongodb Connected"));
 
 app.use(express.json());
@@ -26,7 +26,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.FRONTENT_URL,
     credentials: true,
   })
 );

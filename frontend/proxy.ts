@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { cookies } from 'next/headers';
+import { jwtVerify } from "jose";
 
-export async function middleware(request: NextRequest) {
+const secret = new TextEncoder().encode(process.env.SECRET);
+
+export async function proxy(request: NextRequest) {
   const email = request.cookies.get("email")?.value;
   const path = request.nextUrl.pathname;
 
@@ -26,23 +29,22 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    // const { payload } = await jwtVerify(user, secret);
-    // const role = payload.role as string;
+    const { payload } = await jwtVerify(user, secret);
+    const role = payload.role as string;
 
-    const cookieStore = await cookies();
-    const allCookies = cookieStore.toString();
+    // const cookieStore = await cookies();
+    // const allCookies = cookieStore.toString();
 
-    const res = await fetch(`${process.env.BACKEND_SERVER_URL}/get-user-role`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "Cookie": allCookies,
-        },
-        credentials: "include",
-    });
-    const data = await res.json();
-    const role = data;
-    // console.log(data);
+    // const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/get-user-role`, {
+    //     method: "GET",
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //         "Cookie": allCookies,
+    //     },
+    //     credentials: "include",
+    // });
+    // const data = await res.json();
+    // const role = data;
 
     if (path.startsWith("/admin") && role !== "admin") {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
