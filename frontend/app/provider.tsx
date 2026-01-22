@@ -1,4 +1,7 @@
 "use client";
+import { Suspense } from "react";
+
+
 import { useState, useEffect } from 'react';
 import Navbar from "@/components/navigation/navbar";
 import Footer from "@/components/navigation/footer";
@@ -28,7 +31,11 @@ export default function Provider({ children, pagetype, showNavbar, showFooter }:
     return (
         <>
             {showNavbar && <Navbar pagetype={pagetype} role={role} dp={dp}  />}
-                <main>{children}</main>
+                <main>
+                <Suspense fallback={<div className="bg-indigo-50 min-h-screen w-full flex">  </div>}>
+                {children}
+                </Suspense>
+                </main>
             {showFooter && <Footer />}
         </>
     );

@@ -41,4 +41,4 @@ app.use("/hotel", restrictTo(["hotel"]), hotelRoute);
 app.use("/restaurant", restrictTo(["restaurant"]), restaurantRoute);
 app.use("/tourismManager", restrictTo(["tourismManager"]), tourismManagerRoute);
 
-app.listen(PORT, () => console.log(`Server Started at the PORT ${PORT}`));
+app.listen(PORT, () => console.log(`Server Started`));
