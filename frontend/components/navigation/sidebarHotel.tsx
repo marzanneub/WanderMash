@@ -24,6 +24,7 @@ import {
     FaRegEdit,
 } from "react-icons/fa";
 import { LiaUserEditSolid } from "react-icons/lia";
+import { LuBedDouble } from "react-icons/lu";
 import { RiDashboardFill, RiLogoutBoxRLine  } from "react-icons/ri";
 import { TfiGallery } from "react-icons/tfi";
 
@@ -55,7 +56,7 @@ const SidebarHotel: React.FC<Props> = (props) => {
         // { title: "Dashboard", href: "/hotel/dashboard", spacing: true, icon: <RiDashboardFill /> },
         { title: "Edit Profile", href: "/hotel/editProfile", icon: <FaRegEdit /> },
         { title: "Gallery", href: "/hotel/gallery", icon: <TfiGallery /> },
-        // { title: "Food Menu", href: "/hotel/foodMenu", icon: <BiFoodMenu /> },
+        { title: "Room Management", href: "/hotel/roomManagement", spacing: true, icon: <LuBedDouble /> },
         { title: "Settings", href: "/hotel/settings", spacing: true, icon: <AiOutlineSetting /> },
         { title: "Logout", action: "logout", icon: <RiLogoutBoxRLine /> },
     ];
@@ -132,7 +133,7 @@ const SidebarHotel: React.FC<Props> = (props) => {
                                 </span>
                             </li>
                         ) : (
-                        <Link href={menu.href ?? "#"}>
+                        <Link href={menu.href || "#"}>
                             <li
                             className={`text-gray-300 text-sm flex
                             items-center gap-x-4 cursor-pointer p-2 ${props.pagetype===menu.title && "bg-white/10"}

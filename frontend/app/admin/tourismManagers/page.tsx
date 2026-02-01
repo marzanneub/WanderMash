@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import SidebarAdmin from "@/components/navigation/sidebarAdmin";
-import { districtUpazilas } from "@/data/locations/districtUpazilas";
+import { districtAreas } from "@/data/locations/districtAreas";
 
 interface TourismManager {
     _id: string;
@@ -20,7 +20,7 @@ const TourismManagersPage: React.FC = () => {
     const [tourismManagers, setTourismManagers] = useState<TourismManager[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const districts = Object.keys(districtUpazilas);
+    const districts = Object.keys(districtAreas);
 
     const searchParams = useSearchParams();
     const warnmessage = searchParams.get("warnmessage");
@@ -420,7 +420,7 @@ const TourismManagersPage: React.FC = () => {
                                         onChange={(e) => setDistrict(e.target.value)}
                                         className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                     >
-                                        <option value="" disabled selected>-- select district --</option>
+                                        <option value="" disabled>-- select district --</option>
                                         {districts.map((d) => (
                                             <option key={d} value={d}>
                                                 {d}
@@ -445,7 +445,7 @@ const TourismManagersPage: React.FC = () => {
 
                         <div className="lg:col-span-7 space-y-5">
                             <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                                All Managers
+                                All Managers ({tourismManagers?.length})
                             </h2>
                             {(tourismManagers && tourismManagers.length>0) ? (tourismManagers.map((manager, index) => (
                                 <div key={index} className="bg-white p-5 rounded-2xl border flex gap-5 shadow-sm transition-all border-slate-200">

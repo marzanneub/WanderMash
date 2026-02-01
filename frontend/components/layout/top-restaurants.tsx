@@ -1,5 +1,6 @@
 "use client";
 import React, {useEffect, useState} from "react";
+import Link from "next/link";
 import HomepageCards from "../cards/homepage-cards";
 import HomepageCardsSkeleton from "../cards/homepage-cards-skeleton";
 
@@ -8,7 +9,7 @@ interface Restaurant {
     name: string;
     description: string;
     dp: string;
-    upazila: string;
+    area: string;
     district: string;
 }
 
@@ -47,16 +48,16 @@ const TopRestaurants: React.FC = () => {
                             <HomepageCardsSkeleton key={i}/>
                         )) : (
                             items.map((item) => (
-                                <a href={`/restaurants/preview?id=${item._id}`} key={item._id}>
+                                <Link href={`/restaurants/preview?id=${item._id}`} key={item._id}>
                                     <HomepageCards
                                         _id={item._id}
                                         name={item.name}
                                         description={item.description}
                                         dp={item.dp}
-                                        upazila={item.upazila}
+                                        area={item.area}
                                         district={item.district}
                                     />
-                                </a>
+                                </Link>
                             ))
                         )
                     }

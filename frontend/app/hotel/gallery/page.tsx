@@ -556,7 +556,7 @@ const HotelGalleryPage: React.FC = () => {
                             <h2 className="text-xl font-semibold text-gray-800 mb-6">Uploaded Photos</h2>
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                                 <div className="relative group">
-                                    <img src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}BLIC_BACKEND_SERVER_URL}/images/${user.dp}`} alt="Gallery Image" className="w-full h-48 object-cover rounded-xl shadow-md" />
+                                    <img src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${user.dp}`} alt="Gallery Image" className="w-full h-48 object-cover rounded-xl shadow-md" />
 
                                     <div className="absolute top-2 left-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full shadow">Display</div>
 
@@ -566,7 +566,7 @@ const HotelGalleryPage: React.FC = () => {
 
                                 {images.map((item) => (item !== user.dp && (
                                     <div key={item} className="relative group w-full h-auto">
-                                        <img src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}BLIC_BACKEND_SERVER_URL}/images/${item}`} alt="Gallery Image" className="w-full h-full object-cover rounded-xl shadow-md" />
+                                        <img src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${item}`} alt="Gallery Image" className="w-full h-full object-cover rounded-xl shadow-md" />
 
                                         <div className="absolute bottom-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 transition">
                                             <button

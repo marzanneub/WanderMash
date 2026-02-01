@@ -11,7 +11,7 @@ import {
     FaSquareInstagram,
     FaSquareTwitter,
 } from "react-icons/fa6";
-import { districtUpazilas } from "@/data/locations/districtUpazilas";
+import { districtAreas } from "@/data/locations/districtAreas";
 import { hotelFacilities, hotelViews } from "@/data/user/hotel";
 
 interface SocialLinks {
@@ -48,7 +48,7 @@ interface User {
     approved: boolean;
     address: string;
     district: string;
-    upazila: string;
+    area: string;
     postalCode: number;
     description: string;
     socialLinks?: SocialLinks;
@@ -69,7 +69,7 @@ const HotelEditProfilePage: React.FC = () => {
     const [approved, setApproved] = useState(false)
     const [address, setAddress] = useState("")
     const [district, setDistrict] = useState("")
-    const [upazila, setUpazila] = useState("")
+    const [area, setArea] = useState("")
     const [postalCode, setPostalCode] = useState("")
     const [description, setDescription] = useState("")
     const [socialLinks, setSocialLinks] = useState<SocialLinks>({
@@ -90,7 +90,7 @@ const HotelEditProfilePage: React.FC = () => {
 
     const [loading, setLoading] = useState(true);
     
-    const districts = Object.keys(districtUpazilas);
+    const districts = Object.keys(districtAreas);
 
     const [errors, setErrors] = useState<{
         name?: string;
@@ -101,7 +101,7 @@ const HotelEditProfilePage: React.FC = () => {
         approved?: string;
         address?: string;
         district?: string;
-        upazila?: string;
+        area?: string;
         postalCode?: string;
         description?: string;
         socialLinks?: string;
@@ -153,7 +153,7 @@ const HotelEditProfilePage: React.FC = () => {
                 setApproved(data.user.approved);
                 setAddress(data.user.address);
                 setDistrict(data.user.district);
-                setUpazila(data.user.upazila);
+                setArea(data.user.area);
                 setPostalCode(data.user.postalCode);
                 setDescription(data.user.description);
                 setSocialLinks({
@@ -271,10 +271,8 @@ const HotelEditProfilePage: React.FC = () => {
 /////////////////for facilities/////////////////
     const handleFacilitiesCheckboxChange = (option: string) => {
         if (facilities.includes(option)) {
-            // REMOVE: Filter out the item to create a new array
             setFacilities(facilities.filter(item => item !== option));
         } else {
-            // ADD: Spread existing items and add the new one
             setFacilities([...facilities, option]);
         }
     };
@@ -284,10 +282,8 @@ const HotelEditProfilePage: React.FC = () => {
 ////////////////////for views////////////////////
     const handleViewsCheckboxChange = (option: string) => {
         if (views.includes(option)) {
-            // REMOVE: Filter out the item to create a new array
             setViews(views.filter(item => item !== option));
         } else {
-            // ADD: Spread existing items and add the new one
             setViews([...views, option]);
         }
     };
@@ -321,8 +317,8 @@ const HotelEditProfilePage: React.FC = () => {
             newErrors.district = "District is required";
         }
 
-        if(!upazila) {
-            newErrors.upazila = "Upazila is required";
+        if(!area) {
+            newErrors.area = "Area is required";
         }
         if(!address) {
             newErrors.address = "Address is required";
@@ -341,7 +337,7 @@ const HotelEditProfilePage: React.FC = () => {
         formData.append("phone", phone);
         formData.append("address", address);
         formData.append("district", district);
-        formData.append("upazila", upazila);
+        formData.append("area", area);
         formData.append("postalCode", postalCode);
         formData.append("description", description);
 
@@ -499,8 +495,8 @@ const HotelEditProfilePage: React.FC = () => {
                         <div className="flex items-center space-x-6">
                             <img
                                 id="logoPreview"
-                                src={croppedImage || `${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}BLIC_BACKEND_SERVER_URL}/images/${logo}`}
-                                alt="Restaurant Logo"
+                                src={croppedImage || `${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${logo}`}
+                                alt="Hotel Logo"
                                 className="w-24 h-24 object-cover rounded-lg shadow-md"
                             />
                             <div>
@@ -675,11 +671,11 @@ const HotelEditProfilePage: React.FC = () => {
                                     value={district || ""}
                                     onChange={(e) => {
                                         setDistrict(e.target.value);
-                                        setUpazila("");
+                                        setArea("");
                                     }}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 >
-                                    <option value="" disabled selected>Select district</option>
+                                    <option value="" disabled>Select district</option>
                                     {districts.map((d) => (
                                         <option key={d} value={d}>
                                             {d}
@@ -692,26 +688,26 @@ const HotelEditProfilePage: React.FC = () => {
                             </div>
 
                             <div>
-                                <label htmlFor="upazila" className="block text-sm font-medium text-gray-700 mb-1">Select Upazila <span className="text-red-500">*</span></label>
+                                <label htmlFor="area" className="block text-sm font-medium text-gray-700 mb-1">Select Area <span className="text-red-500">*</span></label>
                                 <select
-                                    id="upazila"
-                                    name="upazila"
-                                    value={upazila || ""}
-                                    onChange={(e) => setUpazila(e.target.value)}
+                                    id="area"
+                                    name="area"
+                                    value={area || ""}
+                                    onChange={(e) => setArea(e.target.value)}
                                     disabled={!district}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 >
                                     <option value="" disabled>
-                                        {district ? "-- select upazila --" : "-- select district first --"}
+                                        {district ? "-- select area --" : "-- select district first --"}
                                     </option>
-                                    {district && districtUpazilas[district]?.map((u) => (
+                                    {district && districtAreas[district]?.map((u) => (
                                         <option key={u} value={u}>
                                             {u}
                                         </option>
                                     ))}
                                 </select>
-                                {errors.upazila && (
-                                    <p className="mt-1 text-sm text-red-600">{errors.upazila}</p>
+                                {errors.area && (
+                                    <p className="mt-1 text-sm text-red-600">{errors.area}</p>
                                 )}
                             </div>
 
@@ -871,7 +867,7 @@ const HotelEditProfilePage: React.FC = () => {
                                     onChange={(e) => setPolicies(prev => ({ ...prev, cancellation: e.target.value }))}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 >
-                                    <option value="" disabled selected>-- Select --</option>
+                                    <option value="" disabled>-- Select --</option>
                                     <option value="Flexible">Flexible (Full refund 24h prior)</option>
                                     <option value="Moderate">Moderate (Full refund 5 days prior)</option>
                                     <option value="Non-Refundable">Non-Refundable (No refund after booking)</option>

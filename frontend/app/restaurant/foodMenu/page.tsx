@@ -672,7 +672,7 @@ const RestaurantFoodMenuPage: React.FC = () => {
 
                         <div className="lg:col-span-7 space-y-5">
                             <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                                Live Menu View
+                                Live Menu View ({menuItems?.length})
                             </h2>
                             {(menuItems && menuItems.length>0) ? (menuItems.map((item) => (
                                 <div key={item._id} className={`bg-white p-5 rounded-2xl border flex gap-5 shadow-sm transition-all ${editingId === item._id ? 'border-amber-400 bg-amber-50/30 ring-1 ring-amber-400' : 'border-slate-200'}`}>

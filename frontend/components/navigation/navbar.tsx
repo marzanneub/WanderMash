@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -67,7 +68,7 @@ const Navbar:React.FC<Props> = (props) => {
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {navigation.map((item) => (
-                  <a
+                  <Link
                     key={item.name}
                     href={item.href}
                     aria-current={item.current ? "page" : undefined}
@@ -77,7 +78,7 @@ const Navbar:React.FC<Props> = (props) => {
                     )}
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -114,20 +115,20 @@ const Navbar:React.FC<Props> = (props) => {
                   data-[enter]:duration-100 data-[enter]:ease-out data-[leave]:duration-75 data-[leave]:ease-in"
                 >
                   <MenuItem>
-                    <a
+                    <Link
                       href="/admin/dashboard"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
                       Dashboard
-                    </a>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
-                    <a
+                    <Link
                       href="/admin/settings"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
                       Settings
-                    </a>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
                     <a
@@ -172,20 +173,20 @@ const Navbar:React.FC<Props> = (props) => {
                   data-[enter]:duration-100 data-[enter]:ease-out data-[leave]:duration-75 data-[leave]:ease-in"
                 >
                   <MenuItem>
-                    <a
+                    <Link
                       href="/generalUser/profile"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
                       Your profile
-                    </a>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
-                    <a
+                    <Link
                       href="/generalUser/settings"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
                       Settings
-                    </a>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
                     <a
@@ -230,20 +231,28 @@ const Navbar:React.FC<Props> = (props) => {
                   data-[enter]:duration-100 data-[enter]:ease-out data-[leave]:duration-75 data-[leave]:ease-in"
                 >
                   <MenuItem>
-                    <a
+                    <Link
                       href="/hotel/profile"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
                       Profile
-                    </a>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
-                    <a
+                    <Link
+                      href="/hotel/roomManagement"
+                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
+                    >
+                      Room Management
+                    </Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link
                       href="/hotel/settings"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
                       Settings
-                    </a>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
                     <a
@@ -288,28 +297,28 @@ const Navbar:React.FC<Props> = (props) => {
                   data-[enter]:duration-100 data-[enter]:ease-out data-[leave]:duration-75 data-[leave]:ease-in"
                 >
                   <MenuItem>
-                    <a
+                    <Link
                       href="/restaurant/profile"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
                       Profile
-                    </a>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
-                    <a
+                    <Link
                       href="/restaurant/foodMenu"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
                       Food Menu
-                    </a>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
-                    <a
+                    <Link
                       href="/restaurant/settings"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
                       Settings
-                    </a>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
                     <a
@@ -354,28 +363,28 @@ const Navbar:React.FC<Props> = (props) => {
                   data-[enter]:duration-100 data-[enter]:ease-out data-[leave]:duration-75 data-[leave]:ease-in"
                 >
                   <MenuItem>
-                    <a
+                    <Link
                       href="/tourismManager/profile"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
                       Your profile
-                    </a>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
-                    <a
+                    <Link
                       href="/tourismManager/attractions"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
                       Attractions
-                    </a>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
-                    <a
+                    <Link
                       href="/tourismManager/settings"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
                       Settings
-                    </a>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
                     <a
@@ -391,13 +400,13 @@ const Navbar:React.FC<Props> = (props) => {
           )}
 
           {props.role === "None" && (
-            <a
+            <Link
               href="/login"
               className="ml-3 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white
                         hover:bg-indigo-500 transition"
             >
               Login
-            </a>
+            </Link>
           )}
 
           {props.role === "" && (

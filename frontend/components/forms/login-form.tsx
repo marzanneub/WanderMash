@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 
@@ -132,7 +133,7 @@ const LoginForm: React.FC = () => {
             </div>
             <div className="flex justify-between items-center">
                 <div className="text-sm">
-                <a href="/forgot-password" className="text-indigo-600 hover:text-indigo-800 font-medium">Forgot password?</a>
+                <Link href="/forgot-password" className="text-indigo-600 hover:text-indigo-800 font-medium">Forgot password?</Link>
                 </div>
             </div>
             <button
@@ -158,7 +159,7 @@ const LoginForm: React.FC = () => {
             {/* <!-- Registration link --> */}
             <p className="text-center text-sm text-gray-600 mt-6">
                 Don&apos;t have an account?
-            <a href="/registration" className="text-indigo-600 hover:text-indigo-800 font-medium"> Register here </a>
+            <Link href="/registration" className="text-indigo-600 hover:text-indigo-800 font-medium"> Register here </Link>
             </p>
         </div>
     )

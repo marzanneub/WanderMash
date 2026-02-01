@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import SidebarTourismManager from "@/components/navigation/sidebarTourismManager";
-import { districtUpazilas } from "@/data/locations/districtUpazilas";
+import { districtAreas } from "@/data/locations/districtAreas";
 import { attractionFacilities } from "@/data/attractions";
 
 interface Attraction {
@@ -16,7 +16,7 @@ interface Attraction {
     category: string;
     description: string;
     district: string;
-    upazila: string;
+    area: string;
     address: string;
     approved: boolean;
 }
@@ -26,7 +26,7 @@ const TourismManagerAttractionsPage: React.FC = () => {
 
     const [loading, setLoading] = useState(true);
 
-    const districts = Object.keys(districtUpazilas);
+    const districts = Object.keys(districtAreas);
     const categories = Object.keys(attractionFacilities);
 
     const searchParams = useSearchParams();
@@ -70,7 +70,7 @@ const TourismManagerAttractionsPage: React.FC = () => {
     const [phone, setPhone] = useState("");
     const [category, setCategory] = useState("");
     const [district, setDistrict] = useState("");
-    const [upazila, setUpazila] = useState("");
+    const [area, setArea] = useState("");
     const [address, setAddress] = useState("");
 
     
@@ -80,7 +80,7 @@ const TourismManagerAttractionsPage: React.FC = () => {
         phone?: string;
         category?: string;
         district?: string;
-        upazila?: string;
+        area?: string;
         address?: string;
     }>({});
     
@@ -90,7 +90,7 @@ const TourismManagerAttractionsPage: React.FC = () => {
         setPhone("");
         setCategory("");
         setDistrict("");
-        setUpazila("");
+        setArea("");
         setAddress("");
     }
 
@@ -168,8 +168,8 @@ const TourismManagerAttractionsPage: React.FC = () => {
             newErrors.district = "District is required";
         }
 
-        if(!upazila) {
-            newErrors.upazila = "Upazila is required";
+        if(!area) {
+            newErrors.area = "Area is required";
         }
 
         if(!address) {
@@ -188,7 +188,7 @@ const TourismManagerAttractionsPage: React.FC = () => {
         formData.append("email", email);
         formData.append("category", category);
         formData.append("district", district);
-        formData.append("upazila", upazila);
+        formData.append("area", area);
         formData.append("address", address);
 
         const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/tourismManager/addAttraction`, {
@@ -366,7 +366,7 @@ const TourismManagerAttractionsPage: React.FC = () => {
                                     onChange={(e) => setCategory(e.target.value)}
                                     className="w-full h-12 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 >
-                                    <option value="" disabled selected>-- select category --</option>
+                                    <option value="" disabled>-- select category --</option>
                                         {categories.map((c) => (
                                             <option key={c} value={c}>
                                                 {c}
@@ -386,11 +386,11 @@ const TourismManagerAttractionsPage: React.FC = () => {
                                     value={district}
                                     onChange={(e) => {
                                         setDistrict(e.target.value);
-                                        setUpazila("");
+                                        setArea("");
                                     }}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                     >
-                                        <option value="" disabled selected>-- select district --</option>
+                                        <option value="" disabled>-- select district --</option>
                                         {districts.map((d) => (
                                             <option key={d} value={d}>
                                                 {d}
@@ -402,29 +402,29 @@ const TourismManagerAttractionsPage: React.FC = () => {
                                     )}
                                 </div>
                                 <div>
-                                    <label htmlFor="upazila" className="block text-sm font-medium text-gray-700 mb-1">Select Upazila <span className="text-red-500">*</span></label>
+                                    <label htmlFor="area" className="block text-sm font-medium text-gray-700 mb-1">Select Area <span className="text-red-500">*</span></label>
                                     <select
-                                    id="upazila"
-                                    name="upazila"
-                                    value={upazila}
-                                    onChange={(e) => setUpazila(e.target.value)}
+                                    id="area"
+                                    name="area"
+                                    value={area}
+                                    onChange={(e) => setArea(e.target.value)}
                                     disabled={!district}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                     >
                                         <option value="">
-                                            {district ? "-- select upazila --" : "-- select district first --"}
+                                            {district ? "-- select area --" : "-- select district first --"}
                                         </option>
 
                                         {district &&
-                                            districtUpazilas[district]?.map((u) => (
+                                            districtAreas[district]?.map((u) => (
                                             <option key={u} value={u}>
                                                 {u}
                                             </option>
                                         ))}
 
                                     </select>
-                                    {errors.upazila && (
-                                        <p className="mt-1 text-sm text-red-600">{errors.upazila}</p>
+                                    {errors.area && (
+                                        <p className="mt-1 text-sm text-red-600">{errors.area}</p>
                                     )}
                                 </div>
                             </div>
@@ -490,7 +490,7 @@ const TourismManagerAttractionsPage: React.FC = () => {
 
                     <div className="lg:col-span-7 space-y-5">
                         <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                            Your added attractions
+                            Your added attractions ({attractions?.length})
                         </h2>
                         
                         {(attractions && attractions.length>0) ? (attractions.map((item) => (

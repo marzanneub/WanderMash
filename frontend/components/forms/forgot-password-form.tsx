@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
@@ -109,7 +110,7 @@ const ForgotPasswordForm: React.FC = () => {
             </form>
 
             <div className="mt-6 text-center text-sm">
-                <a href="/login" className="text-indigo-600 hover:text-indigo-800 font-medium">Back to Login</a>
+                <Link href="/login" className="text-indigo-600 hover:text-indigo-800 font-medium">Back to Login</Link>
             </div>
         </div>
     )

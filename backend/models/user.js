@@ -102,7 +102,7 @@ const attractionSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
-        upazila: {
+        area: {
             type: String,
             required: true,
         },
@@ -215,7 +215,7 @@ const hotelSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
-        upazila: {
+        area: {
             type: String,
             required: true,
         },
@@ -230,19 +230,30 @@ const hotelSchema = new mongoose.Schema({
         },
         roomTypes: [
             {
-                title: { type: String, required: true }, // e.g., "Deluxe King Room"
+                title: { type: String, required: true },
                 pricePerNight: { type: Number, required: true },
+                dp: { type: String, default: "hotelDefault.jpg", },
                 capacity: {
-                    adults: { type: Number, default: 2 },
+                    adults: { type: Number, default: 1 },
                     children: { type: Number, default: 0 }
                 },
-                amenities: [String], // e.g., ["Mini Bar", "Sea View", "AC"]
-                description: String,
-                images: [String],
                 
+                bedConfig: {
+                    singleBeds: { type: Number, default: 1 },
+                    doubleBeds: { type: Number, default: 0 },
+                    extraBedsAvailable: { type: Boolean, default: false }
+                },
+                roomSize: { type: String, required: true },
+                furnishings: [String],
+                amenities: [String], 
+                description: {
+                    type: String,
+                    default: "",
+                },
+                images: [String],
                 rooms: [
                     {
-                        roomNumber: [{ type: Number }],
+                        roomNumber: { type: Number },
                         isAvailable: { type: Boolean, default: true },
                         unavailableDates: { type: [Date] }
                     }
@@ -350,7 +361,7 @@ const restaurantSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
-        upazila: {
+        area: {
             type: String,
             required: true,
         },

@@ -3,6 +3,7 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
+import { TbChevronLeft } from "react-icons/tb";
 import Cropper, { Area, Point } from "react-easy-crop";
 import getCroppedImg from "@/utils/cropImage";
 import SidebarTourismManager from "@/components/navigation/sidebarTourismManager";
@@ -11,7 +12,7 @@ import {
     FaSquareInstagram,
     FaSquareTwitter,
 } from "react-icons/fa6";
-import { districtUpazilas } from "@/data/locations/districtUpazilas";
+import { districtAreas } from "@/data/locations/districtAreas";
 import { attractionFacilities, attractionViews } from "@/data/attractions";
 
 interface SocialLinks {
@@ -55,7 +56,7 @@ interface Attraction {
     category?: string;
     description: string;
     district: string;
-    upazila: string;
+    area: string;
     address: string;
     location: Location;
     socialLinks?: SocialLinks;
@@ -78,7 +79,7 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
     const [category, setCategory] = useState("")
     const [description, setDescription] = useState("")
     const [district, setDistrict] = useState("")
-    const [upazila, setUpazila] = useState("")
+    const [area, setArea] = useState("")
     const [address, setAddress] = useState("")
     const [location, setLocation] = useState<Location>({latitude: null, longitude: null});
     const [socialLinks, setSocialLinks] = useState<SocialLinks>({
@@ -103,7 +104,7 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
 
     const [loading, setLoading] = useState(true);
     
-    const districts = Object.keys(districtUpazilas);
+    const districts = Object.keys(districtAreas);
     const categories = Object.keys(attractionFacilities);
 
     const [errors, setErrors] = useState<{
@@ -113,7 +114,7 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
         category?: string;
         description?: string;
         district?: string;
-        upazila?: string;
+        area?: string;
         address?: string;
         location?: string;
         socialLinks?: string;
@@ -162,7 +163,7 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
                 setCategory(data.attraction.category);
                 setDescription(data.attraction.description);
                 setDistrict(data.attraction.district);
-                setUpazila(data.attraction.upazila);
+                setArea(data.attraction.area);
                 setAddress(data.attraction.address);
                 setLocation(data.attraction.location);
                 setSocialLinks({
@@ -233,10 +234,8 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
 /////////////////for facilities/////////////////
     const handleFacilitiesCheckboxChange = (option: string) => {
         if (facilities.includes(option)) {
-            // REMOVE: Filter out the item to create a new array
             setFacilities(facilities.filter(item => item !== option));
         } else {
-            // ADD: Spread existing items and add the new one
             setFacilities([...facilities, option]);
         }
     };
@@ -246,10 +245,8 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
 ///////////////////for views/////////////////////
     const handleViewsCheckboxChange = (option: string) => {
         if (views.includes(option)) {
-            // REMOVE: Filter out the item to create a new array
             setViews(views.filter(item => item !== option));
         } else {
-            // ADD: Spread existing items and add the new one
             setViews([...views, option]);
         }
     };
@@ -289,7 +286,7 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
             setPhone(`+880${phone}`);
         }
 
-        console.log(phone)
+        // console.log(phone)
 
         if(!category) {
             newErrors.category = "category is required";
@@ -299,8 +296,8 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
             newErrors.district = "District is required";
         }
 
-        if(!upazila) {
-            newErrors.upazila = "Upazila is required";
+        if(!area) {
+            newErrors.area = "Area is required";
         }
         if(!address) {
             newErrors.address = "Address is required";
@@ -318,7 +315,7 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
         formData.append("category", category);
         formData.append("description", description);
         formData.append("district", district);
-        formData.append("upazila", upazila);
+        formData.append("area", area);
         formData.append("address", address);
         formData.append("location", JSON.stringify(location));
         formData.append("socialLinks", JSON.stringify(socialLinks));
@@ -357,7 +354,13 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
             <SidebarTourismManager pagetype="Attractions" />
 
             <main className="container mx-auto px-10 py-16 max-w-7xl">
-                <h1 className="text-4xl font-bold text-indigo-900 mb-10">Edit Attraction</h1>
+                <div className="flex items-center gap-4 mb-10">
+                <button onClick={() => router.back()}
+                    className="p-2 bg-white rounded-full shadow-sm text-gray-300 hover:bg-gray-100 hover:text-black transition flex-shrink-0 cursor-pointer">
+                    <TbChevronLeft size={24} />
+                </button>
+                <h1 className="text-4xl font-bold text-indigo-900">Edit Attraction</h1>
+                </div>
 
                 {loading && (
                     <div className="bg-white rounded-xl shadow-lg p-8 space-y-8 animate-pulse">
@@ -480,7 +483,7 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
                                     }}
                                     className="w-full h-12 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 >
-                                    <option value="" disabled selected>-- select category --</option>
+                                    <option value="" disabled>-- select category --</option>
                                         {categories.map((c) => (
                                             <option key={c} value={c}>
                                                 {c}
@@ -553,11 +556,11 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
                                     value={district || ""}
                                     onChange={(e) => {
                                         setDistrict(e.target.value);
-                                        setUpazila("");
+                                        setArea("");
                                     }}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 >
-                                    <option value="" disabled selected>Select district</option>
+                                    <option value="" disabled>Select district</option>
                                     {districts.map((d) => (
                                         <option key={d} value={d}>
                                             {d}
@@ -570,26 +573,26 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
                             </div>
 
                             <div>
-                                <label htmlFor="upazila" className="block text-sm font-medium text-gray-700 mb-1">Select Upazila <span className="text-red-500">*</span></label>
+                                <label htmlFor="area" className="block text-sm font-medium text-gray-700 mb-1">Select Area <span className="text-red-500">*</span></label>
                                 <select
-                                    id="upazila"
-                                    name="upazila"
-                                    value={upazila || ""}
-                                    onChange={(e) => setUpazila(e.target.value)}
+                                    id="area"
+                                    name="area"
+                                    value={area || ""}
+                                    onChange={(e) => setArea(e.target.value)}
                                     disabled={!district}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 >
                                     <option value="" disabled>
-                                        {district ? "-- select upazila --" : "-- select district first --"}
+                                        {district ? "-- select area --" : "-- select district first --"}
                                     </option>
-                                    {district && districtUpazilas[district]?.map((u) => (
+                                    {district && districtAreas[district]?.map((u) => (
                                         <option key={u} value={u}>
                                             {u}
                                         </option>
                                     ))}
                                 </select>
-                                {errors.upazila && (
-                                    <p className="mt-1 text-sm text-red-600">{errors.upazila}</p>
+                                {errors.area && (
+                                    <p className="mt-1 text-sm text-red-600">{errors.area}</p>
                                 )}
                             </div>
                         </div>
@@ -640,7 +643,7 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
                         {/* Social Links */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <div>
-                                <label htmlFor="facebook" className="flex items-center gap-1 block text-sm font-medium text-gray-700 mb-1"><FaSquareFacebook /> Facebook </label>
+                                <label htmlFor="facebook" className="flex items-center gap-1 text-sm font-medium text-gray-700 mb-1"><FaSquareFacebook /> Facebook </label>
                                 <div className="flex rounded-md shadow-sm border border-gray-300 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 overflow-hidden">
                                 {/* <div className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"> */}
                                 <span className="flex items-center px-3 bg-gray-100 text-gray-500 text-sm border-r border-gray-300 select-none">
@@ -659,7 +662,7 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
                                 </div>
                             </div>
                             <div>
-                                <label htmlFor="instagram" className="flex items-center gap-1 block text-sm font-medium text-gray-700 mb-1"><FaSquareInstagram /> Instagram </label>
+                                <label htmlFor="instagram" className="flex items-center gap-1 text-sm font-medium text-gray-700 mb-1"><FaSquareInstagram /> Instagram </label>
                                 <div className="flex rounded-md shadow-sm border border-gray-300 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 overflow-hidden">
                                 <span className="flex items-center px-3 bg-gray-100 text-gray-500 text-sm border-r border-gray-300 select-none">
                                     https://instagram.com/
@@ -677,7 +680,7 @@ const TourismManagerEditAttractionsPage: React.FC = () => {
                                 </div>
                             </div>
                             <div>
-                                <label htmlFor="twitter" className="flex items-center gap-1 block text-sm font-medium text-gray-700 mb-1"><FaSquareTwitter /> Twitter </label>
+                                <label htmlFor="twitter" className="flex items-center gap-1 text-sm font-medium text-gray-700 mb-1"><FaSquareTwitter /> Twitter </label>
                                 <div className="flex rounded-md shadow-sm border border-gray-300 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 overflow-hidden">
                                 <span className="flex items-center px-3 bg-gray-100 text-gray-500 text-sm border-r border-gray-300 select-none">
                                     https://twitter.com/

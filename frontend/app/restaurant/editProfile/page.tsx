@@ -11,7 +11,7 @@ import {
     FaSquareInstagram,
     FaSquareTwitter,
 } from "react-icons/fa6";
-import { districtUpazilas } from "@/data/locations/districtUpazilas";
+import { districtAreas } from "@/data/locations/districtAreas";
 import { restaurantFacilities, restaurantCuisines } from "@/data/user/restaurant";
 
 interface SocialLinks {
@@ -57,7 +57,7 @@ interface User {
     approved: boolean;
     address: string;
     district: string;
-    upazila: string;
+    area: string;
     postalCode: number;
     description: string;
     socialLinks?: SocialLinks;
@@ -78,7 +78,7 @@ const RestaurantEditProfilePage: React.FC = () => {
     const [approved, setApproved] = useState(false)
     const [address, setAddress] = useState("")
     const [district, setDistrict] = useState("")
-    const [upazila, setUpazila] = useState("")
+    const [area, setArea] = useState("")
     const [postalCode, setPostalCode] = useState("")
     const [description, setDescription] = useState("")
     const [socialLinks, setSocialLinks] = useState<SocialLinks>({
@@ -103,7 +103,7 @@ const RestaurantEditProfilePage: React.FC = () => {
 
     const [loading, setLoading] = useState(true);
     
-    const districts = Object.keys(districtUpazilas);
+    const districts = Object.keys(districtAreas);
 
     const [errors, setErrors] = useState<{
         name?: string;
@@ -114,7 +114,7 @@ const RestaurantEditProfilePage: React.FC = () => {
         approved?: string;
         address?: string;
         district?: string;
-        upazila?: string;
+        area?: string;
         postalCode?: string;
         description?: string;
         socialLinks?: string;
@@ -165,7 +165,7 @@ const RestaurantEditProfilePage: React.FC = () => {
                 setApproved(data.user.approved);
                 setAddress(data.user.address);
                 setDistrict(data.user.district);
-                setUpazila(data.user.upazila);
+                setArea(data.user.area);
                 setPostalCode(data.user.postalCode);
                 setDescription(data.user.description);
                 setSocialLinks({
@@ -283,10 +283,8 @@ const RestaurantEditProfilePage: React.FC = () => {
 /////////////////for facilities/////////////////
     const handleFacilitiesCheckboxChange = (option: string) => {
         if (facilities.includes(option)) {
-            // REMOVE: Filter out the item to create a new array
             setFacilities(facilities.filter(item => item !== option));
         } else {
-            // ADD: Spread existing items and add the new one
             setFacilities([...facilities, option]);
         }
     };
@@ -296,10 +294,8 @@ const RestaurantEditProfilePage: React.FC = () => {
 ///////////////////for cuisines//////////////////
     const handleCuisinesCheckboxChange = (option: string) => {
         if (cuisines.includes(option)) {
-            // REMOVE: Filter out the item to create a new array
             setCuisines(cuisines.filter(item => item !== option));
         } else {
-            // ADD: Spread existing items and add the new one
             setCuisines([...cuisines, option]);
         }
     };
@@ -346,8 +342,8 @@ const RestaurantEditProfilePage: React.FC = () => {
             newErrors.district = "District is required";
         }
 
-        if(!upazila) {
-            newErrors.upazila = "Upazila is required";
+        if(!area) {
+            newErrors.area = "Area is required";
         }
         if(!address) {
             newErrors.address = "Address is required";
@@ -365,7 +361,7 @@ const RestaurantEditProfilePage: React.FC = () => {
         formData.append("registrationId", registrationId);
         formData.append("phone", phone);
         formData.append("district", district);
-        formData.append("upazila", upazila);
+        formData.append("area", area);
         formData.append("address", address);
         formData.append("postalCode", postalCode);
         formData.append("description", description);
@@ -694,11 +690,11 @@ const RestaurantEditProfilePage: React.FC = () => {
                                     value={district || ""}
                                     onChange={(e) => {
                                         setDistrict(e.target.value);
-                                        setUpazila("");
+                                        setArea("");
                                     }}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 >
-                                    <option value="" disabled selected>Select district</option>
+                                    <option value="" disabled>Select district</option>
                                     {districts.map((d) => (
                                         <option key={d} value={d}>
                                             {d}
@@ -711,26 +707,26 @@ const RestaurantEditProfilePage: React.FC = () => {
                             </div>
 
                             <div>
-                                <label htmlFor="upazila" className="block text-sm font-medium text-gray-700 mb-1">Select Upazila <span className="text-red-500">*</span></label>
+                                <label htmlFor="area" className="block text-sm font-medium text-gray-700 mb-1">Select Area <span className="text-red-500">*</span></label>
                                 <select
-                                    id="upazila"
-                                    name="upazila"
-                                    value={upazila || ""}
-                                    onChange={(e) => setUpazila(e.target.value)}
+                                    id="area"
+                                    name="area"
+                                    value={area || ""}
+                                    onChange={(e) => setArea(e.target.value)}
                                     disabled={!district}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 >
                                     <option value="" disabled>
-                                        {district ? "-- select upazila --" : "-- select district first --"}
+                                        {district ? "-- select area --" : "-- select district first --"}
                                     </option>
-                                    {district && districtUpazilas[district]?.map((u) => (
+                                    {district && districtAreas[district]?.map((u) => (
                                         <option key={u} value={u}>
                                             {u}
                                         </option>
                                     ))}
                                 </select>
-                                {errors.upazila && (
-                                    <p className="mt-1 text-sm text-red-600">{errors.upazila}</p>
+                                {errors.area && (
+                                    <p className="mt-1 text-sm text-red-600">{errors.area}</p>
                                 )}
                             </div>
 

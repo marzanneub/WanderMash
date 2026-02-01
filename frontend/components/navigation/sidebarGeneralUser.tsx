@@ -124,7 +124,7 @@ const SidebarGeneralUser: React.FC<Props> = (props) => {
                                 </span>
                             </li>
                         ) : (
-                        <Link href={menu.href ?? "#"}>
+                        <Link href={menu.href || "#"}>
                             <li
                             className={`text-gray-300 text-sm flex
                             items-center gap-x-4 cursor-pointer p-2 ${props.pagetype===menu.title && "bg-white/10"}

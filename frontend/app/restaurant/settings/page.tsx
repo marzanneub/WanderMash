@@ -29,7 +29,7 @@ interface User {
     approved: boolean;
     address: string;
     district: string;
-    upazila: string;
+    area: string;
     postalCode: number;
     description: string;
     socialLinks?: {

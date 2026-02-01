@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import Cropper, { Area, Point } from "react-easy-crop";
 import getCroppedImg from "@/utils/cropImage";
 import SidebarTourismManager from "@/components/navigation/sidebarTourismManager";
-import { districtUpazilas } from "@/data/locations/districtUpazilas";
+import { districtAreas } from "@/data/locations/districtAreas";
 
 const TourismManagerEditProfilePage: React.FC = () => {
     const router = useRouter();
@@ -20,7 +20,7 @@ const TourismManagerEditProfilePage: React.FC = () => {
 
     const [loading, setLoading] = useState(true);
 
-    const districts = Object.keys(districtUpazilas);
+    const districts = Object.keys(districtAreas);
 
     const [errors, setErrors] = useState<{
         name?: string;
@@ -364,7 +364,7 @@ const TourismManagerEditProfilePage: React.FC = () => {
                                 }}
                                 className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 >
-                                    <option value="" disabled selected>-- select district --</option>
+                                    <option value="" disabled>-- select district --</option>
                                     {districts.map((d) => (
                                         <option key={d} value={d}>
                                             {d}

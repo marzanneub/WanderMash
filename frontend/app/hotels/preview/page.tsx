@@ -3,6 +3,7 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
+import { TbChevronLeft } from "react-icons/tb";
 import CarouselSkeleton from "@/components/ui/carousel-skeleton";
 import Carousel from "@/components/ui/carousel";
 import TimeTable from "@/components/data-display/time-table";
@@ -49,7 +50,7 @@ interface Hotel {
     approved: boolean;
     address: string;
     district: string;
-    upazila: string;
+    area: string;
     postalCode: number;
     description: string;
     socialLinks?: SocialLinks;
@@ -60,6 +61,7 @@ interface Hotel {
 }
 
 const HotePreviewPage: React.FC = () => {
+    const router = useRouter();
     const [hotel, setHotel] = useState<Hotel | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -107,7 +109,7 @@ const HotePreviewPage: React.FC = () => {
     const location = [
         { label: "Address", value: hotel?.address },
         { label: "District", value: hotel?.district },
-        { label: "Upazila", value: hotel?.upazila },
+        { label: "Area", value: hotel?.area },
         { label: "Postal Code", value: hotel?.postalCode },
     ];
 
@@ -152,7 +154,13 @@ const HotePreviewPage: React.FC = () => {
             )}
             {hotel!==null && (
                 <div>
-                    <h1 className="text-4xl font-bold text-indigo-900 mb-10">{hotel.name}</h1>
+                    <div className="flex items-center gap-4 mb-10">
+                    <button onClick={() => router.back()}
+                        className="p-2 bg-white rounded-full shadow-sm text-gray-300 hover:bg-gray-100 hover:text-black transition flex-shrink-0 cursor-pointer">
+                        <TbChevronLeft size={24} />
+                    </button>
+                    <h1 className="text-4xl font-bold text-indigo-900">{hotel.name}</h1>
+                    </div>
                     <div className="bg-white rounded-2xl shadow-xl p-12 flex flex-col md:flex-row gap-14">
                         <div className="md:w-2/2 space-y-12">
                             <div className="grid grid-cols-1 md:grid-cols-1 gap-10">

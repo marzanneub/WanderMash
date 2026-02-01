@@ -95,6 +95,161 @@ async function handleDeleteImage(req, res) {
     return res.status(404).json({errormessage: "Error"});
 }
 
+async function handleAddRoomTypes(req, res) {
+    await uploadAsync(req, res);
+
+    room = {
+        title: req.body.title,
+        pricePerNight: req.body.pricePerNight,
+        roomSize: req.body.roomSize,
+        capacity: JSON.parse(req.body.capacity),
+        bedConfig: JSON.parse(req.body.bedConfig),
+    };
+
+    try{
+        await Hotel.findByIdAndUpdate(
+            req.userData._id,
+            { $push: { roomTypes: room } }
+        );
+
+        return res.status(200).json({successmessage: "Room type added successfully"});
+    }
+    catch(error){
+        return res.status(200).json({errormessage: "error"});
+    }
+
+
+}
+
+async function handleEditRoomTypes(req, res) {
+    await uploadAsync(req, res);
+
+    const updateData = {
+        "roomTypes.$.title": req.body.title,
+        "roomTypes.$.pricePerNight": JSON.parse(req.body.pricePerNight),
+        "roomTypes.$.capacity": JSON.parse(req.body.capacity),
+        "roomTypes.$.bedConfig": JSON.parse(req.body.bedConfig),
+        "roomTypes.$.roomSize": JSON.parse(req.body.roomSize),
+        "roomTypes.$.furnishings": JSON.parse(req.body.furnishings),
+        "roomTypes.$.amenities": JSON.parse(req.body.amenities),
+        "roomTypes.$.description": req.body.description,
+    };
+
+    try{
+        const updatedHotel = await Hotel.findOneAndUpdate(
+            { 
+                _id: req.userData._id,
+                "roomTypes._id": req.body.id
+            },
+            { $set: updateData }
+        );
+
+        if(updatedHotel) return res.status(200).json({ successmessage: "Room updated successfully" });
+        else return res.status(409).json({ errormessage: "Error" });
+    }
+    catch(error){
+        return res.status(409).json({ errormessage: error });
+    }
+}
+
+async function handleDeleteRoomTypes(req, res) {
+    await uploadAsync(req, res);
+
+    try{
+        const result = await Hotel.updateOne(
+            { _id: req.userData._id },
+            { $pull: { roomTypes: { _id: req.body.id } } }
+        );
+
+        if(result) return res.status(200).json({ successmessage: "Room deleted successfully" });
+        else return res.status(409).json({ errormessage: "Error" });
+    }
+    catch(error){
+        return res.status(409).json({ errormessage: error });
+    }
+}
+
+async function handleUploadRoomImage(req, res) {
+    await uploadAsync(req, res);
+
+    const image = req.files?.image?.[0]?.filename || null;
+
+    if(image!=null) {
+        try{
+            const updatedHotel = await Hotel.findOneAndUpdate(
+                { 
+                    _id: req.userData._id,
+                    "roomTypes._id": req.body.id
+                },
+                { $push: { "roomTypes.$.images": image } }
+            );
+
+            if(updatedHotel) return res.status(200).json({ successmessage: "Successfully Uploaded", imageTitle: image});
+            else return res.status(409).json({ errormessage: "Error" });
+        }
+        catch(error){
+            return res.status(409).json({ errormessage: error });
+        }
+    }
+
+    return res.status(200).json({errormessage: "Error"});
+}
+
+async function handleSetAsRoomDp(req, res) {
+    await uploadAsync(req, res);
+
+    if(req.body.image) {
+        try{
+            const updatedHotel = await Hotel.findOneAndUpdate(
+                { 
+                    _id: req.userData._id,
+                    "roomTypes._id": req.body.id
+                },
+                { "roomTypes.$.dp": req.body.image }
+            );
+
+            if(updatedHotel) return res.status(200).json({ successmessage: "Display picture updated successfully"});
+            else return res.status(409).json({ errormessage: "Error" });
+        }
+        catch(error){
+            return res.status(409).json({ errormessage: error });
+        }
+
+
+        // await Hotel.findByIdAndUpdate(req.userData._id,{ dp: req.body.image });
+        // return res.status(200).json({successmessage: "Display picture updated successfully."});
+    }
+    return res.status(404).json({errormessage: "Error"});
+}
+
+async function handleDeleteRoomImage(req, res) {
+    await uploadAsync(req, res);
+
+    if(req.body.image) {
+        try{
+            const updatedHotel = await Hotel.findOneAndUpdate(
+                { 
+                    _id: req.userData._id,
+                    "roomTypes._id": req.body.id
+                },
+                { $pull: { "roomTypes.$.images": req.body.image } }
+            );
+
+            if(updatedHotel) return res.status(200).json({ successmessage: "Successfully Deleted", imageTitle: req.body.image});
+            else return res.status(409).json({ errormessage: "Error" });
+        }
+        catch(error){
+            return res.status(409).json({ errormessage: error });
+        }
+
+
+        // await Hotel.findByIdAndUpdate(req.userData._id,{$pull:{ images: req.body.image }});
+        // return res.status(200).json({successmessage: "Image deleted successfully."});
+    }
+    return res.status(404).json({errormessage: "Error"});
+}
+
+
 module.exports = {
     handleEditProfile,
     handleSettings,
@@ -102,4 +257,12 @@ module.exports = {
     handleUploadImage,
     handleSetAsDp,
     handleDeleteImage,
+
+    handleAddRoomTypes,
+    handleEditRoomTypes,
+    handleDeleteRoomTypes,
+
+    handleUploadRoomImage,
+    handleSetAsRoomDp,
+    handleDeleteRoomImage,
 };

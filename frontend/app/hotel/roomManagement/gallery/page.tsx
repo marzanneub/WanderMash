@@ -6,28 +6,26 @@ import { toast } from "react-toastify";
 import { TbChevronLeft } from "react-icons/tb";
 import Cropper, { Area, Point } from "react-easy-crop";
 import getCroppedImg from "@/utils/cropImage";
-import SidebarTourismManager from "@/components/navigation/sidebarTourismManager";
+import SidebarHotel from "@/components/navigation/sidebarHotel";
 
-interface Attraction {
+interface RoomType {
     dp: string;
-    phone: string;
     images: string[];
 }
 
-const AttractionGalleryPage: React.FC = () => {
+const RoomGalleryPage: React.FC = () => {
     const router = useRouter();
 
     const searchParams = useSearchParams();
     const id: string|null  = searchParams.get("_id");
 
-    const [attraction, setAttraction] = useState<Attraction | null>(null);
+    const [roomType, setRoomType] = useState<RoomType | null>(null);
     const [images, setImages] = useState([]);
-    const [phone, setPhone] = useState("");
     const [loading, setLoading] = useState(true);
-
+    
     const [errors, setErrors] = useState<{
         dp?: string;
-        phone?: string;
+        images?: string;
         loading?: string;
         errormessage?: string;
     }>({});
@@ -58,19 +56,18 @@ const AttractionGalleryPage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        fetch(`/api/get-attraction-info?id=${id}`)
+        fetch(`/api/hotel-get-roomType?id=${id}`)
             .then(res => res.json())
             .then(data => {
-                setAttraction(data.attraction);
-                setPhone(data.attraction.phone);
-                setImages(data.attraction.images);
+                setRoomType(data.roomType);
+                setImages(data.roomType.images);
 
                 setLoading(false);
             }
             );
     }, []);
-
     
+        
     const deleteImage = async (item: string) => {
         if(!id) return;
 
@@ -80,7 +77,7 @@ const AttractionGalleryPage: React.FC = () => {
         formData.append("id", id);
 
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/tourismManager/deleteImage`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/hotel/deleteRoomImage`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -112,10 +109,11 @@ const AttractionGalleryPage: React.FC = () => {
                 theme: "colored",
             });
 
-            fetch(`/api/get-attraction-info?id=${id}`)
+            fetch(`/api/hotel-get-roomType?id=${id}`)
                 .then(res => res.json())
                 .then(data => {
-                    setImages(data.attraction.images);
+                    setRoomType(data.roomType);
+                    setImages(data.roomType.images);
                 }
                 );
 
@@ -132,7 +130,7 @@ const AttractionGalleryPage: React.FC = () => {
         formData.append("id", id);
 
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/tourismManager/setAsDp`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/hotel/setAsRoomDp`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -164,10 +162,11 @@ const AttractionGalleryPage: React.FC = () => {
                 theme: "colored",
             });
 
-            fetch(`/api/get-attraction-info?id=${id}`)
+            fetch(`/api/hotel-get-roomType?id=${id}`)
                 .then(res => res.json())
                 .then(data => {
-                    setAttraction(data.attraction);
+                    setRoomType(data.roomType);
+                    setImages(data.roomType.images);
                 }
                 );
 
@@ -270,12 +269,12 @@ const AttractionGalleryPage: React.FC = () => {
         const formData = new FormData();
         if (croppedImage !== null) {
             const imageBlob = dataURLtoBlob(croppedImage);
-            formData.append("image", imageBlob, `${phone}.png`);
+            formData.append("image", imageBlob, `${id}.png`);
         }
 
         formData.append("id", id);
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/tourismManager/uploadImage`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/hotel/uploadRoomImage`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -307,10 +306,11 @@ const AttractionGalleryPage: React.FC = () => {
                 theme: "colored",
             });
 
-            fetch(`/api/get-attraction-info?id=${id}`)
+            fetch(`/api/hotel-get-roomType?id=${id}`)
                 .then(res => res.json())
                 .then(data => {
-                    setImages(data.attraction.images);
+                    setRoomType(data.roomType);
+                    setImages(data.roomType.images);
                 }
                 );
             handleResetImage();
@@ -322,17 +322,15 @@ const AttractionGalleryPage: React.FC = () => {
 
     return (
         <div className="bg-indigo-50 min-h-screen w-full flex">
-            <SidebarTourismManager pagetype="Attractions" />
-
+            <SidebarHotel pagetype="Room Management" />
             <main className="container mx-auto px-10 py-16 max-w-7xl">
                 <div className="flex items-center gap-4 mb-10">
                 <button onClick={() => router.back()}
                     className="p-2 bg-white rounded-full shadow-sm text-gray-300 hover:bg-gray-100 hover:text-black transition flex-shrink-0 cursor-pointer">
                     <TbChevronLeft size={24} />
                 </button>
-                <h1 className="text-4xl font-bold text-indigo-900">Attraction Gallery</h1>
+                <h1 className="text-4xl font-bold text-indigo-900">Room Gallery</h1>
                 </div>
-                
                 {loading && (
                     <div className="animate-pulse">
                     {/* ================= Upload Form Skeleton ================= */}
@@ -386,7 +384,7 @@ const AttractionGalleryPage: React.FC = () => {
                     </div>
                 )}
 
-                {attraction !== null && (
+                {roomType !== null && (
                     <div>
                         <form className="bg-white rounded-xl shadow-lg p-8 space-y-8" onSubmit={handleSubmit}>
                             <div className="grid md:grid-cols-2 gap-8 items-start">
@@ -443,7 +441,7 @@ const AttractionGalleryPage: React.FC = () => {
                                     </h2>
                                     <div className="p-5 bg-slate-50 rounded-xl border border-slate-100">
                                         <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-                                            Upload photos of this attraction’s key features, architecture, 
+                                            Upload photos of this room’s key features, furnitures, 
                                             or surroundings. You can select your favorite shot as the 
                                             primary display photo later.
                                         </p>
@@ -568,7 +566,7 @@ const AttractionGalleryPage: React.FC = () => {
                             <h2 className="text-xl font-semibold text-gray-800 mb-6">Uploaded Photos</h2>
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                                 <div className="relative group">
-                                    <img src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${attraction.dp}`} alt="Gallery Image" className="w-full h-48 object-cover rounded-xl shadow-md" />
+                                    <img src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${roomType.dp}`} alt="Gallery Image" className="w-full h-48 object-cover rounded-xl shadow-md" />
 
                                     <div className="absolute top-2 left-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full shadow">Display</div>
 
@@ -576,7 +574,7 @@ const AttractionGalleryPage: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {images.map((item) => (item !== attraction.dp && (
+                                {images.map((item) => (item !== roomType.dp && (
                                     <div key={item} className="relative group w-full h-auto">
                                         <img src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${item}`} alt="Gallery Image" className="w-full h-full object-cover rounded-xl shadow-md" />
 
@@ -597,15 +595,14 @@ const AttractionGalleryPage: React.FC = () => {
                                     </div>
 
                                 )))}
-
                             </div>
                         </div>
+
                     </div>
                 )}
-
             </main>
         </div>
     )
 }
 
-export default AttractionGalleryPage;
+export default RoomGalleryPage;

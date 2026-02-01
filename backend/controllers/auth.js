@@ -6,7 +6,7 @@ const { Verification } = require("../models/verification");
 
 /////////////////////////Need to handle many types of user in this fucntion///////////////////////////////
 async function handleUserRegistration(req, res) {
-    let {role, name, email, phone, registrationId, district, upazila, address, password} = req.body;
+    let {role, name, email, phone, registrationId, district, area, address, password} = req.body;
 
     if(phone.startsWith("880")) {
         phone = `+${phone}`;
@@ -56,7 +56,7 @@ async function handleUserRegistration(req, res) {
             phone,
             registrationId,
             district,
-            upazila,
+            area,
             address,
             password: hash,
         });
@@ -73,7 +73,7 @@ async function handleUserRegistration(req, res) {
             phone,
             registrationId,
             district,
-            upazila,
+            area,
             address,
             password: hash,
         });

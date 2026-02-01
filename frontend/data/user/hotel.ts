@@ -57,3 +57,94 @@ export const hotelViews: string[] = [
     "Vineyard View", "Volcano View", "Waterfall View", "Waterfront View", "West-Facing (Sunset) View", 
     "Wetland View", "Wildflower Meadow View", "Wildlife Sanctuary View", "Woodland View", "Yacht Club View"
 ];
+
+export const roomAmenities: string[] = [
+    // Sleeping & Comfort
+    "Premium Bedding", "Memory Foam Mattress", "Pillow Menu", "Blackout Curtains", 
+    "Soundproof Walls", "Hypoallergenic Bedding", "Extra Linens & Towels", "Fold-out Sofa",
+
+    // Bathroom & Personal Care
+    "En-suite Bathroom", "Rainfall Showerhead", "Deep Soaking Bathtub", "Jacuzzi Tub", 
+    "Walk-in Shower", "Bidet", "Dual Vanities", "Hairdryer", "Lighted Makeup Mirror", 
+    "Designer Toiletries", "Plush Bathrobes", "Slippers", "Heated Towel Rail",
+
+    // Technology & Entertainment
+    "High-Speed Wi-Fi", "Smart TV with Streaming (Netflix/HBOMax)", "Cable/Satellite Channels", 
+    "Bluetooth Speaker", "Charging Station", "USB Charging Ports", "Bedside Power Outlets", 
+    "Telephone", "Radio/Alarm Clock",
+
+    // Food & Drink
+    "Mini Bar", "Refrigerator", "Microwave", "Coffee/Tea Maker", "Nespresso Machine", 
+    "Electric Kettle", "Complimentary Bottled Water", "Wine Glasses & Opener", 
+    "Kitchenette", "Stovetop", "Toaster", "Dining Table",
+
+    // Workspace & Storage
+    "Desk/Workspace", "Ergonomic Chair", "In-Room Safe (Laptop Size)", "Wardrobe/Closet", 
+    "Clothes Rack", "Luggage Rack", "Iron & Ironing Board", "Full-Length Mirror",
+
+    // Climate Control & Views
+    "Individually Controlled AC", "Central Heating", "Ceiling Fan", "Fresh Air Windows", 
+    "Private Balcony", "Terrace Access", "Patio", "City View", "Sea/Ocean View", "Garden View",
+
+    // Safety & Accessibility
+    "Smoke Detector", "Emergency Cord in Bathroom", "Grab Rails in Toilet", "Lowered Sink", 
+    "Visual Fire Alarm", "Electronic Door Key"
+];
+
+export const roomFurnishings: string[] = [
+    // Seating & Lounging
+    "Sofa / Couch", "Armchair", "Loveseat", "Ottoman", "Chaise Lounge", 
+    "Recliner", "Bean Bag", "Window Seat", "Breakfast Nook",
+
+    // Work & Storage
+    "Executive Writing Desk", "Ergonomic Office Chair", "Bookshelf", "Wardrobe / Closet", 
+    "Walk-in Closet", "Chest of Drawers", "Nightstand / Bedside Table", "Luggage Rack", 
+    "Media Console", "Vanity Table / Dressing Table",
+
+    // Bedding Related
+    "Upholstered Headboard", "Bed Bench / End of Bed Stool", "Canopy Bed Frame", 
+    "Murphy Bed", "Crib / Cot (Upon Request)",
+
+    // Decor & Accents
+    "Full-Length Mirror", "Area Rug", "Blackout Drapes", "Accent Lighting", 
+    "Wall Art / Paintings", "Indoor Plants", "Decorative Cushions", "Throw Blanket",
+
+    // Dining (for Suites/Kitchenettes)
+    "Dining Table", "Bar Stools", "Sideboard / Buffet", "Kitchen Island"
+];
+
+export const roomLighting: string[] = [
+    // Ambient & General
+    "Recessed Ceiling Lights (Pot Lights)", "Cove Lighting", "Chandelier", "Flush Mount Ceiling Light",
+    "Track Lighting", "Natural Skylight", "Dimmable Main Lights",
+
+    // Task Lighting
+    "Adjustable Reading Lamps", "Bedside Pendant Lights", "Desk Lamp", "Floor Lamp",
+    "Wardrobe / Closet Internal Lighting", "Magnifying Makeup Mirror with Light",
+
+    // Accent & Mood
+    "LED Strip Lighting (Under-bed/Behind Headboard)", "Night Light (Floor Level)",
+    "Wall Sconces", "Smart Lighting (App/Voice Controlled)", "RGB Color-Changing Lights",
+    "Candlelight Effect Lamps",
+
+    // Bathroom Specific
+    "Backlit Vanity Mirror", "Anti-fog Mirror Lighting", "Over-Mirror Bar Light"
+];
+
+export const roomFloorTypes: string[] = [
+    // Wood & Laminate
+    "Hardwood Flooring", "Polished Oak", "Bamboo Flooring", "Laminate Wood", "Engineered Wood",
+
+    // Stone & Tile
+    "Marble Tile", "Polished Granite", "Ceramic Tiles", "Porcelain Tiles", 
+    "Travertine", "Terracotta", "Slate",
+
+    // Soft Surfaces
+    "Wall-to-Wall Carpeting", "Plush Carpet", "Berber Carpet", "Area Rugs over Hardwood",
+
+    // Modern & Industrial
+    "Polished Concrete", "Epoxy Flooring", "Vinyl Plank (LVP)", "Cork Flooring",
+
+    // Traditional / Natural
+    "Parquet", "Mosaic Tiles", "Brick Flooring"
+];

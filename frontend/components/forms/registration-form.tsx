@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { districtUpazilas } from "@/data/locations/districtUpazilas";
+import { districtAreas } from "@/data/locations/districtAreas";
 
 const RegistrationForm: React.FC = () => {
     const router = useRouter();
@@ -14,11 +15,11 @@ const RegistrationForm: React.FC = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [district, setDistrict] = useState("")
-    const [upazila, setUpazila] = useState("")
+    const [area, setArea] = useState("")
     const [address, setAddress] = useState("")
     const [submission, setSubmission] = useState(false);
 
-    const districts = Object.keys(districtUpazilas);
+    const districts = Object.keys(districtAreas);
 
 
 
@@ -30,7 +31,7 @@ const RegistrationForm: React.FC = () => {
         password?: string;
         confirmPassword?: string;
         district?: string;
-        upazila?: string;
+        area?: string;
         address?: string;
         errormessage?: string;
     }>({});
@@ -138,8 +139,8 @@ const RegistrationForm: React.FC = () => {
                 newErrors.district = "District is required";
             }
 
-            if(!upazila) {
-                newErrors.upazila = "Upazila is required";
+            if(!area) {
+                newErrors.area = "Area is required";
             }
 
             if(!address) {
@@ -167,7 +168,7 @@ const RegistrationForm: React.FC = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ role, name, email, phone, registrationId, district, upazila, address, password }),
+                body: JSON.stringify({ role, name, email, phone, registrationId, district, area, address, password }),
                 credentials: "include",
             });
 
@@ -221,8 +222,8 @@ const RegistrationForm: React.FC = () => {
                 newErrors.district = "District is required";
             }
 
-            if(!upazila) {
-                newErrors.upazila = "Upazila is required";
+            if(!area) {
+                newErrors.area = "Area is required";
             }
 
             if(!address) {
@@ -250,7 +251,7 @@ const RegistrationForm: React.FC = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ role, name, email, phone, registrationId, district, upazila, address, password }),
+                body: JSON.stringify({ role, name, email, phone, registrationId, district, area, address, password }),
                 credentials: "include",
             });
 
@@ -291,7 +292,7 @@ const RegistrationForm: React.FC = () => {
                 onChange={(e) => setRole(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
-                    <option value="" disabled selected>-- select user type --</option>
+                    <option value="" disabled>-- select user type --</option>
                     <option value="generalUser">General User</option>
                     <option value="restaurant">Restaurant</option>
                     <option value="hotel">Hotel</option>
@@ -463,11 +464,11 @@ const RegistrationForm: React.FC = () => {
                         name="district"
                         onChange={(e) => {
                             setDistrict(e.target.value);
-                            setUpazila("");
+                            setArea("");
                         }}
                         className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                         >
-                            <option value="" disabled selected>-- select district --</option>
+                            <option value="" disabled>-- select district --</option>
                             {districts.map((d) => (
                                 <option key={d} value={d}>
                                     {d}
@@ -479,28 +480,28 @@ const RegistrationForm: React.FC = () => {
                         )}
                     </div>
                     <div>
-                        <label htmlFor="upazila" className="block text-sm font-medium text-gray-700 mb-1">Select Upazila <span className="text-red-500">*</span></label>
+                        <label htmlFor="area" className="block text-sm font-medium text-gray-700 mb-1">Select Area <span className="text-red-500">*</span></label>
                         <select
-                        id="upazila"
-                        name="upazila"
-                        onChange={(e) => setUpazila(e.target.value)}
+                        id="area"
+                        name="area"
+                        onChange={(e) => setArea(e.target.value)}
                         disabled={!district}
                         className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                         >
                             <option value="">
-                                {district ? "-- select upazila --" : "-- select district first --"}
+                                {district ? "-- select area --" : "-- select district first --"}
                             </option>
 
                             {district &&
-                                districtUpazilas[district]?.map((u) => (
+                                districtAreas[district]?.map((u) => (
                                 <option key={u} value={u}>
                                     {u}
                                 </option>
                             ))}
 
                         </select>
-                        {errors.upazila && (
-                            <p className="mt-1 text-sm text-red-600">{errors.upazila}</p>
+                        {errors.area && (
+                            <p className="mt-1 text-sm text-red-600">{errors.area}</p>
                         )}
                     </div>
                     <div>
@@ -638,11 +639,11 @@ const RegistrationForm: React.FC = () => {
                         name="district"
                         onChange={(e) => {
                             setDistrict(e.target.value);
-                            setUpazila("");
+                            setArea("");
                         }}
                         className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                         >
-                            <option value="" disabled selected>-- select district --</option>
+                            <option value="" disabled>-- select district --</option>
                             {districts.map((d) => (
                                 <option key={d} value={d}>
                                     {d}
@@ -654,28 +655,28 @@ const RegistrationForm: React.FC = () => {
                         )}
                     </div>
                     <div>
-                        <label htmlFor="upazila" className="block text-sm font-medium text-gray-700 mb-1">Select Upazila <span className="text-red-500">*</span></label>
+                        <label htmlFor="area" className="block text-sm font-medium text-gray-700 mb-1">Select Area <span className="text-red-500">*</span></label>
                         <select
-                        id="upazila"
-                        name="upazila"
-                        onChange={(e) => setUpazila(e.target.value)}
+                        id="area"
+                        name="area"
+                        onChange={(e) => setArea(e.target.value)}
                         disabled={!district}
                         className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                         >
                             <option value="">
-                                {district ? "-- select upazila --" : "-- select district first --"}
+                                {district ? "-- select area --" : "-- select district first --"}
                             </option>
 
                             {district &&
-                                districtUpazilas[district]?.map((u) => (
+                                districtAreas[district]?.map((u) => (
                                 <option key={u} value={u}>
                                     {u}
                                 </option>
                             ))}
 
                         </select>
-                        {errors.upazila && (
-                            <p className="mt-1 text-sm text-red-600">{errors.upazila}</p>
+                        {errors.area && (
+                            <p className="mt-1 text-sm text-red-600">{errors.area}</p>
                         )}
                     </div>
                     <div>
@@ -750,7 +751,7 @@ const RegistrationForm: React.FC = () => {
             {/* <!-- Registration link --> */}
             <p className="text-center text-sm text-gray-600 mt-6">
                 Already have an account?
-            <a href="/login" className="text-indigo-600 hover:text-indigo-800 font-medium"> Log in here </a>
+            <Link href="/login" className="text-indigo-600 hover:text-indigo-800 font-medium"> Log in here </Link>
             </p>
         </div>
     )

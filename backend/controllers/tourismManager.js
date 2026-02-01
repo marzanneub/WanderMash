@@ -61,7 +61,7 @@ async function handleSettings(req, res) {
 async function handleAddAttraction(req, res) {
     await uploadAsync(req, res);
 
-    let {name, email, phone, category, district, upazila, address} = req.body;
+    let {name, email, phone, category, district, area, address} = req.body;
 
     const user = await TourismManager.findOne({ _id: req.userData._id});
 
@@ -96,7 +96,7 @@ async function handleAddAttraction(req, res) {
         email: email,
         category: category,
         district: district,
-        upazila: upazila,
+        area: area,
         address: address,
         createdBy: req.userData._id,
     });

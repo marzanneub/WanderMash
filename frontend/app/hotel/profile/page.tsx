@@ -42,7 +42,7 @@ interface User {
     approved: boolean;
     address: string;
     district: string;
-    upazila: string;
+    area: string;
     postalCode: number;
     description: string;
     socialLinks?: SocialLinks;
@@ -101,7 +101,7 @@ const HotelProfilePage: React.FC = () => {
     const location = [
         { label: "Address", value: user?.address },
         { label: "District", value: user?.district },
-        { label: "Upazila", value: user?.upazila },
+        { label: "Area", value: user?.area },
         { label: "Postal Code", value: user?.postalCode },
     ];
 

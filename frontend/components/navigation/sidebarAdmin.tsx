@@ -125,7 +125,7 @@ const SidebarAdmin: React.FC<Props> = (props) => {
                                 </span>
                             </li>
                         ) : (
-                        <Link href={menu.href ?? "#"}>
+                        <Link href={menu.href || "#"}>
                             <li
                             className={`text-gray-300 text-sm flex
                             items-center gap-x-4 cursor-pointer p-2 ${props.pagetype===menu.title && "bg-white/10"}
@@ -145,23 +145,23 @@ const SidebarAdmin: React.FC<Props> = (props) => {
                                     setSubmenuOpen(!submenuOpen)} />
                                 )}
                             </li>
-                            {menu.submenu && submenuOpen && open && (
-                                <ul>
-                                    {menu.submenuItems.map((submenuItem, index) =>(
-                                        <div  key={index}>
-                                            <Link href={submenuItem.href ?? "#"}>
-                                            <li className="text-gray-300
-                                            text-sm flex items-center gap-x-4 
-                                            cursor-pointer p-2 px-5 hover:bg-white/10 
-                                            rounded-md">
-                                                {submenuItem.title}
-                                            </li>
-                                            </Link>
-                                        </div>
-                                    ))}
-                                </ul>
-                            )}
                         </Link>)}
+                        {menu.submenu && submenuOpen && open && (
+                            <ul>
+                                {menu.submenuItems.map((submenuItem, index) =>(
+                                    <div  key={index}>
+                                        <Link href={submenuItem.href || "#"}>
+                                        <li className="text-gray-300
+                                        text-sm flex items-center gap-x-4 
+                                        cursor-pointer p-2 px-5 hover:bg-white/10 
+                                        rounded-md">
+                                            {submenuItem.title}
+                                        </li>
+                                        </Link>
+                                    </div>
+                                ))}
+                            </ul>
+                        )}
                     </div>
                 ))}
             </ul>
