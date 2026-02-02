@@ -16,7 +16,10 @@ const {
 
     handleUploadRoomImage,
     handleSetAsRoomDp,
-    handleDeleteRoomImage,} = require("../controllers/hotel");
+    handleDeleteRoomImage,
+
+    handleAddRooms,
+    handleToggleRoomAvility,} = require("../controllers/hotel");
 
 router.post("/editProfile", handleEditProfile);
 router.post("/settings", handleSettings);
@@ -32,6 +35,9 @@ router.post("/deleteRoomTypes", handleDeleteRoomTypes);
 router.post("/uploadRoomImage", handleUploadRoomImage);
 router.post("/setAsRoomDp", handleSetAsRoomDp);
 router.post("/deleteRoomImage", handleDeleteRoomImage);
+
+router.post("/addRooms", handleAddRooms);
+router.post("/toggleRoomAvility", handleToggleRoomAvility);
 
 router.get("/get-roomType", async(req, res) => {
     

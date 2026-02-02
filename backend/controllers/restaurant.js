@@ -25,7 +25,6 @@ async function handleEditProfile(req, res) {
     const logo = req.files?.logo?.[0]?.filename || null;
 
     const updates = {...req.body};
-    // console.log(updates);
 
     let result =  await GeneralUser.findOne({ phone: updates.phone });
     if(!result) result =  await Attraction.findOne({phone: updates.phone });

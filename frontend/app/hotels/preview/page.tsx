@@ -6,8 +6,6 @@ import { toast } from "react-toastify";
 import { TbChevronLeft } from "react-icons/tb";
 import CarouselSkeleton from "@/components/ui/carousel-skeleton";
 import Carousel from "@/components/ui/carousel";
-import TimeTable from "@/components/data-display/time-table";
-import TimeTableSkeleton from "@/components/data-display/time-table-skeleton";
 import InfoGrid from "@/components/data-display/info-grid";
 import InfoGridSkeleton from "@/components/data-display/info-grid-skeleton";
 import DescriptionGrid from "@/components/data-display/description-grid";
@@ -18,8 +16,6 @@ import ServicesGrid from "@/components/data-display/hotel-services-grid";
 import ServicesGridSkeleton from "@/components/data-display/services-grid-skeleton";
 import CuisinesGrid from "@/components/data-display/cuisines-grid";
 import CuisinesGridSkeleton from "@/components/data-display/cuisines-grid-skeleton";
-import FoodCardSwiperSkeleton from "@/components/ui/food-card-swiper-skeleton";
-import FoodCardSwiper from "@/components/ui/food-card-swiper";
 import MapViewSkeleton from "@/components/maps/map-view-skeleton";
 import MapView from "@/components/maps/map-view";
 
@@ -62,6 +58,7 @@ interface Hotel {
 
 const HotePreviewPage: React.FC = () => {
     const router = useRouter();
+    const [role, setRole] = useState("");
     const [hotel, setHotel] = useState<Hotel | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -96,6 +93,13 @@ const HotePreviewPage: React.FC = () => {
             .then(data => {
                 setHotel(data.hotel);
                 setLoading(false);
+            }
+        );
+
+        fetch('/api/get-user-info-for-navbar') 
+            .then(res => res.json())
+            .then(data => {
+                setRole(data.role);
             }
         );
     }, []);
@@ -166,6 +170,16 @@ const HotePreviewPage: React.FC = () => {
                             <div className="grid grid-cols-1 md:grid-cols-1 gap-10">
                                 {hotel.images.length>0 && (<Carousel items={hotel.images} />)}
                             </div>
+                            {role === "generalUser" && (
+                                <div className="grid grid-cols-1 sm:grid-cols-6">
+                                    <Link href={`/generalUser/bookHotel?_id=${id}`}>
+                                    <button
+                                    className="w-full bg-indigo-600 flex items-center justify-center text-white font-semibold py-3 rounded-md disabled:opacity-70 cursor-pointer"
+                                    >Book now
+                                    </button>
+                                    </Link>
+                                </div>
+                            )}
                             <div className="grid grid-cols-1 md:grid-cols-1 gap-1">
                                 <DescriptionGrid description={hotel.description} />
                             </div>

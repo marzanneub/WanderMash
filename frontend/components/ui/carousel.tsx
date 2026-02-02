@@ -8,7 +8,6 @@ interface CarouselProps {
 }
 
 const Carousel: React.FC<CarouselProps> = ({items}) => {
-    console.log(items);
     const images = items;
 
     const [currentIndex, setCurrentIndex] = useState(0);

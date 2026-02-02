@@ -149,7 +149,6 @@ async function handleUserResendVerificationCode(req, res) {
     } else {
         return;
     }
-    // console.log(email);
     
     let user = await Admin.findOne({email});
     if(!user) user = await GeneralUser.findOne({email});
@@ -203,7 +202,6 @@ async function handleForgotPassword(req, res) {
     } else {
         return;
     }
-    // console.log(email);
     
     let user = await Admin.findOne({email});
     if(!user) user = await GeneralUser.findOne({email});

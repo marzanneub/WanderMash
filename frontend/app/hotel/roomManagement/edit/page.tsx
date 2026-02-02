@@ -245,7 +245,6 @@ const HotelRoomsEditPage: React.FC = () => {
             <SidebarHotel pagetype="Room Management" />
 
             <main className="container mx-auto px-10 py-16 max-w-7xl">
-                {/* <button className="px-4 py-3 text-indigo-600 hover:bg-gray-100 font-semibold rounded-md shadow-md transition cursor-pointer"> */}
                 <div className="flex items-center gap-4 mb-10">
                 <button onClick={() => router.back()}
                     className="p-2 bg-white rounded-full shadow-sm text-gray-300 hover:bg-gray-100 hover:text-black transition flex-shrink-0 cursor-pointer">

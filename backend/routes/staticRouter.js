@@ -29,6 +29,18 @@ router.get("/get-hotel-info", async(req, res) => {
     else return res.status(404).json({errormessage: "Error"});
 });
 
+router.get("/get-hotel-rooms", async(req, res) => {
+
+    try{
+        const hotel = await Hotel.findById(req.query.id);
+        if(hotel) return res.status(200).json({roomTypes: hotel.roomTypes});
+        else return res.status(404).json({errormessage: "Error"});
+    }
+    catch(error){
+        return res.status(404).json({errormessage: error});
+    }
+});
+
 router.get("/get-restaurant-info", async(req, res) => {
 
     const restaurant = await Restaurant.findById(req.query.id);
@@ -46,8 +58,6 @@ router.get("/get-attraction-info", async(req, res) => {
 /////////////////////////Need to handle many types of user in this fucntion///////////////////////////////
 router.get("/get-user-info", async(req, res) => {
     const token = getUser(req.cookies.user);
-    // console.log(token);
-    // console.log("hello");
     if(!token) return res.status(404).json(null);
 
     let user = await Admin.findOne({_id: token._id});
@@ -61,8 +71,6 @@ router.get("/get-user-info", async(req, res) => {
 
 router.get("/get-user-role", async(req, res) => {
     const token = getUser(req.cookies.user);
-    // console.log(token);
-    // console.log("hello");
     if(token) return res.status(200).json(token.role);
     else return res.status(404).json(null);
 });

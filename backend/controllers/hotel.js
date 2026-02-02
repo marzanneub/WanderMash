@@ -154,7 +154,17 @@ async function handleEditRoomTypes(req, res) {
 
 async function handleDeleteRoomTypes(req, res) {
     await uploadAsync(req, res);
+    
+    try{
+        const user = await Hotel.findOne({_id: req.userData._id});
+        const targetRoomTypes = user.roomTypes.find(item => item._id.toString() === req.body.id)
 
+        if(targetRoomTypes.rooms.length > 0) return res.status(409).json({ errormessage: "Please delete all the rooms of this type first." });
+    }
+    catch(error){
+        return res.status(409).json({ errormessage: error });
+    }
+    
     try{
         const result = await Hotel.updateOne(
             { _id: req.userData._id },
@@ -250,6 +260,68 @@ async function handleDeleteRoomImage(req, res) {
 }
 
 
+async function handleAddRooms(req, res) {
+    await uploadAsync(req, res);
+
+    try{
+        const found = await Hotel.findOne({ 
+            _id: req.userData._id, 
+            roomTypes: {
+                $elemMatch: {
+                    "rooms.roomNumber": req.body.roomNumber
+                }
+            }
+        });
+
+        if(found) return res.status(409).json({ errormessage: "This number already exists"});
+    }
+    catch(error){
+        return res.status(409).json({ errormessage: error });
+    }
+
+    try{
+        const updatedHotel = await Hotel.findOneAndUpdate(
+            { 
+                _id: req.userData._id,
+                "roomTypes._id": req.body.id
+            },
+            { $push: { "roomTypes.$.rooms": {roomNumber: req.body.roomNumber} } }
+        );
+
+        if(updatedHotel) return res.status(200).json({ successmessage: "Successfully added"});
+        else return res.status(409).json({ errormessage: "Error" });
+    }
+    catch(error){
+        return res.status(409).json({ errormessage: error });
+    }
+}
+
+async function handleToggleRoomAvility(req, res) {
+    await uploadAsync(req, res);
+    
+    const roomNumber = JSON.parse(req.body.roomNumber);
+    const isAvailable = JSON.parse(req.body.isAvailable);
+    
+    try{
+        const updatedHotel = await Hotel.findOneAndUpdate(
+            { 
+                _id: req.userData._id,
+                "roomTypes.rooms.roomNumber": roomNumber
+            },
+            { 
+                $set: { "roomTypes.$.rooms.$[room].isAvailable": isAvailable } 
+            },
+            { arrayFilters: [{ "room.roomNumber": roomNumber }] }
+        );
+
+        if(updatedHotel) return res.status(200).json({ successmessage: "Successfully updated"});
+        else return res.status(409).json({ errormessage: "Error" });
+    }
+    catch(error){
+        return res.status(409).json({ errormessage: error });
+    }
+}
+
 module.exports = {
     handleEditProfile,
     handleSettings,
@@ -265,4 +337,7 @@ module.exports = {
     handleUploadRoomImage,
     handleSetAsRoomDp,
     handleDeleteRoomImage,
+
+    handleAddRooms,
+    handleToggleRoomAvility,
 };

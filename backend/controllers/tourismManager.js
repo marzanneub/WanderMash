@@ -131,8 +131,6 @@ async function handleEditAttraction(req, res) {
     updates.openingHours = JSON.parse(updates.openingHours);
     updates.location = JSON.parse(updates.location);
 
-    // console.log(updates);
-
     await Attraction.findByIdAndUpdate({_id: updates.id}, { $set: updates });
     return res.status(200).json({successmessage: "Successfully Updated"});
 }
