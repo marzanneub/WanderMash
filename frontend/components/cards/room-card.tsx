@@ -144,20 +144,16 @@ interface RoomTypes {
 
 interface RoomCardProps {
     item: RoomTypes;
+    children: React.ReactNode;
 }
 
-export const RoomCard: React.FC<RoomCardProps> = ({item}) => {
-  const [[page, direction], setPage] = useState([0, 0]);
+export const RoomCard: React.FC<RoomCardProps> = ({item, children}) => {
 
   const [furnishingsOpen, setFurnishingsOpen] = useState(false);
   const [amenitiesOpen, setAmenitiesOpen] = useState(false);
 
-  // Modulo logic to loop images infinitely
-  const imageIndex = ((page % item.images.length) + item.images.length) % item.images.length;
-
-  const paginate = (newDirection: number) => {
-    setPage([page + newDirection, newDirection]);
-  };
+  const images = item.images;
+  const [imageIndex, setImageIndex] = useState(-1);
 
   const variants = {
     enter: (direction: number) => ({
@@ -180,14 +176,12 @@ export const RoomCard: React.FC<RoomCardProps> = ({item}) => {
     <div className="bg-white rounded-3xl overflow-hidden shadow-lg flex flex-col md:flex-row border border-slate-100">
       <div className="md:w-1/3 h-64 md:h-auto bg-slate-200">
         <div className="relative w-full h-[260px] md:h-[300px] overflow-hidden bg-black">
-          <AnimatePresence initial={false} custom={direction}>
+          <AnimatePresence initial={false}>
             <motion.img
-              key={page}
+              key={imageIndex}
               src={`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/images/${
-                item.images.length > 0 ? item.images[imageIndex] : item.dp
+                images.length > 0 ? (imageIndex<0 ? item.dp :  images[imageIndex]) : item.dp
               }`}
-              custom={direction}
-              variants={variants}
               initial="enter"
               animate="center"
               exit="exit"
@@ -200,16 +194,22 @@ export const RoomCard: React.FC<RoomCardProps> = ({item}) => {
           </AnimatePresence>
 
           {/* Navigation Buttons */}
-          <button
+          {images.length>1 && (<div><button
             className="absolute left-4 top-1/2 z-10 -translate-y-1/2 bg-white/30 p-2 rounded-full hover:bg-white/50 transition cursor-pointer"
-            onClick={() => paginate(-1)}
+            onClick={() => {
+              if((imageIndex<=0)) {setImageIndex(images.length-1)}
+              else {setImageIndex(imageIndex-1)}}
+            }
           ><FaChevronLeft size={24} />
           </button>
           <button
             className="absolute right-4 top-1/2 z-10 -translate-y-1/2 bg-white/30 p-2 rounded-full hover:bg-white/50 transition cursor-pointer"
-            onClick={() => paginate(1)}
+            onClick={() => {
+              if((imageIndex === (images.length-1))) {setImageIndex(0)}
+              else {setImageIndex(imageIndex+1)}}
+            }
           ><FaChevronRight size={24} />
-          </button>
+          </button></div>)}
         </div>
       </div>
 
@@ -328,9 +328,8 @@ export const RoomCard: React.FC<RoomCardProps> = ({item}) => {
                   ))}
               </div> */}
           </div>
-          <button className="mt-6 w-full md:w-max px-8 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-indigo-600 transition-colors">
-              Book Now
-          </button>
+          {children}
+          
       </div>
 
     </div>

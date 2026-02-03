@@ -39,6 +39,7 @@ const HotelRoomsPage: React.FC = () => {
     
     const warnmessage = searchParams.get("warnmessage");
     const successmessage = searchParams.get("successmessage");
+    const errormessage = searchParams.get("errormessage");
     useEffect(() => {
         toast.warn(warnmessage, {
             position: "top-center",
@@ -51,6 +52,16 @@ const HotelRoomsPage: React.FC = () => {
             theme: "colored",
         });
         toast.success(successmessage, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+        });
+        toast.error(errormessage, {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -99,6 +110,61 @@ const HotelRoomsPage: React.FC = () => {
         );
     }
     
+    //////////////////For adding room///////////////
+    const deleteRoom = async (roomID: string) => {
+
+        const formData = new FormData();
+        formData.append("roomID", JSON.stringify(roomID));
+        formData.append("roomTypeID", JSON.stringify(id));
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/hotel/deleteRoom`, {
+            method: "POST",
+            body: formData,
+            credentials: "include",
+        });
+
+        const data = await res.json();
+        if(!res.ok){
+            toast.error(data.errormessage, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+            return;
+        }
+        else{
+            toast.success(data.successmessage, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+            
+            fetch('/api/get-user-info-for-profile')
+                .then(res => res.json())
+                .then(data => {
+                    const allRoomTypes = data.user.roomTypes;
+                    const targetRoomTypes = allRoomTypes.find((item: RoomTypes) => item._id === id);
+                    setRoomTypes(targetRoomTypes);
+                    
+                    setLoading(false);
+                }
+            );
+
+            return;
+        }
+    }
+    ////////////////////////////////////////////////
+
     //////////////////For adding room///////////////
     const [roomNumber, setRoomNumber] = useState("");
 
@@ -301,14 +367,16 @@ const HotelRoomsPage: React.FC = () => {
                                                 {room.isAvailable ? 'Available' : 'Unavailable'}
                                             </span>
                                             <button 
-                                                onClick={() => toggleAvility(room.roomNumber!, room.isAvailable)}
+                                                onClick={() => toggleAvility(room.roomNumber, room.isAvailable)}
                                                 className={`relative w-12 h-6 rounded-full transition-colors cursor-pointer ${room.isAvailable ? 'bg-emerald-500' : 'bg-slate-300'}`}
                                             >
                                                 <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow-sm transition-transform ${room.isAvailable ? 'translate-x-6' : 'translate-x-0'}`} />
                                             </button>
                                         </div>
     
-                                        <button className="text-slate-300 hover:text-rose-500 transition-colors cursor-pointer">
+                                        <button
+                                            onClick={() => deleteRoom(room._id!)}
+                                            className="text-slate-300 hover:text-rose-500 transition-colors cursor-pointer">
                                             <TbTrash size={20} />
                                         </button>
                                     </div>

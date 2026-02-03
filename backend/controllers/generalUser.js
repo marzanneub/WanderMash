@@ -2,6 +2,8 @@ const multer = require("multer");
 const util = require("util");
 const bcrypt = require ("bcrypt");
 const { Admin, Attraction, GeneralUser, Hotel, Restaurant, TourismManager } = require("../models/user");
+const { HotelBooking } = require("../models/booking");
+const { BKashAccount } = require("../models/paymentAccount");
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -52,7 +54,116 @@ async function handleSettings(req, res) {
     return res.status(201).json({successmessage: "Successfully settings updated"});
 }
 
+async function handleBkashPayment(req, res) {
+    const { hotelID, selectedRoomType, checkIn, checkOut, accountNumber, pinNumber, totalAmount } = req.body;
+
+    const start = new Date(checkIn);
+    const end = new Date(checkOut);
+    const datesToBlock = [];
+
+    for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+        datesToBlock.push(new Date(d));
+    }
+
+    try{
+        const hotel = await Hotel.findById(hotelID);
+        if(!hotel) return res.status(404).json({errormessage: "Hotel not found"});
+        
+        const roomType = hotel.roomTypes.id(selectedRoomType);
+        if(!roomType) return res.status(404).json({errormessage: "Room type not found"});
+
+        const availableRoom = roomType.rooms.find(room => {
+            return !room.unavailableDates.some(unavailableDate => 
+                datesToBlock.some(blockDate => blockDate.getTime() === unavailableDate.getTime())
+            );
+        });
+
+        if (!availableRoom) {
+            return res.status(404).json({errormessage: "Sorry this room is booked most recently, you are too late"});
+        }
+
+        const account = await BKashAccount.findOne({ accountNumber: accountNumber, pinNumber: pinNumber});
+        if(account) {
+            if(account.balance <= totalAmount) return res.status(404).json({errormessage: "Insufficient balance"});
+
+            const result = await BKashAccount.findOneAndUpdate({ accountNumber: accountNumber }, {balance: account.balance-totalAmount});
+
+            if(result) return res.status(200).json({successmessage: "found"});
+            else return res.status(404).json({errormessage: "Error"});
+        }
+        else {
+            return res.status(404).json({errormessage: "Invalid information"});
+        }
+    }
+    catch(error) {
+        return res.status(404).json({errormessage: error});
+    }
+}
+async function handleBookHotel(req, res) {
+    const { hotelID, selectedRoomType, totalAmount, checkIn, checkOut } = req.body;
+
+    const start = new Date(checkIn);
+    const end = new Date(checkOut);
+    const datesToBlock = [];
+
+    for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+        datesToBlock.push(new Date(d));
+    }
+
+    try{
+        const hotel = await Hotel.findById(hotelID);
+        if(!hotel) return res.status(404).json({errormessage: "Hotel not found"});
+        
+        const roomType = hotel.roomTypes.id(selectedRoomType);
+        if(!roomType) return res.status(404).json({errormessage: "Room type not found"});
+
+        const availableRoom = roomType.rooms.find(room => {
+            return !room.unavailableDates.some(unavailableDate => 
+                datesToBlock.some(blockDate => blockDate.getTime() === unavailableDate.getTime())
+            );
+        });
+
+        if (!availableRoom) {
+            return res.status(404).json({errormessage: "No rooms available during these dates"});
+        }
+        
+        availableRoom.unavailableDates.push(...datesToBlock);
+        
+        await hotel.save();
+
+        const newBooking = new HotelBooking({
+            userId: req.userData._id,
+            hotelId: hotelID,
+
+            roomTitle: roomType.title,
+            bedConfig: roomType.bedConfig,
+            roomSize: roomType.roomSize,
+            pricePerNight: roomType.pricePerNight,
+            roomNumber: availableRoom.roomNumber,
+            furnishings: roomType.furnishings,
+            amenities: roomType.amenities,
+
+            checkInDate: start,
+            checkOutDate: end,
+            totalAmount: totalAmount,
+            status: "confirmed"
+
+        });
+
+        await newBooking.save();
+
+        return res.status(200).json({successmessage: `Booking successful, your room number is ${availableRoom.roomNumber}`});
+
+    }
+    catch(error) {
+        return res.status(404).json({errormessage: error});
+    }
+}
+
 module.exports = {
     handleEditProfile,
     handleSettings,
+
+    handleBkashPayment,
+    handleBookHotel,
 };

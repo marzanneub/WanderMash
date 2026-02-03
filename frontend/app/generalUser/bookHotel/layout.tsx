@@ -2,7 +2,7 @@ import Provider from "@/app/provider";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Edit Profile | WanderMash",
+  title: "Book Hotel | WanderMash",
 };
 
 export default function GeneralUserbookHotelLayout({children}: {children: React.ReactNode;}) {

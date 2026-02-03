@@ -322,6 +322,48 @@ async function handleToggleRoomAvility(req, res) {
     }
 }
 
+async function handleDeleteRoom(req, res) {
+    await uploadAsync(req, res);
+
+    const roomTypeID = JSON.parse(req.body.roomTypeID);
+    const roomID = JSON.parse(req.body.roomID);
+
+    let demo = new Date("1970-01-05");
+
+    let bookedUpto = new Date(1);
+    const now = new Date(Date.now());
+
+    try{
+        const hotel = await Hotel.findById(req.userData._id);
+        if(!hotel) return res.status(404).json({errormessage: "Hotel not found"});
+        
+        const roomType = hotel.roomTypes.id(roomTypeID);
+        if(!roomType) return res.status(404).json({errormessage: "Room type not found"});
+        
+        const room = roomType.rooms.id(roomID);
+
+        room.unavailableDates.forEach(unavailableDate => {
+            bookedUpto = new Date (Math.max(unavailableDate.getTime(), bookedUpto.getTime()));
+        });
+
+        if(bookedUpto.getTime() > now.getTime()) {
+            return res.status(409).json({errormessage: `Room cannot be deleted upto ${bookedUpto}, because booked`});
+        }
+
+        room.deleteOne(); 
+
+        await hotel.save();
+
+        return res.status(200).json({successmessage: "Room deleted successfully"});
+    }
+    catch(error) {
+        return res.status(404).json({errormessage: error});
+    }
+
+    return;
+
+}
+
 module.exports = {
     handleEditProfile,
     handleSettings,
@@ -340,4 +382,5 @@ module.exports = {
 
     handleAddRooms,
     handleToggleRoomAvility,
+    handleDeleteRoom,
 };

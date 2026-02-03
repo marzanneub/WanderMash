@@ -49,7 +49,7 @@ export interface RoomTypes {
 
 const getDateString = (date: Date) => date.toISOString().split("T")[0];
 
-const GeneralUserSettingsPage: React.FC = () => {
+const GeneralUserbookHotelPage: React.FC = () => {
     const router = useRouter();
 
     const searchParams = useSearchParams();
@@ -91,7 +91,7 @@ const GeneralUserSettingsPage: React.FC = () => {
             }
         );
     }, [id]);
-        
+    
     const today = getDateString(new Date());
     const minCheckOutDate = useMemo(() => {
         const date = new Date(checkIn || today);
@@ -113,7 +113,7 @@ const GeneralUserSettingsPage: React.FC = () => {
         }
 
         setErrors(newErrors);
-
+        
         if (Object.keys(newErrors).length !== 0) return;
         if (!id) return;
 
@@ -141,7 +141,178 @@ const GeneralUserSettingsPage: React.FC = () => {
         setSearch(true);
 
     }
+    //////////////////Room booking//////////////////
+    const [selectedRoomType, setSelectedRoomType] = useState("");
+    const [totalAmount, setTotalAmount] = useState(10000000000000000);
 
+    const bookRoom = async () => {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/generalUser/bookHotel`, {
+            method: "POST",
+            headers: {
+                    "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ hotelID: id, selectedRoomType, totalAmount, checkIn, checkOut }),
+            credentials: "include",
+        });
+            
+        const data = await res.json();
+        if(!res.ok){
+            toast.error(data.errormessage, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+            return;
+        }
+        else{
+            toast.success(data.successmessage, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+            return;
+        }
+    }
+    ////////////////////////////////////////////////
+    
+    //////////////////For payment//////////////////
+    const [paymentOpen, setPaymentOpen] = useState(false);
+    const [step, setStep] = useState(1);
+
+    const bkashPink = "#E2136E";
+    const bkashDarkPink = "#B11155";
+
+    const [errorsPayment, setErrorsPayment] = useState<{
+        accountNumber?: string;
+        pinNumber?: string;
+        errormessage?: string;
+    }>({});
+    
+    const calculateTotalAmount = (pricePerNight: number) => {
+        if (!checkIn || !checkOut) return 0;
+
+        const start = new Date(checkIn);
+        const end = new Date(checkOut);
+
+        const diffInTime = end.getTime() - start.getTime();
+        
+        const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
+
+        const nights = diffInDays > 0 ? diffInDays : 1;
+        
+        setTotalAmount(nights * pricePerNight);
+    };
+    
+    const [accountNumber, setAccountNumber] = useState("");
+    const handleInputAccountNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value;
+        const onlyNums = val.replace(/[^0-9]/g, "");
+        
+        const maxLength = 11;
+        if (onlyNums.length <= maxLength) {
+            setAccountNumber(onlyNums);
+        }
+    };
+    const [pinNumber, setPinNumber] = useState("");
+    const handleInputPinNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value;
+        const onlyNums = val.replace(/[^0-9]/g, "");
+        
+        const maxLength = 6;
+        if (onlyNums.length <= maxLength) {
+            setPinNumber(onlyNums);
+        }
+    };
+    
+    const handleNext = async () => {
+
+        if (step < 2) {
+            const newErrors: typeof errorsPayment = {};
+
+            if(accountNumber === "") {
+                newErrors.accountNumber = "Account Number is required";
+            }
+
+            setErrorsPayment(newErrors);
+            if (Object.keys(newErrors).length !== 0) return;
+
+            setStep(step + 1);
+        }
+        else {
+            const newErrors: typeof errorsPayment = {};
+
+            if(pinNumber === "") {
+                newErrors.pinNumber = "Pin Number is required";
+            }
+
+            setErrorsPayment(newErrors);
+            if (Object.keys(newErrors).length !== 0) return;
+
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/generalUser/bkashPayment`, {
+                method: "POST",
+                headers: {
+                        "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ hotelID: id, selectedRoomType, totalAmount, checkIn, checkOut, accountNumber, pinNumber }),
+                credentials: "include",
+            });
+
+            const data = await res.json();
+            if(res.ok){
+                // toast.success(data.successmessage, {
+                //     position: "top-center",
+                //     autoClose: 5000,
+                //     hideProgressBar: false,
+                //     closeOnClick: false,
+                //     pauseOnHover: true,
+                //     draggable: true,
+                //     progress: undefined,
+                //     theme: "colored",
+                // });
+
+                bookRoom();
+
+                setPaymentOpen(false);
+                setStep(1);
+                setAccountNumber("");
+                setPinNumber("");
+
+                return;
+            }
+            else{
+                toast.error(data.errormessage, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
+
+                // setPaymentOpen(false);
+                setStep(1);
+                setAccountNumber("");
+                setPinNumber("");
+
+                return;
+            }
+        }
+    };
+    
+    ///////////////////////////////////////////////
+    
     return (
         <div className="bg-indigo-50 min-h-screen w-full flex">
             <main className="container mx-auto px-10 py-16 max-w-7xl">
@@ -241,7 +412,17 @@ const GeneralUserSettingsPage: React.FC = () => {
                 <div className="grid grid-cols-1 gap-8">
                     {filteredRoomTypes.map((type) => (
                         <div key={type._id}>
-                            <RoomCard item={type}/>
+                            <RoomCard item={type}>
+                                <button
+                                onClick={() => {
+                                    setPaymentOpen(true);
+                                    setSelectedRoomType(type._id);
+                                    calculateTotalAmount(type.pricePerNight);
+                                }}
+                                className="mt-6 w-full md:w-max px-8 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-indigo-600 transition-colors cursor-pointer">
+                                    Book Now
+                                </button>
+                            </RoomCard>
                         </div>
                     ))}
                 </div>
@@ -256,10 +437,108 @@ const GeneralUserSettingsPage: React.FC = () => {
                     </p>
                 </div>)
                 }
+                
+                {paymentOpen && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+                <div className="max-w-[360px] bg-white rounded-t-lg shadow-2xl overflow-hidden relative">
+
+                    <div style={{ backgroundColor: bkashPink }} className="p-5 text-white flex flex-col items-center">
+                    <div className="bg-white px-4 py-1 rounded flex items-center justify-center mb-3">
+                        <span style={{ color: bkashPink }} className="font-black italic text-xl underline decoration-2 tracking-tighter">bKash (replica)</span>
+                    </div>
+                    <p className="text-xs opacity-80 uppercase tracking-widest">Merchant: WanderMash</p>
+                    <div className="flex items-center gap-2 mt-2">
+                        <span className="text-xs opacity-80">Amount:</span>
+                        <span className="text-lg font-bold">৳ {totalAmount}</span>
+                    </div>
+                    </div>
+
+                    <div className="p-8 space-y-6">
+                        <div className="text-center space-y-1">
+                            <h3 style={{ color: bkashPink }} className="font-bold text-sm">
+                            {step === 1 && "Your bKash Account Number"}
+                            {step === 2 && "Enter Your bKash PIN"}
+                            </h3>
+                        </div>
+
+                        <div className="relative">
+                            {step === 1 && (<input 
+                            type="text"
+                            placeholder="e.g 01XXXXXXXXX"
+                            value={accountNumber}
+                            onChange={handleInputAccountNumber}
+                            className={`w-full border-b-2 border-gray-300 outline-none py-2 text-center text-xl font-medium transition-colors
+                                tracking-[0.2em] placeholder:tracking-normal placeholder:text-gray-300 placeholder:text-base`}
+                            style={{ caretColor: bkashPink }}
+                            onFocus={(e) => e.target.style.borderBottomColor = bkashPink}
+                            onBlur={(e) => e.target.style.borderBottomColor = "#D1D5DB"}
+                            autoFocus
+                            />)}
+                            {errorsPayment.accountNumber && (
+                                <p className="mt-1 text-sm text-red-600">{errorsPayment.accountNumber}</p>
+                            )}
+                            {step === 2 && (<input 
+                            type="password"
+                            placeholder="****"
+                            value={pinNumber}
+                            onChange={handleInputPinNumber}
+                            className={`w-full border-b-2 border-gray-300 outline-none py-2 text-center text-xl font-medium transition-colors
+                                tracking-[0.8em] placeholder:tracking-normal placeholder:text-gray-300 placeholder:text-base`}
+                            style={{ caretColor: bkashPink }}
+                            onFocus={(e) => e.target.style.borderBottomColor = bkashPink}
+                            onBlur={(e) => e.target.style.borderBottomColor = "#D1D5DB"}
+                            autoFocus
+                            />)}
+                            {errorsPayment.pinNumber && (
+                                <p className="mt-1 text-sm text-red-600">{errorsPayment.pinNumber}</p>
+                            )}
+                        </div>
+
+                        <p className="text-[10px] text-gray-400 text-center leading-relaxed">
+                            By clicking on <b>{step === 2 ? "CONFIRM" : "PROCEED"}</b>, you are agreeing to our 
+                            <span className="underline ml-1 cursor-pointer">terms & conditions</span>
+                        </p>
+                    </div>
+
+                    <div className="flex border-t border-gray-100">
+                    <button 
+                        onClick={() => {
+                            setPaymentOpen(false);
+                            setStep(1);
+                            setAccountNumber("");
+                            setPinNumber("");
+                            setErrorsPayment({});
+                        }}
+                        className="w-1/2 py-4 bg-gray-300 text-gray-700 font-bold text-sm hover:bg-gray-400 uppercase transition-colors cursor-pointer"
+                    >
+                        Close
+                    </button>
+                    <button 
+                        onClick={handleNext}
+                        style={{ backgroundColor: bkashPink }}
+                        className="w-1/2 py-4 text-white font-bold text-sm uppercase transition-colors opacity-90 hover:opacity-100 cursor-pointer"
+                    >
+                        {step === 2 ? "Confirm" : "Proceed"}
+                    </button>
+                    </div>
+
+                    <div style={{ backgroundColor: bkashDarkPink }} className="py-2 flex items-center justify-center gap-2 text-white text-opacity-90">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    <span className="text-xs font-bold tracking-tighter">16247</span>
+                    </div>
+
+
+                </div>
+                </div>
+                )}
+
+                
 
             </main>
         </div>
     )
 }
 
-export default GeneralUserSettingsPage;
+export default GeneralUserbookHotelPage;

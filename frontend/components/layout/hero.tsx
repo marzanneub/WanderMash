@@ -10,7 +10,7 @@ const Hero: React.FC = () => {
 
                 <div className="relative container mx-auto px-6 max-w-4xl">
                 <h1 className="text-5xl md:text-6xl font-extrabold mb-6 drop-shadow-lg">Plan Your Perfect Trip</h1>
-                <p className="text-xl md:text-2xl mb-10 drop-shadow-md">Hotels, attractions, restaurants & transport – all in one place</p>
+                <p className="text-xl md:text-2xl mb-10 drop-shadow-md">Hotels, attractions, restaurants – all in one place</p>
                 
                 </div>
             </section>

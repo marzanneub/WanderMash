@@ -10,6 +10,7 @@ import {
     AiOutlineMail,
     AiOutlineSetting,
 } from "react-icons/ai";
+import { HiOutlineTicket } from "react-icons/hi";
 import { 
     BsArrowLeftShort,
     BsChevronDown,
@@ -48,6 +49,7 @@ const SidebarGeneralUser: React.FC<Props> = (props) => {
         // { title: "Inbox", submenu: false, submenuItems: [], icon: <AiOutlineMail /> },
         { title: "Profile", href: "profile", spacing: true, icon: <BsPerson /> },
         { title: "Edit Profile", href: "editProfile", icon: <LiaUserEditSolid /> },
+        { title: "Bookings", href: "bookings", spacing: true, icon: <HiOutlineTicket /> },
         { title: "Settings", href: "settings", spacing: true, icon: <AiOutlineSetting /> },
         { title: "Logout", action: "logout", icon: <RiLogoutBoxRLine /> },
     ];
