@@ -14,25 +14,25 @@ interface User {
     bio: string;
 }
 
-export interface Capacity {
+interface Capacity {
     adults: number;
     children: number;
 }
 
-export interface BedConfig {
+interface BedConfig {
     singleBeds: number;
     doubleBeds: number;
     extraBedsAvailable: boolean;
 }
 
-export interface Rooms {
+interface Rooms {
     _id?: string;
     roomNumber: number;
     isAvailable: boolean;
     unavailableDates: Date[];
 }
 
-export interface RoomTypes {
+interface RoomTypes {
     _id: string;
     title: string;
     pricePerNight: number;
@@ -151,7 +151,7 @@ const GeneralUserbookHotelPage: React.FC = () => {
             headers: {
                     "Content-Type": "application/json",
             },
-            body: JSON.stringify({ hotelID: id, selectedRoomType, totalAmount, checkIn, checkOut }),
+            body: JSON.stringify({ hotelID: id, selectedRoomType, totalAmount, checkIn, checkOut, accountNumber }),
             credentials: "include",
         });
             
@@ -170,16 +170,17 @@ const GeneralUserbookHotelPage: React.FC = () => {
             return;
         }
         else{
-            toast.success(data.successmessage, {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-            });
+            // toast.success(data.successmessage, {
+            //     position: "top-center",
+            //     autoClose: 5000,
+            //     hideProgressBar: false,
+            //     closeOnClick: false,
+            //     pauseOnHover: true,
+            //     draggable: true,
+            //     progress: undefined,
+            //     theme: "colored",
+            // });
+            router.push(`bookings?successmessage=${data.successmessage}`);
             return;
         }
     }

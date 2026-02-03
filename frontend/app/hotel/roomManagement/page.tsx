@@ -9,25 +9,25 @@ import Cropper, { Area, Point } from "react-easy-crop";
 import getCroppedImg from "@/utils/cropImage";
 import SidebarHotel from "@/components/navigation/sidebarHotel";
 
-export interface Capacity {
+interface Capacity {
     adults: number;
     children: number;
 }
 
-export interface BedConfig {
+interface BedConfig {
     singleBeds: number;
     doubleBeds: number;
     extraBedsAvailable: boolean;
 }
 
-export interface Rooms {
+interface Rooms {
     _id?: string;
     roomNumber: number;
     isAvailable: boolean;
     unavailableDates: Date[];
 }
 
-export interface RoomTypes {
+interface RoomTypes {
     _id: string;
     title: string;
     pricePerNight: number;

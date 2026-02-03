@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Settings | WanderMash",
+  title: "Dashboard | WanderMash",
 };
 
-export default function HotelSettingsLayout({children}: {children: React.ReactNode;}) {
+export default function HotelDashboardLayout({children}: {children: React.ReactNode;}) {
     return (
         <main>{children}</main>
     );

@@ -6,14 +6,14 @@ import { toast } from "react-toastify";
 import { TbChevronLeft, TbTrash } from "react-icons/tb";
 import SidebarHotel from "@/components/navigation/sidebarHotel";
 
-export interface Rooms {
+interface Rooms {
     _id?: string;
     roomNumber: number;
     isAvailable: boolean;
     unavailableDates: Date[];
 }
 
-export interface RoomTypes {
+interface RoomTypes {
     _id: string;
     title: string;
     rooms: Rooms[];

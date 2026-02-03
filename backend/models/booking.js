@@ -10,6 +10,10 @@ const hotelBookingSchema = new mongoose.Schema({
         doubleBeds: { type: Number, default: 0 },
         extraBedsAvailable: { type: Boolean, default: false }
     },
+    capacity: {
+        adults: { type: Number, default: 1 },
+        children: { type: Number, default: 0 }
+    },
     roomSize: { type: String, required: true },
     pricePerNight: { type: Number, required: true },
     roomNumber: { type: Number, required: true },
@@ -19,6 +23,7 @@ const hotelBookingSchema = new mongoose.Schema({
     checkInDate: { type: Date, required: true },
     checkOutDate: { type: Date, required: true },
     totalAmount: { type: Number, required: true },
+    accountNumber: { type: String, required: true },
     
     status: {
         type: String,

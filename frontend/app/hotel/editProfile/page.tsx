@@ -868,9 +868,10 @@ const HotelEditProfilePage: React.FC = () => {
                                     className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 >
                                     <option value="" disabled>-- Select --</option>
-                                    <option value="Flexible">Flexible (Full refund 24h prior)</option>
-                                    <option value="Moderate">Moderate (Full refund 5 days prior)</option>
-                                    <option value="Non-Refundable">Non-Refundable (No refund after booking)</option>
+                                    <option value="Flexible">Flexible (Full Refundable)</option>
+                                    <option value="Fixed">Fixed (No Cancellation)</option>
+                                    {/* <option value="Moderate">Moderate (Full refund 5 days prior)</option>
+                                    <option value="Non-Refundable">Non-Refundable (No refund after booking)</option> */}
                                 </select>
                                 </div>
                             </div>

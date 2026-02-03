@@ -100,7 +100,7 @@ async function handleBkashPayment(req, res) {
     }
 }
 async function handleBookHotel(req, res) {
-    const { hotelID, selectedRoomType, totalAmount, checkIn, checkOut } = req.body;
+    const { hotelID, selectedRoomType, totalAmount, checkIn, checkOut, accountNumber } = req.body;
 
     const start = new Date(checkIn);
     const end = new Date(checkOut);
@@ -137,6 +137,7 @@ async function handleBookHotel(req, res) {
 
             roomTitle: roomType.title,
             bedConfig: roomType.bedConfig,
+            capacity: roomType.capacity,
             roomSize: roomType.roomSize,
             pricePerNight: roomType.pricePerNight,
             roomNumber: availableRoom.roomNumber,
@@ -146,6 +147,7 @@ async function handleBookHotel(req, res) {
             checkInDate: start,
             checkOutDate: end,
             totalAmount: totalAmount,
+            accountNumber: accountNumber,
             status: "confirmed"
 
         });
@@ -160,10 +162,60 @@ async function handleBookHotel(req, res) {
     }
 }
 
+async function handleCancelHotelBooking(req, res) {
+    const { bookingId, accountNumber } = req.body;
+    // console.log(bookingId)
+    
+    try{
+        let booking = await HotelBooking.findOne({_id: bookingId, userId: req.userData._id});
+        if(!booking) return res.status(404).json({errormessage: "Not found"});
+
+        let hotel = await Hotel.findById(booking.hotelId);
+        if(!hotel) return res.status(404).json({errormessage: "Not found"});
+        if(hotel.policies.cancellation === "Fixed") return res.status(409).json({errormessage: "No cancellation acceptable for this hotel"});
+
+        booking.status = "cancelled";
+        await booking.save();
+
+        let account = await BKashAccount.findOne({ accountNumber: booking.accountNumber});
+        account.balance+=booking.totalAmount;
+        await account.save();
+
+        const start = new Date(booking.checkInDate);
+        const end = new Date(booking.checkOutDate);
+        const datesToRemove = [];
+
+        for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+            datesToRemove.push(new Date(d).getTime()); // Store as timestamp for easy comparison
+        }
+        
+        let roomFound = null;
+        hotel.roomTypes.forEach(type => {
+            const room = type.rooms.find(r => r.roomNumber === booking.roomNumber);
+            if (room) roomFound = room;
+        });
+
+        if (roomFound) {
+            roomFound.unavailableDates = roomFound.unavailableDates.filter(date => {
+                return !datesToRemove.includes(new Date(date).getTime());
+            });
+            
+            hotel.markModified('roomTypes'); 
+            await hotel.save();
+        }
+
+        return res.status(200).json({successmessage: "Booking is cancelled successfully"});
+    }
+    catch(error) {
+        return res.status(404).json({errormessage: error});
+    }
+}
+
 module.exports = {
     handleEditProfile,
     handleSettings,
 
     handleBkashPayment,
     handleBookHotel,
+    handleCancelHotelBooking,
 };

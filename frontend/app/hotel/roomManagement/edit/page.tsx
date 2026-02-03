@@ -9,25 +9,25 @@ import getCroppedImg from "@/utils/cropImage";
 import SidebarHotel from "@/components/navigation/sidebarHotel";
 import { roomAmenities, roomFurnishings } from "@/data/user/hotel";
 
-export interface Capacity {
+interface Capacity {
     adults: number;
     children: number;
 }
 
-export interface BedConfig {
+interface BedConfig {
     singleBeds: number;
     doubleBeds: number;
     extraBedsAvailable: boolean;
 }
 
-export interface Rooms {
+interface Rooms {
     _id?: string;
     roomNumber: number;
     isAvailable: boolean;
     unavailableDates: Date[];
 }
 
-export interface RoomType {
+interface RoomType {
     _id: string;
     title: string;
     pricePerNight: number;

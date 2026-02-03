@@ -12,8 +12,13 @@ interface User {
     bio: string;
 }
 
+interface Booking {
+    _id: string;
+}
+
 const GeneralUserProfilePage: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
+    const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(true);
 
     const searchParams = useSearchParams();
@@ -43,10 +48,11 @@ const GeneralUserProfilePage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        fetch('/api/get-user-info-for-profile') 
+        fetch('/api/generalUser-get-my-info') 
             .then(res => res.json())
             .then(data => {
                 setUser(data.user);
+                setBookings(data.bookings);
                 setLoading(false);
             }
          );
@@ -70,8 +76,8 @@ const GeneralUserProfilePage: React.FC = () => {
                         <section className="md:w-3/4 space-y-10">
                             <div className="grid grid-cols-3 gap-4 text-center">
                                 <div className="bg-gray-100 p-4 rounded-lg h-20"></div>
-                                <div className="bg-gray-100 p-4 rounded-lg h-20"></div>
-                                <div className="bg-gray-100 p-4 rounded-lg h-20"></div>
+                                {/* <div className="bg-gray-100 p-4 rounded-lg h-20"></div>
+                                <div className="bg-gray-100 p-4 rounded-lg h-20"></div> */}
                             </div>
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="bg-gray-100 p-6 rounded-lg h-20"></div>
@@ -99,17 +105,17 @@ const GeneralUserProfilePage: React.FC = () => {
 
                         <div className="grid grid-cols-3 gap-4 text-center text-gray-700">
                             <div className="bg-indigo-50 p-4 rounded-lg shadow-sm">
-                                <p className="text-2xl font-bold">12</p>
-                                <p className="text-sm">Trips</p>
+                                <p className="text-2xl font-bold">{bookings.length}</p>
+                                <p className="text-sm">Bookings</p>
                             </div>
-                            <div className="bg-indigo-50 p-4 rounded-lg shadow-sm">
+                            {/* <div className="bg-indigo-50 p-4 rounded-lg shadow-sm">
                                 <p className="text-2xl font-bold">5</p>
                                 <p className="text-sm">Reviews</p>
                             </div>
                             <div className="bg-indigo-50 p-4 rounded-lg shadow-sm">
                                 <p className="text-2xl font-bold">8</p>
                                 <p className="text-sm">Wishlisted</p>
-                            </div>
+                            </div> */}
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-6">

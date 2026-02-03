@@ -182,6 +182,14 @@ const Navbar:React.FC<Props> = (props) => {
                   </MenuItem>
                   <MenuItem>
                     <Link
+                      href="/generalUser/bookings"
+                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
+                    >
+                      Bookings
+                    </Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link
                       href="/generalUser/settings"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
                     >
@@ -230,6 +238,14 @@ const Navbar:React.FC<Props> = (props) => {
                   data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 
                   data-[enter]:duration-100 data-[enter]:ease-out data-[leave]:duration-75 data-[leave]:ease-in"
                 >
+                  <MenuItem>
+                    <Link
+                      href="/hotel/dashboard"
+                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden"
+                    >
+                      Dashboard
+                    </Link>
+                  </MenuItem>
                   <MenuItem>
                     <Link
                       href="/hotel/profile"
