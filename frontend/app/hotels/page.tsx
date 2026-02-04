@@ -5,7 +5,7 @@ import { districtAreas } from "@/data/locations/districtAreas";
 import AttractionCard from "@/components/cards/attraction-card";
 import AttractionCardSkeleton from "@/components/cards/attraction-card-skeleton";
 
-interface Restaurant {
+interface Hotel {
     _id: string;
     name: string;
     description: string;
@@ -15,15 +15,15 @@ interface Restaurant {
 }
 
 
-const Restaurants: React.FC = () => {
-    const [items, setItems] = useState<Restaurant[]>([]);
+const Hotels: React.FC = () => {
+    const [items, setItems] = useState<Hotel[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadData = async () => {
             try {
                 const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/get-restaurants`
+                    `${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/get-hotels`
                 );
 
                 const data = await res.json();
@@ -103,7 +103,7 @@ const Restaurants: React.FC = () => {
                         .filter((item) => !district.length || item.district === district)
                         .filter((item) => !area.length || item.area === area)
                         .map((item) => (
-                            <Link href={`/restaurants/preview?id=${item._id}`} key={item._id}>
+                            <Link href={`/hotels/preview?id=${item._id}`} key={item._id}>
                                 <AttractionCard
                                     _id={item._id}
                                     name={item.name}
@@ -121,4 +121,4 @@ const Restaurants: React.FC = () => {
     )
 }
 
-export default Restaurants;
+export default Hotels;

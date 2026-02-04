@@ -7,14 +7,11 @@ import {
   LuCalendar, LuBed, LuClock, LuReceipt 
 } from "react-icons/lu";
 
-import SidebarGeneralUser from "@/components/navigation/sidebarGeneralUser";
+import SidebarHotel from "@/components/navigation/sidebarHotel";
 
-interface User {
+interface GeneralUser {
     name: string;
-    email: string;
-    profilePicture: string;
     phone: string;
-    bio: string;
 }
 
 interface Capacity {
@@ -51,7 +48,7 @@ interface HotelId {
 
 interface Booking {
     _id: string;
-    hotelId: HotelId;
+    userId: GeneralUser;
     roomTitle: string;
     bedConfig: BedConfig;
     capacity: Capacity;
@@ -69,8 +66,8 @@ interface Booking {
 
 const currentTime = Date.now();
 
-const GeneralUserBookingsPage: React.FC = () => {
-    const [user, setUser] = useState<User | null>(null);
+const HotelBookingsPage: React.FC = () => {
+    const [generalUser, setGeneralUser] = useState<GeneralUser | null>(null);
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [filter, setFilter] = useState("all");
     const [loading, setLoading] = useState(true);
@@ -102,7 +99,7 @@ const GeneralUserBookingsPage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        fetch('/api/generalUser-get-my-info') 
+        fetch('/api/hotel-get-my-info') 
             .then(res => res.json())
             .then(data => {
                 setBookings(data.bookings);
@@ -119,62 +116,13 @@ const GeneralUserBookingsPage: React.FC = () => {
         }
     };
 
-    const cancelBooking = async (bookingId: string) => {
-
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_SERVER_URL}/generalUser/cancelHotelBooking`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ bookingId }),
-            credentials: "include",
-        });
-
-        const data = await res.json();
-        if (!res.ok) {
-            toast.error(data.errormessage, {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-            });
-            return;
-        }
-        else {
-            toast.success(data.successmessage, {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-            });
-
-            fetch('/api/generalUser-get-my-info') 
-                .then(res => res.json())
-                .then(data => {
-                    setBookings(data.bookings);
-                    setLoading(false);
-                }
-            );
-
-            return;
-        }
-    }
-
     return (
         <div className="bg-indigo-50 min-h-screen w-full flex">
-            <SidebarGeneralUser pagetype="Bookings" />
+            <SidebarHotel pagetype="Bookings" />
 
             <main className="container mx-auto px-10 py-16 max-w-7xl">
                 <div className="grid grid-cols-1 lg:grid-cols-3 md:justify-between">
-                    <h1 className="md:col-span-2 text-4xl font-bold text-indigo-900 mb-10">Your Bookings</h1>
+                    <h1 className="md:col-span-2 text-4xl font-bold text-indigo-900 mb-10">Bookings</h1>
 
                     
                     <div className="flex bg-white grid grid-cols-1 sm:grid-cols-3 rounded-2xl mb-10">
@@ -271,7 +219,7 @@ const GeneralUserBookingsPage: React.FC = () => {
                                 </div>
                                 
                                 <span className="text-slate-400 text-[10px] font-medium">
-                                    Booked on: {new Date(booking.createdAt).toLocaleDateString('en-GB', {
+                                    Received: {new Date(booking.createdAt).toLocaleDateString('en-GB', {
                                         day: '2-digit',
                                         month: 'short',
                                         year: 'numeric',
@@ -282,24 +230,22 @@ const GeneralUserBookingsPage: React.FC = () => {
                                     })}
                                 </span>
 
-                                <div className="mb-2">
+                                <div className="mb-4">
                                     <h2 className="text-xl font-bold text-slate-800 leading-tight">
-                                        {booking.roomTitle}
+                                        {booking.userId.name}
                                     </h2>
-                                    <Link
-                                        href={`/hotels/preview?id=${booking.hotelId._id}`}
-                                        className="text-indigo-600 font-semibold text-sm cursor-pointer">
-                                        {booking.hotelId.name}
-                                    </Link>
-                                    <p className="text-slate-500 text-xs mt-1">
-                                        <span className="font-medium text-slate-700">{booking.hotelId.area}, {booking.hotelId.district}</span>
-                                        <br />
-                                        <span className="italic">{booking.hotelId.address}</span>
+                                    <p
+                                        className="text-indigo-600 font-semibold text-sm block">
+                                        {booking.userId.phone}
                                     </p>
                                 </div>
 
                                 <div className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-slate-500 mt-2">
-                                    <span className="flex items-center gap-1.5"><LuBed className="text-slate-400" /> Room {booking.roomNumber}</span>
+                                    <span className="flex items-center gap-1.5">
+                                        <LuBed className="text-slate-400" /> 
+                                        <span className="font-bold text-slate-700">Room {booking.roomNumber}</span>
+                                        <span className="text-slate-400">— {booking.roomTitle}</span>
+                                    </span>
                                     <span className="flex items-center gap-1.5">
                                     <LuCalendar className="text-slate-400" /> 
                                     {new Date(booking.checkInDate).toLocaleDateString('en-GB', {
@@ -319,26 +265,11 @@ const GeneralUserBookingsPage: React.FC = () => {
 
                             <div className="md:w-44 flex flex-col justify-between md:border-l border-slate-100 md:pl-6 pt-4 md:pt-0">
                                 <div>
-                                    <p className="text-slate-400 text-[10px] font-bold uppercase">Total Amount</p>
+                                    <p className="text-slate-400 text-[10px] font-bold uppercase">Total Payout</p>
                                     <h3 className="text-2xl font-bold text-slate-900">৳ {booking.totalAmount.toLocaleString()}</h3>
                                 </div>
 
                                 <div className="flex flex-col gap-2 mt-4">
-                                    {booking.status === "confirmed" && booking.hotelId.policies.cancellation === "Flexible" && (new Date(booking.checkInDate).getTime()>currentTime) && (
-                                    <button
-                                    onClick={() => cancelBooking(booking._id)}
-                                    className="text-xs font-bold text-slate-400 hover:text-rose-600 transition-colors py-1 cursor-pointer"
-                                    >
-                                        Cancel Booking
-                                    </button>
-                                    )}
-                                    {booking.status === "confirmed" && booking.hotelId.policies.cancellation === "Fixed" && (new Date(booking.checkInDate).getTime()>currentTime) && (
-                                    <div
-                                    className="text-xs font-bold text-slate-400 hover:line-through transition-colors py-1 cursor-pointer"
-                                    >
-                                        No Cancellation
-                                    </div>
-                                    )}
                                     {(new Date(booking.checkInDate).getTime()<currentTime) && (
                                     <div
                                     className="flex items-center justify-center gap-2 py-2 border border-dashed border-slate-200 rounded-xl text-slate-300"
@@ -364,4 +295,4 @@ const GeneralUserBookingsPage: React.FC = () => {
     )
 }
 
-export default GeneralUserBookingsPage;
+export default HotelBookingsPage;

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Attractions | WanderMash",
 };
 
-export default function RestaurantsLayout({children}: {children: React.ReactNode;}) {
+export default function AttractionsLayout({children}: {children: React.ReactNode;}) {
     return (
         <Provider showNavbar pagetype="Attractions" showFooter>
         <main>{children}</main>

@@ -1,8 +1,8 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
-import HomepageCards from "../cards/homepage-cards";
-import HomepageCardsSkeleton from "../cards/homepage-cards-skeleton";
+import HomepageCards from "@/components/cards/homepage-cards";
+import HomepageCardsSkeleton from "@/components/cards/homepage-cards-skeleton";
 
 interface Restaurant {
     _id: string;

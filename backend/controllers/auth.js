@@ -290,6 +290,10 @@ async function handleUserLogin(req, res) {
         return res.status(401).json({errormessage: "Not verified"});
     }
 
+    if(user.approved === false) {
+        return res.status(401).json({errormessage: "Your account is disapproved"});
+    }
+
     const token = setUser(user);
     res.cookie("user", token);
     return res.status(200).json({successmessage: "Login Successful"});

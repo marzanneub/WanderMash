@@ -45,8 +45,10 @@ const SidebarAdmin: React.FC<Props> = (props) => {
             submenu: true,
             submenuItems: [
                 { title: "Tourism Managers",  href: "tourismManagers" },
-                { title: "Submenu 2" },
-                { title: "Submenu 3" },
+                { title: "General Users",  href: "generalUsers" },
+                { title: "Attractions",  href: "attractions" },
+                { title: "Hotels",  href: "hotels" },
+                { title: "Restaurants",  href: "restaurants" },
             ],
         },
         { title: "Settings", href: "settings", spacing: true, icon: <AiOutlineSetting /> },

@@ -16,7 +16,7 @@ interface TourismManager {
     profilePicture: string;
 }
 
-const TourismManagersPage: React.FC = () => {
+const AdminTourismManagersPage: React.FC = () => {
     const [tourismManagers, setTourismManagers] = useState<TourismManager[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -497,4 +497,4 @@ const TourismManagersPage: React.FC = () => {
     )
 }
 
-export default TourismManagersPage;
+export default AdminTourismManagersPage;

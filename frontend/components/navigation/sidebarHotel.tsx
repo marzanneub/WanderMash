@@ -23,6 +23,7 @@ import {
     FaUserEdit,
     FaRegEdit,
 } from "react-icons/fa";
+import { HiOutlineTicket } from "react-icons/hi";
 import { LiaUserEditSolid } from "react-icons/lia";
 import { LuBedDouble } from "react-icons/lu";
 import { RiDashboardFill, RiLogoutBoxRLine  } from "react-icons/ri";
@@ -57,6 +58,7 @@ const SidebarHotel: React.FC<Props> = (props) => {
         { title: "Edit Profile", href: "/hotel/editProfile", icon: <FaRegEdit /> },
         { title: "Gallery", href: "/hotel/gallery", spacing: true, icon: <TfiGallery /> },
         { title: "Room Management", href: "/hotel/roomManagement", icon: <LuBedDouble /> },
+        { title: "Bookings", href: "bookings", icon: <HiOutlineTicket /> },
         { title: "Settings", href: "/hotel/settings", spacing: true, icon: <AiOutlineSetting /> },
         { title: "Logout", action: "logout", icon: <RiLogoutBoxRLine /> },
     ];

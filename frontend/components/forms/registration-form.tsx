@@ -14,9 +14,9 @@ const RegistrationForm: React.FC = () => {
     const [registrationId, setRegistrationId] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [district, setDistrict] = useState("")
-    const [area, setArea] = useState("")
-    const [address, setAddress] = useState("")
+    const [district, setDistrict] = useState("");
+    const [area, setArea] = useState("");
+    const [address, setAddress] = useState("");
     const [submission, setSubmission] = useState(false);
 
     const districts = Object.keys(districtAreas);
@@ -292,7 +292,7 @@ const RegistrationForm: React.FC = () => {
                 onChange={(e) => setRole(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
-                    <option value="" disabled>-- select user type --</option>
+                    <option value="">-- select user type --</option>
                     <option value="generalUser">General User</option>
                     <option value="restaurant">Restaurant</option>
                     <option value="hotel">Hotel</option>

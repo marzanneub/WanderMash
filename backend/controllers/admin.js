@@ -100,6 +100,86 @@ async function handleAddTourismManager(req, res) {
 }
 
 
+async function handleDisapproveAttraction(req, res) {
+    await uploadAsync(req, res);
+    const { _id } = req.body;
+
+    const result = await Attraction.findByIdAndUpdate(_id, { approved: false });
+
+    if(result) return res.status(200).json({successmessage: "Attraction disapproved successfully."});
+    else return res.status(409).json({errormessage: "Error"});
+}
+
+async function handleApproveAttraction(req, res) {
+    await uploadAsync(req, res);
+    const { _id } = req.body;
+
+    const result = await Attraction.findByIdAndUpdate(_id, { approved: true });
+
+    if(result) return res.status(200).json({successmessage: "Attraction approved successfully."});
+    else return res.status(409).json({errormessage: "Error"});
+}
+
+async function handleDisapproveHotel(req, res) {
+    await uploadAsync(req, res);
+    const { _id } = req.body;
+
+    const result = await Hotel.findByIdAndUpdate(_id, { approved: false });
+
+    if(result) return res.status(200).json({successmessage: "Hotel disapproved successfully."});
+    else return res.status(409).json({errormessage: "Error"});
+}
+
+async function handleApproveHotel(req, res) {
+    await uploadAsync(req, res);
+    const { _id } = req.body;
+
+    const result = await Hotel.findByIdAndUpdate(_id, { approved: true });
+
+    if(result) return res.status(200).json({successmessage: "Hotel approved successfully."});
+    else return res.status(409).json({errormessage: "Error"});
+}
+
+async function handleDisapproveRestaurant(req, res) {
+    await uploadAsync(req, res);
+    const { _id } = req.body;
+
+    const result = await Restaurant.findByIdAndUpdate(_id, { approved: false });
+
+    if(result) return res.status(200).json({successmessage: "Restaurant disapproved successfully."});
+    else return res.status(409).json({errormessage: "Error"});
+}
+
+async function handleApproveRestaurant(req, res) {
+    await uploadAsync(req, res);
+    const { _id } = req.body;
+
+    const result = await Restaurant.findByIdAndUpdate(_id, { approved: true });
+
+    if(result) return res.status(200).json({successmessage: "Restaurant approved successfully."});
+    else return res.status(409).json({errormessage: "Error"});
+}
+
+async function handleDisapproveGeneralUser(req, res) {
+    await uploadAsync(req, res);
+    const { _id } = req.body;
+
+    const result = await GeneralUser.findByIdAndUpdate(_id, { approved: false });
+
+    if(result) return res.status(200).json({successmessage: "General User disapproved successfully."});
+    else return res.status(409).json({errormessage: "Error"});
+}
+
+async function handleApproveGeneralUser(req, res) {
+    await uploadAsync(req, res);
+    const { _id } = req.body;
+
+    const result = await GeneralUser.findByIdAndUpdate(_id, { approved: true });
+
+    if(result) return res.status(200).json({successmessage: "General User approved successfully."});
+    else return res.status(409).json({errormessage: "Error"});
+}
+
 async function handleDisapproveTourismManager(req, res) {
     await uploadAsync(req, res);
     const { _id } = req.body;
@@ -124,6 +204,14 @@ async function handleApproveTourismManager(req, res) {
 module.exports = {
     handleSettings,
     handleAddTourismManager,
+    handleDisapproveAttraction,
+    handleApproveAttraction,
+    handleDisapproveHotel,
+    handleApproveHotel,
+    handleDisapproveRestaurant,
+    handleApproveRestaurant,
+    handleDisapproveGeneralUser,
+    handleApproveGeneralUser,
     handleDisapproveTourismManager,
     handleApproveTourismManager,
 };

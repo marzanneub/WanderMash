@@ -2,13 +2,12 @@ import Provider from "@/app/provider";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Tourism Managers | WanderMash",
+  title: "Bookings | WanderMash",
 };
 
-
-export default function AdminTourismManagersLayout({children}: {children: React.ReactNode;}) {
+export default function HotelBookingsLayout({children}: {children: React.ReactNode;}) {
     return (
-        <Provider>
+        <Provider showNavbar showFooter>
         <main>{children}</main>
         </Provider>
     );

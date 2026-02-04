@@ -4,13 +4,44 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import SidebarAdmin from "@/components/navigation/sidebarAdmin";
 
-interface User {
-    email: string;
-    profilePicture: string;
+interface Attraction {
+    _id: string;
+    name: string;
 }
 
+interface GeneralUser {
+    _id: string;
+    name: string;
+}
+
+interface Hotel {
+    _id: string;
+    name: string;
+}
+
+interface HotelBooking {
+    _id: string;
+}
+
+interface Restaurant {
+    _id: string;
+    name: string;
+}
+
+interface TourismManager {
+    _id: string;
+    name: string;
+}
+
+
 const AdminPanelPage: React.FC = () => {
-    const [user, setUser] = useState<User | null>(null);
+    const [attractions, setAttractions] = useState<Attraction[]>([]);
+    const [generalUsers, setGeneralUsers] = useState<GeneralUser[]>([]);
+    const [hotels, setHotels] = useState<Hotel[]>([]);
+    const [hotelBookings, setHotelBookings] = useState<HotelBooking[]>([]);
+    const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+    const [tourismManagers, setTourismManagers] = useState<TourismManager[]>([]);
+    
     const [loading, setLoading] = useState(true);
 
     const searchParams = useSearchParams();
@@ -51,10 +82,9 @@ const AdminPanelPage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        fetch('/api/get-user-info-for-profile') 
+        fetch('/api/admin-get-dashboard-info') 
             .then(res => res.json())
             .then(data => {
-                setUser(data.user);
                 setLoading(false);
             }
          );
@@ -74,7 +104,7 @@ const AdminPanelPage: React.FC = () => {
 
                 )}
                 
-                {user!==null && (
+                {!loading && (
                 <div className="bg-white rounded-xl shadow-lg p-8 flex flex-col md:flex-row gap-10">
 
 

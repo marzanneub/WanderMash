@@ -74,10 +74,8 @@ const LoginForm: React.FC = () => {
             return;
         }
         else if(!res.ok){
-            // newErrors.message = data.message;
-            const msg = "Invalid email or Password";
             setErrors({ errormessage: data.errormessage });
-            toast.error(errors.errormessage || msg, {
+            toast.error(data.errormessage, {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,

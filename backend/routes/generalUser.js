@@ -24,7 +24,7 @@ router.get("/get-my-info", async(req, res) => {
             path: "hotelId",
             model: "hotel",
             select: "name district area address policies"
-        }).sort({ _id: -1 });
+        }).sort({ createdAt: -1 });
         
         if(bookings) return res.status(200).json({bookings, user});
     }
